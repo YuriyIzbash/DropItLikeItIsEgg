@@ -1,0 +1,25 @@
+//
+//  Extensions+Font.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 16. 12. 25.
+//
+
+import SwiftUI
+
+extension Font {
+    enum Family {
+        static let rubikMonoOne = "RubikMonoOne-Regular"
+        static let fredoka = "Fredoka-VariableFont_wdth,wght"
+    }
+    
+    static let title: Font = .custom(Family.rubikMonoOne, size: 155)
+    static let subtitle: Font = .custom(Family.rubikMonoOne, size: 75)
+    static let coinCounter: Font = .custom(Family.rubikMonoOne, size: 30)
+    static let mainButton: Font = .custom(Family.rubikMonoOne, size: 140)
+    static let menuButton: Font = .custom(Family.rubikMonoOne, size: 45)
+    static let mainText: Font = .custom(Family.rubikMonoOne, size: 45)
+    static let regularText: Font = .custom(Family.rubikMonoOne, size: 25)
+    
+    static let sheetText: Font = .custom(Family.fredoka, size: 37.5)
+}
