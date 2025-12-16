@@ -25,10 +25,23 @@ struct HomeView: View {
                     .ignoresSafeArea()
             )
             .overlay(
-                VStack() {
-                    Spacer()
+                ZStack {
+                    HStack {
+                        SquareBtn(type: .info) {
+                            print("Info tapped")
+                        }
+                        
+                        Spacer()
+                        
+                        SquareBtn(type: .menu) {
+                            print("Info tapped")
+                        }
+                    }
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .padding(.horizontal, 48)
                     
                     MainBtn(title: "PLAY", action: {})
+                        .frame(maxHeight: .infinity, alignment: .bottom)
                         .padding(.horizontal, 48)
                 }
             )
