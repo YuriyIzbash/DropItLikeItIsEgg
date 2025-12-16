@@ -16,10 +16,36 @@ extension Font {
     static let title: Font = .custom(Family.rubikMonoOne, size: 155)
     static let subtitle: Font = .custom(Family.rubikMonoOne, size: 75)
     static let coinCounter: Font = .custom(Family.rubikMonoOne, size: 30)
-    static let mainButton: Font = .custom(Family.rubikMonoOne, size: 140)
-    static let menuButton: Font = .custom(Family.rubikMonoOne, size: 45)
+    static let mainBtn: Font = .custom(Family.rubikMonoOne, size: 70)
+    static let menuBtn: Font = .custom(Family.rubikMonoOne, size: 45)
     static let mainText: Font = .custom(Family.rubikMonoOne, size: 45)
     static let regularText: Font = .custom(Family.rubikMonoOne, size: 25)
     
     static let sheetText: Font = .custom(Family.fredoka, size: 37.5)
+}
+
+#Preview {
+    Text("test")
+        .font(.title)
+    
+    Text("test")
+        .font(.subtitle)
+    
+    Text("test")
+        .font(.coinCounter)
+    
+    Text("test")
+        .font(.mainBtn)
+    
+    Text("test")
+        .font(.menuBtn)
+    
+    Text("test")
+        .font(.mainText)
+    
+    Text("test")
+        .font(.regularText)
+    
+    Text("test")
+        .font(.sheetText)
 }
