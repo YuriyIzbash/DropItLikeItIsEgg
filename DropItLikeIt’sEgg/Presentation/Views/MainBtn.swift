@@ -19,7 +19,6 @@ struct MainBtn: View {
                     .font(.mainBtn)
                     .textOutline(width: 1, color: .textOutline)
                     .foregroundColor(.white)
-                    
             }
             .frame(height: 347)
             .background(
@@ -33,7 +32,7 @@ struct MainBtn: View {
 }
 
 #Preview {
-        MainBtn(title: "Test") {
-            print("Tested...")
-        }
+    MainBtn(title: "Test") {
+        print("Tested...")
+    }
 }
