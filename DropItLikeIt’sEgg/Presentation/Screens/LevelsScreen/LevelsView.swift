@@ -35,15 +35,16 @@ struct LevelsView: View {
                                     Image(.coinCounter)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 150)
+                                        .frame(width: 100)
                                     
                                     Text("1000")
                                         .font(.coinCounter)
                                         .appTextStyle()
-                                        .padding(.leading, 16)
+                                        .padding(.leading, 8)
                                 }
                             }
                         }
+                        
                         Text("CHANGE LEVEL")
                             .font(.subtitle)
                             .appTextStyle()

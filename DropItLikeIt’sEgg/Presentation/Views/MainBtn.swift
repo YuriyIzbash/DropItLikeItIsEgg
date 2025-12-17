@@ -28,7 +28,7 @@ struct MainBtn: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .font(isMultiline ? .menuBtn : .mainBtn)
-                    .minimumScaleFactor(0.6)
+                    .minimumScaleFactor(0.2)
                     .textOutline(width: 1, color: .textOutline)
                     .appTextStyle()
                     .background(
