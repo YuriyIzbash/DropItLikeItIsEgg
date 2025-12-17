@@ -12,6 +12,7 @@ struct MainBtn: View {
     var action: () -> Void
     var enableHaptics: Bool = true
     @State private var isPressed = false
+    @State private var isMultiline = false
     
     var body: some View {
         Button {
@@ -22,11 +23,25 @@ struct MainBtn: View {
         } label: {
             HStack {
                 Text(title)
+                    .padding(.horizontal, 12)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .font(.mainBtn)
+                    .font(isMultiline ? .menuBtn : .mainBtn)
+                    .minimumScaleFactor(0.6)
                     .textOutline(width: 1, color: .textOutline)
-                    .foregroundColor(.white)
+                    .appTextStyle()
+                    .background(
+                        TextSizeReader(text: title, baseFont: .mainBtn) { isWrapped in
+                            if isMultiline != isWrapped {
+                                isMultiline = isWrapped
+                            }
+                        }
+                            .allowsHitTesting(false)
+                            .accessibilityHidden(true)
+                    )
             }
+            .padding()
             .frame(height: 248)
             .background(
                 ZStack {
@@ -75,6 +90,53 @@ struct PressFeedbackStyle: ButtonStyle {
                     }
             }
         }
+    }
+}
+
+private struct TextSizeReader: View {
+    let text: String
+    let baseFont: Font
+    let onWrapChange: (Bool) -> Void
+    
+    @State private var availableWidth: CGFloat = 0
+    @State private var singleLineWidth: CGFloat = 0
+    
+    var body: some View {
+        GeometryReader { proxy in
+            Color.clear
+                .onAppear { updateAvailableWidth(proxy.size.width) }
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    updateAvailableWidth(proxy.size.width)
+                }
+                .overlay(alignment: .topLeading) {
+                    Text(text)
+                        .font(baseFont)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .opacity(0)
+                        .background(
+                            GeometryReader { textProxy in
+                                Color.clear
+                                    .onAppear {
+                                        singleLineWidth = textProxy.size.width
+                                        notify()
+                                    }
+                            }
+                        )
+                }
+        }
+        .frame(height: 0)
+    }
+    
+    private func updateAvailableWidth(_ width: CGFloat) {
+        if availableWidth != width {
+            availableWidth = width
+            notify()
+        }
+    }
+    
+    private func notify() {
+        let wraps = singleLineWidth > max(0, availableWidth)
+        onWrapChange(wraps)
     }
 }
 

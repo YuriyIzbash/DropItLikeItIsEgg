@@ -1,3 +1,10 @@
+//
+//  WinView.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 17. 12. 25.
+//
+
 import SwiftUI
 
 struct WinView: View {
@@ -54,7 +61,7 @@ struct WinView: View {
     }
 }
 
-private struct ScoreRow: View {
+struct ScoreRow: View {
     let title: String
     let value: String
     
