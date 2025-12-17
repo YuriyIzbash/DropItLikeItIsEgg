@@ -27,6 +27,8 @@ extension SquareBtn {
     enum SquareBtnType: String, CaseIterable {
         case info
         case menu
+        case pause
+        case back
         
         var imageName: String {
             switch self {
@@ -34,6 +36,10 @@ extension SquareBtn {
                 return "btnInfo"
             case .menu:
                 return "btnMenu"
+            case .pause:
+                return "btnPause"
+            case .back:
+                return "btnBack"
             }
         }
     }
@@ -42,5 +48,17 @@ extension SquareBtn {
 #Preview {
     SquareBtn(type: .info) {
         print("Info tapped")
+    }
+    
+    SquareBtn(type: .menu) {
+        print("Menu tapped")
+    }
+    
+    SquareBtn(type: .pause) {
+        print("Pause tapped")
+    }
+    
+    SquareBtn(type: .back) {
+        print("Back tapped")
     }
 }

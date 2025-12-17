@@ -1,6 +1,6 @@
 //
 //  MainBtn.swift
-//  DropItLike It’sEgg
+//  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 16. 12. 25.
 //
