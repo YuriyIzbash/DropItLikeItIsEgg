@@ -14,12 +14,12 @@ extension Font {
     }
     
     static let title: Font = .custom(Family.rubikMonoOne, size: 100)
-    static let subtitle: Font = .custom(Family.rubikMonoOne, size: 32)
+    static let subtitle: Font = .custom(Family.rubikMonoOne, size: 28)
     static let coinCounter: Font = .custom(Family.rubikMonoOne, size: 16)
     static let mainBtn: Font = .custom(Family.rubikMonoOne, size: 60)
     static let menuBtn: Font = .custom(Family.rubikMonoOne, size: 45)
-    static let mainText: Font = .custom(Family.rubikMonoOne, size: 45)
-    static let regularText: Font = .custom(Family.rubikMonoOne, size: 25)
+    static let mainText: Font = .custom(Family.rubikMonoOne, size: 24)
+    static let regularText: Font = .custom(Family.rubikMonoOne, size: 12)
     
     static let sheetText: Font = .custom(Family.fredoka, size: 37.5)
 }

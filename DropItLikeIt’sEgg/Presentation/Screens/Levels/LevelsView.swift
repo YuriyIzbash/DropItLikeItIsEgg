@@ -16,34 +16,42 @@ struct LevelsView: View {
                     Image("backgroundMain")
                         .resizable()
                         .scaledToFill()
+                    
                 }
                     .ignoresSafeArea()
             )
             .overlay(
                 ZStack {
-                    HStack {
-                        SquareBtn(type: .back) {
-                            print("Back tapped")
-                        }
-                        
-                        Spacer()
-                        
-                        ZStack(alignment: .trailing) {
-                            ZStack(alignment: .leading) {
-                                Image(.coinCounter)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 150)
-                                
-                                Text("1000")
-                                    .font(.coinCounter)
-                                    .appTextStyle()
-                                    .padding(.leading, 16)
+                    VStack {
+                        HStack {
+                            SquareBtn(type: .back) {
+                                print("Back tapped")
+                            }
+                            
+                            Spacer()
+                            
+                            ZStack(alignment: .trailing) {
+                                ZStack(alignment: .leading) {
+                                    Image(.coinCounter)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150)
+                                    
+                                    Text("1000")
+                                        .font(.coinCounter)
+                                        .appTextStyle()
+                                        .padding(.leading, 16)
+                                }
                             }
                         }
+                        Text("CHANGE LEVEL")
+                            .font(.subtitle)
+                            .appTextStyle()
+                            .padding(.top, 16)
                     }
                     .frame(maxHeight: .infinity, alignment: .top)
                     .padding(.horizontal, 32)
+                    
                 }
             )
             .overlay(
