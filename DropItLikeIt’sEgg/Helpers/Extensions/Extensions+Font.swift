@@ -13,10 +13,10 @@ extension Font {
         static let fredoka = "Fredoka-VariableFont_wdth,wght"
     }
     
-    static let title: Font = .custom(Family.rubikMonoOne, size: 155)
-    static let subtitle: Font = .custom(Family.rubikMonoOne, size: 75)
+    static let title: Font = .custom(Family.rubikMonoOne, size: 100)
+    static let subtitle: Font = .custom(Family.rubikMonoOne, size: 32)
     static let coinCounter: Font = .custom(Family.rubikMonoOne, size: 30)
-    static let mainBtn: Font = .custom(Family.rubikMonoOne, size: 70)
+    static let mainBtn: Font = .custom(Family.rubikMonoOne, size: 60)
     static let menuBtn: Font = .custom(Family.rubikMonoOne, size: 45)
     static let mainText: Font = .custom(Family.rubikMonoOne, size: 45)
     static let regularText: Font = .custom(Family.rubikMonoOne, size: 25)
