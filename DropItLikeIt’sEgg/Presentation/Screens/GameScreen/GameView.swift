@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GameView: View {
+    @State private var isPaused: Bool = false
+    
     var body: some View {
         Color.clear
             .edgesIgnoringSafeArea(.all)
@@ -37,12 +39,19 @@ struct GameView: View {
                     
                     
                     SquareBtn(type: .pause) {
-                        print("Pause tapped")
+                        isPaused = true
                     }
                 }
                     .padding(.horizontal, 32)
                 , alignment: .top
             )
+            .overlay {
+                if isPaused {
+                    PauseView(isPresented: $isPaused)
+                        .transition(.opacity)
+                        .animation(.easeInOut, value: isPaused)
+                }
+            }
     }
 }
 
