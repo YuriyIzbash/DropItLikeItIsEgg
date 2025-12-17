@@ -38,7 +38,7 @@ struct HomeView: View {
                         }
                     }
                     .frame(maxHeight: .infinity, alignment: .top)
-                    .padding(.horizontal, 48)
+                    .padding(.horizontal, 32)
                     
                     MainBtn(title: "PLAY", action: {})
                         .frame(maxHeight: .infinity, alignment: .bottom)

@@ -15,7 +15,7 @@ extension Font {
     
     static let title: Font = .custom(Family.rubikMonoOne, size: 100)
     static let subtitle: Font = .custom(Family.rubikMonoOne, size: 32)
-    static let coinCounter: Font = .custom(Family.rubikMonoOne, size: 30)
+    static let coinCounter: Font = .custom(Family.rubikMonoOne, size: 16)
     static let mainBtn: Font = .custom(Family.rubikMonoOne, size: 60)
     static let menuBtn: Font = .custom(Family.rubikMonoOne, size: 45)
     static let mainText: Font = .custom(Family.rubikMonoOne, size: 45)

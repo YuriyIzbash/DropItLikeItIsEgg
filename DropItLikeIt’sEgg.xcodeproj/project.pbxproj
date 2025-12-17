@@ -10,22 +10,9 @@
 		5BDD35012EF193D400760408 /* DropItLikeIt’sEgg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DropItLikeIt’sEgg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5BDD35512EF1B7C300760408 /* Exceptions for "DropItLikeIt’sEgg" folder in "DropItLikeIt’sEgg" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Configuration/DropItLikeIt’sEgg/Configuration/DropItLikeIt-sEgg-Info.plist",
-			);
-			target = 5BDD35002EF193D400760408 /* DropItLikeIt’sEgg */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5BDD35032EF193D400760408 /* DropItLikeIt’sEgg */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				5BDD35512EF1B7C300760408 /* Exceptions for "DropItLikeIt’sEgg" folder in "DropItLikeIt’sEgg" target */,
-			);
 			path = "DropItLikeIt’sEgg";
 			sourceTree = "<group>";
 		};
