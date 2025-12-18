@@ -1,5 +1,5 @@
 //
-//  LoseView.swift
+//  LoseScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoseView: View {
+struct LoseScreen: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             Color.black.opacity(0.8)
@@ -49,5 +49,5 @@ struct LoseView: View {
 }
 
 #Preview {
-    LoseView()
+    LoseScreen()
 }

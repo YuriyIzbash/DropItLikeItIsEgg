@@ -1,5 +1,5 @@
 //
-//  SquareBtn.swift
+//  NavBtn.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 16. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SquareBtn: View {
+struct NavBtn: View {
     let type: SquareBtnType
     var size: CGFloat = 72
     let action: () -> Void
@@ -38,7 +38,7 @@ struct SquareBtn: View {
     }
 }
 
-extension SquareBtn {
+extension NavBtn {
     enum SquareBtnType: String, CaseIterable {
         case info
         case menu
@@ -59,22 +59,22 @@ extension SquareBtn {
 }
 
 #Preview {
-    SquareBtn(type: .info) {
+    NavBtn(type: .info) {
         print("Info tapped")
     }
     
-    SquareBtn(type: .menu) {
+    NavBtn(type: .menu) {
         print("Menu tapped")
     }
     
-    SquareBtn(type: .pause) {
+    NavBtn(type: .pause) {
         print("Pause tapped")
     }
     
-    SquareBtn(type: .back) {
+    NavBtn(type: .back) {
         print("Back tapped")
     }
-    SquareBtn(type: .empty) {
+    NavBtn(type: .empty) {
         print("Empty btn tapped")
     }
 }

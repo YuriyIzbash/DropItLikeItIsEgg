@@ -23,7 +23,7 @@ struct PrivacyView: View {
             .overlay(
                 ZStack {
                     VStack(alignment: .leading) {
-                        SquareBtn(type: .back) {
+                        NavBtn(type: .back) {
                             print("Back tapped")
                         }
                         .padding(.bottom, 8)

@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  SettingsScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 18. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SettingsView: View {
+struct SettingsScreen: View {
     @State private var soundIsOn: Bool = false
     @State private var notificationIsOn: Bool = false
     @State private var vibroIsOn: Bool = false
@@ -42,9 +42,9 @@ struct SettingsView: View {
     }
 }
 
-private extension SettingsView {
+private extension SettingsScreen {
     var header: some View {
-        SquareBtn(type: .back) {
+        NavBtn(type: .back) {
             print("Back tapped")
         }
         .padding(.bottom, 32)
@@ -115,5 +115,5 @@ private struct MainBackground: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsScreen()
 }

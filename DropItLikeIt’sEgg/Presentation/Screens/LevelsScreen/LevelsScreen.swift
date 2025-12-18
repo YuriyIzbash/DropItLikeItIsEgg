@@ -1,5 +1,5 @@
 //
-//  LevelsView.swift
+//  LevelsScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LevelsView: View {
+struct LevelsScreen: View {
     var body: some View {
         Color.clear
             .edgesIgnoringSafeArea(.all)
@@ -24,7 +24,7 @@ struct LevelsView: View {
                 ZStack {
                     VStack {
                         HStack {
-                            SquareBtn(type: .back) {
+                            NavBtn(type: .back) {
                                 print("Back tapped")
                             }
                             
@@ -70,7 +70,7 @@ private struct GridLevels: View {
                     ForEach(0..<3, id: \.self) { col in
                         let number = row * 3 + col + 1
                         let isLocked = number >= 7
-                        SquareBtn(type: .empty, size: 96) {
+                        NavBtn(type: .empty, size: 96) {
                             if !isLocked {
                                 print("Level \(number) tapped")
                             }
@@ -92,5 +92,5 @@ private struct GridLevels: View {
 }
 
 #Preview {
-    LevelsView()
+    LevelsScreen()
 }

@@ -1,5 +1,5 @@
 //
-//  GameView.swift
+//  GameScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GameView: View {
+struct GameScreen: View {
     @State private var isPaused: Bool = false
     
     var body: some View {
@@ -38,7 +38,7 @@ struct GameView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     
                     
-                    SquareBtn(type: .pause) {
+                    NavBtn(type: .pause) {
                         isPaused = true
                     }
                 }
@@ -56,5 +56,5 @@ struct GameView: View {
 }
 
 #Preview {
-    GameView()
+    GameScreen()
 }

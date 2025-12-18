@@ -1,5 +1,5 @@
 //
-//  LeaderBoardView.swift
+//  LeaderBoardScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 18. 12. 25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-struct LeaderBoardView: View {
+struct LeaderBoardScreen: View {
     @State private var profile = UserProfile()
     
     var body: some View {
@@ -29,9 +29,9 @@ struct LeaderBoardView: View {
     }
 }
 
-private extension LeaderBoardView {
+private extension LeaderBoardScreen {
     var header: some View {
-        SquareBtn(type: .back) {
+        NavBtn(type: .back) {
             print("Back tapped")
         }
         .padding(.bottom, 32)
@@ -129,5 +129,5 @@ private struct MainBackground: View {
 }
 
 #Preview {
-    LeaderBoardView()
+    LeaderBoardScreen()
 }

@@ -1,5 +1,5 @@
 //
-//  MenuView.swift
+//  MenuScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MenuView: View {
+struct MenuScreen: View {
     var body: some View {
         Color.clear
             .edgesIgnoringSafeArea(.all)
@@ -24,7 +24,7 @@ struct MenuView: View {
                 ZStack {
                     VStack(alignment: .leading) {
                         HStack {
-                            SquareBtn(type: .back) {
+                            NavBtn(type: .back) {
                                 print("Back tapped")
                             }
                             
@@ -85,5 +85,5 @@ struct MenuView: View {
 }
 
 #Preview {
-    MenuView()
+    MenuScreen()
 }

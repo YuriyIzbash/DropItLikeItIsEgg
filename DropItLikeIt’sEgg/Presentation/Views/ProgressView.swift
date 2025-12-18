@@ -17,7 +17,7 @@ struct ProgressView: View {
     var body: some View {
         ZStack {
             if showHome {
-                HomeView()
+                HomeScreen()
                     .transition(.opacity)
             } else {
                 Color.clear

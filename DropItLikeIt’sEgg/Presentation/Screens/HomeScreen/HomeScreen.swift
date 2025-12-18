@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  HomeScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 16. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct HomeScreen: View {
     var body: some View {
         Color.clear
             .edgesIgnoringSafeArea(.all)
@@ -27,13 +27,13 @@ struct HomeView: View {
             .overlay(
                 ZStack {
                     HStack {
-                        SquareBtn(type: .info) {
+                        NavBtn(type: .info) {
                             print("Info tapped")
                         }
                         
                         Spacer()
                         
-                        SquareBtn(type: .menu) {
+                        NavBtn(type: .menu) {
                             print("Info tapped")
                         }
                     }
@@ -49,5 +49,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeScreen()
 }

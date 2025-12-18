@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  ProfileScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct ProfileScreen: View {
     @State private var profile = UserProfile()
     @FocusState private var focusedField: Field?
     @State private var showPhotoActionSheet: Bool = false
@@ -55,9 +55,9 @@ struct ProfileView: View {
     }
 }
 
-private extension ProfileView {
+private extension ProfileScreen {
     var header: some View {
-        SquareBtn(type: .back) {
+        NavBtn(type: .back) {
             print("Back tapped")
         }
         .padding(.bottom, 32)
@@ -120,7 +120,7 @@ private extension ProfileView {
                     .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .onTapGesture { showPhotoActionSheet = true }
             } else {
-                SquareBtn(type: .empty, size: 120) {
+                NavBtn(type: .empty, size: 120) {
                     showPhotoActionSheet = true
                 }
             }
@@ -179,8 +179,8 @@ private extension ProfileView {
 private struct StyledTextField: View {
     let title: String
     @Binding var text: String
-    let field: ProfileView.Field
-    @FocusState.Binding var focusedField: ProfileView.Field?
+    let field: ProfileScreen.Field
+    @FocusState.Binding var focusedField: ProfileScreen.Field?
     var isError: Bool = false
     
     var body: some View {
@@ -267,5 +267,5 @@ private struct ImagePicker: UIViewControllerRepresentable {
 }
 
 #Preview {
-    ProfileView()
+    ProfileScreen()
 }

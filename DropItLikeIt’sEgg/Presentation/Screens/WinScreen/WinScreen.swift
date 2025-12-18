@@ -1,5 +1,5 @@
 //
-//  WinView.swift
+//  WinScreen.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WinView: View {
+struct WinScreen: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             Color.black.opacity(0.8)
@@ -89,5 +89,5 @@ struct ScoreRow: View {
 }
 
 #Preview {
-    WinView()
+    WinScreen()
 }
