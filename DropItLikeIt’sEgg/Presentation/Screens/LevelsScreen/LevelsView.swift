@@ -78,7 +78,7 @@ private struct GridLevels: View {
                         .overlay(
                             Text("\(number)")
                                 .font(.subtitle)
-                                .foregroundColor(.white)
+                                .appTextStyle()
                         )
                         .allowsHitTesting(!isLocked)
                         .grayscale(isLocked ? 1.0 : 0.0)

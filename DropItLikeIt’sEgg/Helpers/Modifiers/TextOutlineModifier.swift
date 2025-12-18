@@ -24,7 +24,7 @@ fileprivate struct TextOutlineModifier: ViewModifier {
         ForEach(offsets.indices, id: \.self) { index in
             let offset = offsets[index]
             content
-                .foregroundColor(color)
+                .foregroundStyle(color)
                 .offset(x: offset.width, y: offset.height)
         }
     }
@@ -52,3 +52,4 @@ extension View {
         modifier(TextOutlineModifier(width: width, color: color))
     }
 }
+

@@ -10,7 +10,7 @@ import SwiftUI
 extension Font {
     enum Family {
         static let rubikMonoOne = "RubikMonoOne-Regular"
-        static let fredoka = "Fredoka-VariableFont_wdth,wght"
+        static let fredoka = "Fredoka-SemiBold"
     }
     
     static let title: Font = .custom(Family.rubikMonoOne, size: 56)
@@ -20,9 +20,10 @@ extension Font {
     static let mainBtn: Font = .custom(Family.rubikMonoOne, size: 50)
     static let menuBtn: Font = .custom(Family.rubikMonoOne, size: 32)
     static let mainText: Font = .custom(Family.rubikMonoOne, size: 24)
+    static let placeholderText: Font = .custom(Family.rubikMonoOne, size: 18)
     static let regularText: Font = .custom(Family.rubikMonoOne, size: 12)
     
-    static let sheetText: Font = .custom(Family.fredoka, size: 37.5)
+    static let sheetText: Font = .custom(Family.fredoka, size: 18)
 }
 
 #Preview {
@@ -46,6 +47,8 @@ extension Font {
     
     Text("test")
         .font(.mainText)
+    Text("test")
+        .font(.placeholderText)
     
     Text("test")
         .font(.regularText)

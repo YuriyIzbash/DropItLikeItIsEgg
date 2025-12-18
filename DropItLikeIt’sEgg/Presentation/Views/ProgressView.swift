@@ -62,7 +62,7 @@ struct ProgressView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .font(.subtitle)
                                 .textOutline(width: 1, color: .textOutline)
-                                .foregroundColor(.white)
+                                .appTextStyle()
                         }
                             .frame(width: barSize.width, height: barSize.height)
                             .frame(maxHeight: .infinity, alignment: .bottom)
