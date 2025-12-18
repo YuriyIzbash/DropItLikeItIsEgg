@@ -10,15 +10,18 @@ import UIKit
 struct UserProfile: Codable, Equatable {
     var username: String
     var email: String
+    var score: Int
     @StoredImage(in: "ProfileImages") var image: UIImage?
 
     init(
         username: String = "",
         email: String = "",
-        image: UIImage? = nil
+        score: Int = 0,
+        image: UIImage = UIImage(imageLiteralResourceName: "chicken-1")
     ) {
         self.username = username
         self.email = email
+        self.score = score
         self._image = StoredImage(wrappedValue: image, in: "ProfileImages")
     }
 }
