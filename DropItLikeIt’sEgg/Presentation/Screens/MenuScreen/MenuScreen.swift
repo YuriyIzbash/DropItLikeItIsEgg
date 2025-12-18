@@ -38,8 +38,7 @@ struct MenuScreen: View {
                                         .frame(width: 100)
                                     
                                     Text("1000")
-                                        .font(.coinCounter)
-                                        .appTextStyle()
+                                        .customFont(size: 12)
                                         .padding(.leading, 8)
                                 }
                             }
@@ -48,25 +47,24 @@ struct MenuScreen: View {
                         .padding(.bottom, 32)
                         
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.mainOpaque)
+                            .fill(Color.appMain)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.strokeMain, lineWidth: 2)
+                                    .stroke(Color.appPink, lineWidth: 2)
                             )
                             .frame(maxWidth: .infinity, alignment: .center)
                             .overlay(
                                 VStack {
                                     Text("MENU")
-                                        .font(.subtitle)
+                                        .customFont(size: 32)
                                         .padding(.top, 56)
-                                        .appTextStyle()
                                     
                                     Group {
                                         MainBtn(title: "PROFILE", action: {})
                                         
                                         MainBtn(title: "SETTINGS", action: {})
                                         
-                                        MainBtn(title: "LEADERBOARD", action: {})
+                                        MainBtn(title: "LEADER BOARD", action: {})
                                         
                                         MainBtn(title: "PRIVACY POLICY", action: {})
                                         

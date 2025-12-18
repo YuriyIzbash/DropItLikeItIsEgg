@@ -38,16 +38,14 @@ struct LevelsScreen: View {
                                         .frame(width: 100)
                                     
                                     Text("1000")
-                                        .font(.coinCounter)
-                                        .appTextStyle()
+                                        .customFont(size: 12)
                                         .padding(.leading, 8)
                                 }
                             }
                         }
                         
                         Text("CHANGE LEVEL")
-                            .font(.subtitle)
-                            .appTextStyle()
+                            .customFont(size: 32)
                             .padding(.top, 16)
                     }
                     .frame(maxHeight: .infinity, alignment: .top)
@@ -77,8 +75,7 @@ private struct GridLevels: View {
                         }
                         .overlay(
                             Text("\(number)")
-                                .font(.subtitle)
-                                .appTextStyle()
+                                .customFont(size: 32)
                         )
                         .allowsHitTesting(!isLocked)
                         .grayscale(isLocked ? 1.0 : 0.0)

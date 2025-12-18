@@ -22,7 +22,7 @@ struct LeaderBoardScreen: View {
     private var content: some View {
         VStack(alignment: .leading) {
             header
-            profileCard
+            leaderBoardCard
         }
         .padding(.horizontal, 32)
         .frame(maxHeight: .infinity, alignment: .top)
@@ -37,22 +37,21 @@ private extension LeaderBoardScreen {
         .padding(.bottom, 32)
     }
     
-    var profileCard: some View {
+    var leaderBoardCard: some View {
         RoundedRectangle(cornerRadius: 8, style: .continuous)
-            .fill(Color.mainOpaque)
+            .fill(Color.appMain)
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color.strokeMain, lineWidth: 2)
+                    .stroke(Color.appPink, lineWidth: 2)
             )
-            .overlay(profileContent, alignment: .top)
+            .overlay(leaderBoardContent, alignment: .top)
         
     }
     
-    var profileContent: some View {
+    var leaderBoardContent: some View {
         VStack(spacing: 0) {
             Text("LEADER BOARD")
-                .font(.subtitle)
-                .appTextStyle()
+                .customFont(size: 24)
                 .padding(.top, 56)
                 .padding(.bottom, 16)
             
@@ -77,16 +76,16 @@ private extension LeaderBoardScreen {
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .overlay(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(Color.strokeMain, lineWidth: 2)
+                            .stroke(Color.appPink, lineWidth: 2)
                     )
-                    .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .contentShape(RoundedRectangle(cornerRadius: 8))
             } else {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color.textFields)
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.appPink)
                     .frame(width: 60, height: 60)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(Color.strokeMain, lineWidth: 2)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.appPink, lineWidth: 2)
                     )
             }
         }
@@ -100,18 +99,16 @@ private struct UserInfoRow: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.textFields)
+                .fill(Color.appPink)
             
             HStack(spacing: 12) {
                 Text(username.isEmpty ? "USERNAME" : username)
-                    .font(.placeholderText)
+                    .customFont(size: 16)
                     .lineLimit(1)
-                    .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("\(score)")
-                    .font(.placeholderText)
-                    .foregroundStyle(Color.white)
+                    .customFont(size: 16)
             }
             .padding(.horizontal, 16)
         }

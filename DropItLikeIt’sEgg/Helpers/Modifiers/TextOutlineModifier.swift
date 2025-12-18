@@ -47,7 +47,7 @@ fileprivate struct TextOutlineModifier: ViewModifier {
 extension View {
     func textOutline(
         width: CGFloat = 3,
-        color: Color = .textOutline
+        color: Color = .appTextOutline
     ) -> some View {
         modifier(TextOutlineModifier(width: width, color: color))
     }

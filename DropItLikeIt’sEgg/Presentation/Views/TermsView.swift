@@ -29,26 +29,25 @@ struct TermsView: View {
                         .padding(.bottom, 8)
                         
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.mainOpaque)
+                            .fill(Color.appMain)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.strokeMain, lineWidth: 2)
+                                    .stroke(Color.appPink, lineWidth: 2)
                             )
                             .frame(maxWidth: .infinity, alignment: .center)
                             .overlay(
                                 VStack {
                                     Text("TERMS OF USE")
-                                        .font(.subtitle)
+                                        .customFont(size: 24)
                                         .multilineTextAlignment(.center)
                                         .minimumScaleFactor(0.6)
                                         .lineLimit(1)
                                     
                                     Text("TEXT")
-                                        .font(.regularText)
+                                        .customFont(size: 12)
                                         .frame(maxHeight: .infinity, alignment: .center)
                                 }
-                                    .padding(16)
-                                    .appTextStyle(),
+                                    .padding(16),
                                 alignment: .top
                             )
                     }

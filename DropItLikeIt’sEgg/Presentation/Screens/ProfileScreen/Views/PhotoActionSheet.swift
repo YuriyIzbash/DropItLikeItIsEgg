@@ -27,15 +27,15 @@ struct PhotoActionSheet: View {
                         
                         VStack {
                             Text("PLEASE MAKE YOUR CHOICE")
-                                .font(.sheetText)
-                                .appTextStyle()
-                                .padding()
-                                
+                                .customFont(.fredokaSemiBold, size: 18)
+                                .padding(.top, 12)
+                                .padding(.bottom, 8)
+
                             Divider()
                                 .background(Color.white)
                                 .padding(.bottom, 16)
                             
-                            VStack {
+                            VStack(spacing: 0) {
                                 Button {
                                     isPresented = false
                                     DispatchQueue.main.async {
@@ -43,6 +43,7 @@ struct PhotoActionSheet: View {
                                     }
                                 } label: {
                                     Text("MAKE A PHOTO")
+                                        .frame(maxWidth: .infinity, minHeight: 44)
                                 }
                                 
                                 Rectangle()
@@ -56,12 +57,12 @@ struct PhotoActionSheet: View {
                                     }
                                 } label: {
                                     Text("CHOOSE PHOTO")
+                                        .frame(maxWidth: .infinity, minHeight: 44)
                                 }
                             }
-                            .frame(maxWidth: .infinity, maxHeight: 44)
-                                .foregroundColor(.black)
-                                .font(.sheetText)
-                            .padding(16)
+                            .frame(maxWidth: .infinity)
+                            .customFont(.fredokaSemiBold, size: 18, color: .black)
+                            .padding()
                             .background(Color.white)
                             .cornerRadius(12)
                             .padding(.horizontal, 56)
@@ -73,15 +74,14 @@ struct PhotoActionSheet: View {
                                 Text("CANCEL")
                                     .frame(maxWidth: .infinity, maxHeight: 44)
                                     .background(Color.white)
-                                    .foregroundColor(.black)
-                                    .font(.sheetText)
+                                    .customFont(.fredokaSemiBold, size: 18, color: .black)
                                     .cornerRadius(12)
                                     .padding(.horizontal, 104)
                             }
                         }
                         .padding(.bottom, geometry.safeAreaInsets.bottom)
-                        .frame(height: geometry.size.height * 0.35)
-                        .background(Color.sheetBackground)
+                        .frame(height: geometry.size.height * 0.4)
+                        .background(Color.appSheetBackground)
                         .cornerRadius(20, corners: [.topLeft, .topRight])
                     }
                     .ignoresSafeArea(edges: .bottom)

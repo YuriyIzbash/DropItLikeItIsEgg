@@ -16,8 +16,7 @@ struct WinScreen: View {
             VStack {
                 VStack(spacing: 24) {
                     Text("YOU WIN!")
-                        .font(.title2)
-                        .appTextStyle()
+                        .customFont(size: 32)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                     
@@ -31,8 +30,7 @@ struct WinScreen: View {
                             print("Home tapped ...")
                         } label: {
                             Text("HOME")
-                                .font(.subtitle)
-                                .appTextStyle()
+                                .customFont(size: 24)
                                 .underline(true)
                         }
                         
@@ -42,8 +40,7 @@ struct WinScreen: View {
                             print("Restart tapped ...")
                         } label: {
                             Text("RESTART")
-                                .font(.subtitle)
-                                .appTextStyle()
+                                .customFont(size: 24)
                                 .underline(true)
                         }
                     }
@@ -68,10 +65,10 @@ struct ScoreRow: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.scoreBackground)
+                .fill(Color.appLightGreen)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.scoreOutline, lineWidth: 2)
+                        .stroke(Color.appGreen, lineWidth: 2)
                 )
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(height: 60)
@@ -82,8 +79,7 @@ struct ScoreRow: View {
                 Text(value)
             }
             .padding(.horizontal, 18)
-            .font(.subtitle)
-            .appTextStyle()
+            .customFont(size: 24)
         }
     }
 }

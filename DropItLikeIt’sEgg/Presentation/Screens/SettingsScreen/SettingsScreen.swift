@@ -24,7 +24,7 @@ struct SettingsScreen: View {
     }
     
     private var content: some View {
-        VStack(alignment: .leading) {
+        VStack {
             header
                 .padding(.horizontal, 32)
 
@@ -44,28 +44,31 @@ struct SettingsScreen: View {
 
 private extension SettingsScreen {
     var header: some View {
-        NavBtn(type: .back) {
-            print("Back tapped")
+        HStack {
+            NavBtn(type: .back) {
+                print("Back tapped")
+            }
+            
+            Spacer()
         }
-        .padding(.bottom, 32)
+        .padding(.bottom, 104)
     }
     
     var settingsCard: some View {
         RoundedRectangle(cornerRadius: 8, style: .continuous)
-            .fill(Color.mainOpaque)
+            .fill(Color.appMain)
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color.strokeMain, lineWidth: 2)
+                    .stroke(Color.appPink, lineWidth: 2)
             )
             .overlay(settingsContent, alignment: .top)
-            .padding(.horizontal, 32)
+            .frame(width: 350, height: 300, alignment: .center)
     }
     
     var settingsContent: some View {
         VStack {
             Text("SETTINGS")
-                .font(.subtitle)
-                .appTextStyle()
+                .customFont(size: 24)
                 .padding(.top, 16)
             
             SettingToggleRow(title: "SOUND", isOn: $soundIsOn)
@@ -82,6 +85,7 @@ private extension SettingsScreen {
         }
         .frame(height: 140)
         .padding(.horizontal, 48)
+        .padding(.top, 80)
     }
 }
 
@@ -92,15 +96,14 @@ private struct SettingToggleRow: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(.placeholderText)
-                .appTextStyle()
+                .customFont(size: 16)
                 .layoutPriority(1)
             Spacer()
             Toggle("", isOn: $isOn)
                 .labelsHidden()
                 .toggleStyle(SwitchToggleStyle())
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, 56)
         .padding(.vertical, 16)
     }
 }

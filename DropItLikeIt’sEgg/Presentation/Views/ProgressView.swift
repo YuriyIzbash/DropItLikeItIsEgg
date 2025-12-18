@@ -43,7 +43,7 @@ struct ProgressView: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(
                                     LinearGradient(
-                                        colors: [Color("gradientOrange"), Color("gradientYellow")],
+                                        colors: [Color.appOrange, Color.appYellow],
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )
@@ -53,16 +53,15 @@ struct ProgressView: View {
                             
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(LinearGradient(
-                                    colors: [Color("gradientOrange"), Color("gradientYellow")],
+                                    colors: [Color.appOrange, Color.appYellow],
                                     startPoint: .top,
                                     endPoint: .bottom
                                 ), lineWidth: 2)
                             
                             Text("\(Int(progress * 100))%")
                                 .frame(maxWidth: .infinity, alignment: .center)
-                                .font(.subtitle)
-                                .textOutline(width: 1, color: .textOutline)
-                                .appTextStyle()
+                                .textOutline(width: 1, color: .appTextOutline)
+                                .customFont(size: 24)
                         }
                             .frame(width: barSize.width, height: barSize.height)
                             .frame(maxHeight: .infinity, alignment: .bottom)

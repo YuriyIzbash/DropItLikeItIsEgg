@@ -27,12 +27,11 @@ struct MainBtn: View {
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .font(isMultiline ? .menuBtn : .mainBtn)
+                    .textOutline(width: 1, color: .appTextOutline)
+                    .customFont(size: isMultiline ? 18 : 56)
                     .minimumScaleFactor(0.2)
-                    .textOutline(width: 1, color: .textOutline)
-                    .appTextStyle()
                     .background(
-                        TextSizeReader(text: title, baseFont: .mainBtn) { isWrapped in
+                        TextSizeReader(text: title) { isWrapped in
                             if isMultiline != isWrapped {
                                 isMultiline = isWrapped
                             }
@@ -95,7 +94,6 @@ struct PressFeedbackStyle: ButtonStyle {
 
 private struct TextSizeReader: View {
     let text: String
-    let baseFont: Font
     let onWrapChange: (Bool) -> Void
     
     @State private var availableWidth: CGFloat = 0
@@ -110,7 +108,6 @@ private struct TextSizeReader: View {
                 }
                 .overlay(alignment: .topLeading) {
                     Text(text)
-                        .font(baseFont)
                         .fixedSize(horizontal: true, vertical: false)
                         .opacity(0)
                         .background(

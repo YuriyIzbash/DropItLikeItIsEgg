@@ -16,8 +16,7 @@ struct LoseScreen: View {
             VStack {
                 VStack(spacing: 24) {
                     Text("YOU LOSE!")
-                        .font(.title2)
-                        .appTextStyle()
+                        .customFont(size: 32)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                     
@@ -30,8 +29,7 @@ struct LoseScreen: View {
                         print("Home tapped ...")
                     } label: {
                         Text("HOME")
-                            .font(.subtitle)
-                            .appTextStyle()
+                            .customFont(size: 24)
                             .underline(true)
                     }
                     .padding(.horizontal, 12)

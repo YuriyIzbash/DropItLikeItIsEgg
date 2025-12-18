@@ -31,8 +31,7 @@ struct GameScreen: View {
                             .frame(width: 100)
                         
                         Text("1000")
-                            .font(.coinCounter)
-                            .appTextStyle()
+                            .customFont(size: 12)
                             .padding(.leading, 8)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)

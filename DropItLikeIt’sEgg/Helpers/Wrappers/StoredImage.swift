@@ -7,43 +7,13 @@
 
 import UIKit
 
-struct FileService {
-    let folderName: String
-
-    private var directoryURL: URL {
-        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let dir = urls[0].appendingPathComponent(folderName, isDirectory: true)
-        if !FileManager.default.fileExists(atPath: dir.path) {
-            try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        }
-        return dir
-    }
-
-    func save(_ data: Data, in fileName: String) throws {
-        let url = directoryURL.appendingPathComponent(fileName)
-        try data.write(to: url, options: .atomic)
-    }
-
-    func load(from fileName: String) throws -> Data {
-        let url = directoryURL.appendingPathComponent(fileName)
-        return try Data(contentsOf: url)
-    }
-
-    func delete(_ fileName: String) throws {
-        let url = directoryURL.appendingPathComponent(fileName)
-        if FileManager.default.fileExists(atPath: url.path) {
-            try FileManager.default.removeItem(at: url)
-        }
-    }
-}
-
 @propertyWrapper
 struct StoredImage: Codable, Hashable {
     private var image: UIImage? = nil
     private var fileName: String
     private var folderName: String
     private let separator: String = "_folder_"
-
+    
     var wrappedValue: UIImage? {
         get { image }
         set {
@@ -55,9 +25,9 @@ struct StoredImage: Codable, Hashable {
             }
         }
     }
-
+    
     var projectedValue: StoredImage { self }
-
+    
     init(wrappedValue: UIImage? = nil, in folderName: String) {
         self.folderName = folderName
         self.fileName = "\(folderName)\(separator)\(UUID().uuidString).jpeg"
@@ -66,18 +36,18 @@ struct StoredImage: Codable, Hashable {
             saveImage(wrapped)
         }
     }
-
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         fileName = try container.decode(String.self)
-
+        
         let parts = fileName.split(separator: separator, maxSplits: 1, omittingEmptySubsequences: true)
         guard let folderPart = parts.first else {
             throw DecodingError.dataCorruptedError(
                 in: container,
                 debugDescription:("Invalid filename format: \(fileName)"))
         }
-
+        
         self.folderName = String(folderPart)
         if let data = try? fileService.load(from: fileName) {
             self.image = UIImage(data: data)
@@ -85,22 +55,28 @@ struct StoredImage: Codable, Hashable {
             self.image = nil
         }
     }
-
+    
     private var fileService: FileService {
         FileService(folderName: folderName)
     }
-
+    
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(fileName)
     }
-
+    
     func deleteFromDisk() throws {
         try fileService.delete(fileName)
     }
-
+    
     private func saveImage(_ imageToSave: UIImage) {
         guard let data = imageToSave.jpegData(compressionQuality: 0.7) else { return }
         try? fileService.save(data, in: fileName)
+    }
+}
+
+extension StoredImage: Equatable {
+    static func == (lhs: StoredImage, rhs: StoredImage) -> Bool {
+        lhs.fileName == rhs.fileName
     }
 }

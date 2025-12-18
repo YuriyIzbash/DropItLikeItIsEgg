@@ -12,7 +12,6 @@ struct DropItLikeItIsEggApp: App {
     var body: some Scene {
         WindowGroup {
             ProgressView()
-                .appTextStyle()
         }
     }
 }

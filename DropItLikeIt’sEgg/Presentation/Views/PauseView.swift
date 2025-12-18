@@ -13,8 +13,7 @@ struct PauseView: View {
     var body: some View {
         ZStack {
             Text("paused")
-                .font(.title)
-                .appTextStyle()
+                .customFont(size: 32)
                 .padding(.bottom, 160)
 
             HStack {
@@ -22,8 +21,7 @@ struct PauseView: View {
                     print("Home tapped ...")
                 } label: {
                     Text("HOME")
-                        .font(.subtitle)
-                        .appTextStyle()
+                        .customFont(size: 24)
                         .underline(true)
                 }
 
@@ -33,8 +31,7 @@ struct PauseView: View {
                     print("Restart tapped ...")
                 } label: {
                     Text("RESTART")
-                        .font(.subtitle)
-                        .appTextStyle()
+                        .customFont(size: 24)
                         .underline(true)
                 }
             }

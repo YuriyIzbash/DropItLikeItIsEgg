@@ -65,10 +65,10 @@ private extension ProfileScreen {
     
     var profileCard: some View {
         RoundedRectangle(cornerRadius: 8, style: .continuous)
-            .fill(Color.mainOpaque)
+            .fill(Color.appMain)
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color.strokeMain, lineWidth: 2)
+                    .stroke(Color.appPink, lineWidth: 2)
             )
             .overlay(profileContent, alignment: .top)
             .padding(.horizontal, 32)
@@ -77,8 +77,7 @@ private extension ProfileScreen {
     var profileContent: some View {
         VStack(spacing: 0) {
             Text("PROFILE")
-                .font(.subtitle)
-                .appTextStyle()
+                .customFont(size: 32)
                 .padding(.top, 56)
             
             avatarButton
@@ -115,7 +114,7 @@ private extension ProfileScreen {
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .overlay(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(Color.strokeMain, lineWidth: 2)
+                            .stroke(Color.appPink, lineWidth: 2)
                     )
                     .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .onTapGesture { showPhotoActionSheet = true }
@@ -131,7 +130,7 @@ private extension ProfileScreen {
                 .padding(3)
                 .background(
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.scoreBackground)
+                        .fill(Color.appLightGreen)
                 ),
             alignment: .bottom
         )
@@ -143,7 +142,6 @@ private extension ProfileScreen {
             ImagePicker(sourceType: .photoLibrary, selectedImage: $profile.image)
                 .ignoresSafeArea()
         }
-        
     }
     
     var saveButton: some View {
@@ -155,7 +153,6 @@ private extension ProfileScreen {
             emailError = isEmailEmpty
 
             guard !isUsernameEmpty && !isEmailEmpty else {
-                // Focus the first invalid field
                 if isUsernameEmpty {
                     focusedField = .username
                 } else if isEmailEmpty {
@@ -164,7 +161,6 @@ private extension ProfileScreen {
                 return
             }
 
-            // Ensure default image if none selected
             if profile.image == nil {
                 profile.image = UIImage(named: "chicken-1")
             }
@@ -186,21 +182,20 @@ private struct StyledTextField: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.textFields)
+                .fill(Color.appPink)
             
             HStack(spacing: 12) {
                 ZStack(alignment: .leading) {
                     if text.isEmpty && focusedField != field {
                         Text(title)
-                            .font(.placeholderText)
+                            .customFont(size: 16)
                             .foregroundStyle(isError ? Color.red : Color.white)
                     }
                     
                     TextField("", text: $text)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled(true)
-                        .font(.placeholderText)
-                        .foregroundStyle(Color.white)
+                        .customFont(size: 16)
                         .tint(.white)
                         .focused($focusedField, equals: field)
                 }
@@ -221,48 +216,6 @@ private struct MainBackground: View {
             .resizable()
             .scaledToFill()
             .ignoresSafeArea()
-    }
-}
-
-private struct ImagePicker: UIViewControllerRepresentable {
-    enum SourceType {
-        case camera
-        case photoLibrary
-    }
-    let sourceType: SourceType
-    @Binding var selectedImage: UIImage?
-
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.delegate = context.coordinator
-        switch sourceType {
-        case .camera:
-            picker.sourceType = UIImagePickerController.isSourceTypeAvailable(.camera) ? .camera : .photoLibrary
-        case .photoLibrary:
-            picker.sourceType = .photoLibrary
-        }
-        picker.allowsEditing = false
-        return picker
-    }
-
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator { Coordinator(self) }
-
-    final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: ImagePicker
-        init(_ parent: ImagePicker) { self.parent = parent }
-
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.selectedImage = image
-            }
-            picker.dismiss(animated: true)
-        }
-
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            picker.dismiss(animated: true)
-        }
     }
 }
 
