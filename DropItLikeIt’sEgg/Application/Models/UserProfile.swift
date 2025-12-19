@@ -17,7 +17,7 @@ struct UserProfile: Codable, Equatable {
         username: String = "",
         email: String = "",
         score: Int = 0,
-        image: UIImage = UIImage(imageLiteralResourceName: "chicken-1")
+        image: UIImage = UIImage(imageLiteralResourceName: "profilePlaceholder")
     ) {
         self.username = username
         self.email = email
