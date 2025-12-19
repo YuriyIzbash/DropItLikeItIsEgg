@@ -1,5 +1,5 @@
 //
-//  HomeVM.swift
+//  HomeScreenVM.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 16. 12. 25.
