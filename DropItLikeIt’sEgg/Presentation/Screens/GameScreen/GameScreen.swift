@@ -8,21 +8,17 @@
 import SwiftUI
 
 struct GameScreen: View {
-    @State private var isPaused: Bool = false
+    @StateObject var vm: GameScreenVM
     
     var body: some View {
         Color.clear
-            .edgesIgnoringSafeArea(.all)
             .background(
-                ZStack {
-                    Image("backgroundGame")
-                        .resizable()
-                        .scaledToFill()
-                    
-                }
+                Image("backgroundGame")
+                    .resizable()
+                    .scaledToFill()
                     .ignoresSafeArea()
             )
-            .overlay(
+            .overlay(alignment: .top) {
                 ZStack(alignment: .trailing) {
                     ZStack(alignment: .leading) {
                         Image(.coinCounter)
@@ -38,22 +34,21 @@ struct GameScreen: View {
                     
                     
                     NavBtn(type: .pause) {
-                        isPaused = true
+                        vm.pause()
                     }
                 }
-                    .padding(.horizontal, 32)
-                , alignment: .top
-            )
+                .padding(.horizontal, 32)
+            }
             .overlay {
-                if isPaused {
-                    PauseView(isPresented: $isPaused)
+                if vm.isPaused {
+                    PauseView(isPresented: $vm.isPaused)
                         .transition(.opacity)
-                        .animation(.easeInOut, value: isPaused)
+                        .animation(.easeInOut, value: vm.isPaused)
                 }
             }
     }
 }
 
 #Preview {
-    GameScreen()
+    GameScreen(vm: GameScreenVM())
 }
