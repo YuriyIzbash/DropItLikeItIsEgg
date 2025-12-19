@@ -9,54 +9,39 @@ import SwiftUI
 
 struct LevelsScreen: View {
     var body: some View {
-        Color.clear
-            .edgesIgnoringSafeArea(.all)
-            .background(
-                ZStack {
-                    Image("backgroundMain")
-                        .resizable()
-                        .scaledToFill()
-                    
-                }
-                    .ignoresSafeArea()
-            )
-            .overlay(
-                ZStack {
-                    VStack {
-                        HStack {
-                            NavBtn(type: .back) {
-                                print("Back tapped")
-                            }
-                            
-                            Spacer()
-                            
-                            ZStack(alignment: .trailing) {
-                                ZStack(alignment: .leading) {
-                                    Image(.coinCounter)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 100)
-                                    
-                                    Text("1000")
-                                        .customFont(size: 12)
-                                        .padding(.leading, 8)
-                                }
-                            }
+        ZStackWithBackground {
+                VStack {
+                    HStack {
+                        NavBtn(type: .back) {
+                            print("Back tapped")
                         }
                         
-                        Text("CHANGE LEVEL")
-                            .customFont(size: 32)
-                            .padding(.top, 16)
+                        Spacer()
+                        
+                        ZStack(alignment: .trailing) {
+                            ZStack(alignment: .leading) {
+                                Image(.coinCounter)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100)
+                                
+                                Text("1000")
+                                    .customFont(size: 12)
+                                    .padding(.leading, 8)
+                            }
+                        }
                     }
-                    .frame(maxHeight: .infinity, alignment: .top)
-                    .padding(.horizontal, 32)
                     
+                    Text("CHANGE LEVEL")
+                        .customFont(size: 32)
+                        .padding(.top, 16)
                 }
-            )
-            .overlay(
-                GridLevels()
-                    .padding(.horizontal, 32)
-            )
+                .frame(maxHeight: .infinity, alignment: .top)
+                .padding(.horizontal, 48)
+            
+            GridLevels()
+        }
+        .padding(.horizontal, 32)
     }
 }
 

@@ -9,22 +9,14 @@ import SwiftUI
 
 struct HomeScreen: View {
     var body: some View {
-        Color.clear
-            .edgesIgnoringSafeArea(.all)
-            .background(
-                ZStack {
-                    Image("backgroundMain")
-                        .resizable()
-                        .scaledToFill()
-                    
-                    Image("chicken-1")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height)
-                }
-                    .ignoresSafeArea()
-            )
-            .overlay(
+        GeometryReader { proxy in
+            ZStackWithBackground {
+                Image(.chicken1)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: proxy.size.width * 0.8, height: proxy.size.height)
+            }
+            .overlay {
                 ZStack {
                     HStack {
                         NavBtn(type: .info) {
@@ -44,7 +36,8 @@ struct HomeScreen: View {
                         .frame(maxHeight: .infinity, alignment: .bottom)
                         .padding(.horizontal, 48)
                 }
-            )
+            }
+        }
     }
 }
 

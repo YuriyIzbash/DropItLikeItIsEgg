@@ -9,11 +9,10 @@ import SwiftUI
 
 struct LoseScreen: View {
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Color.black.opacity(0.8)
-                .ignoresSafeArea()
-            
+        ZStackWithBackground(color: .black.opacity(0.8)) {
             VStack {
+                Spacer()
+                
                 VStack(spacing: 24) {
                     Text("YOU LOSE!")
                         .customFont(size: 32)
@@ -39,7 +38,7 @@ struct LoseScreen: View {
                 MainBtn(title: "TRY AGAIN", action: {
                     print("TRY AGAIN tapped...")
                 })
-                .padding(.horizontal, 48)
+                .padding(.horizontal, 56)
             }
             .frame(maxWidth: .infinity, alignment: .bottom)
         }

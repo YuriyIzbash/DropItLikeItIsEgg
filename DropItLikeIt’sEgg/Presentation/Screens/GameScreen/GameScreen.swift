@@ -11,41 +11,36 @@ struct GameScreen: View {
     @StateObject var vm: GameScreenVM
     
     var body: some View {
-        Color.clear
-            .background(
-                Image("backgroundGame")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-            )
-            .overlay(alignment: .top) {
-                ZStack(alignment: .trailing) {
-                    ZStack(alignment: .leading) {
-                        Image(.coinCounter)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100)
-                        
-                        Text("1000")
-                            .customFont(size: 12)
-                            .padding(.leading, 8)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
+        ZStackWithBackground(.backgroundGame) {
+            
+        }
+        .overlay(alignment: .top) {
+            ZStack(alignment: .trailing) {
+                ZStack(alignment: .leading) {
+                    Image(.coinCounter)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100)
                     
-                    
-                    NavBtn(type: .pause) {
-                        vm.pause()
-                    }
+                    Text("1000")
+                        .customFont(size: 12)
+                        .padding(.leading, 8)
                 }
-                .padding(.horizontal, 32)
-            }
-            .overlay {
-                if vm.isPaused {
-                    PauseView(isPresented: $vm.isPaused)
-                        .transition(.opacity)
-                        .animation(.easeInOut, value: vm.isPaused)
+                .frame(maxWidth: .infinity, alignment: .center)
+                
+                NavBtn(type: .pause) {
+                    vm.pause()
                 }
             }
+            .padding(.horizontal, 32)
+        }
+        .overlay {
+            if vm.isPaused {
+                PauseView(isPresented: $vm.isPaused)
+                    .transition(.opacity)
+                    .animation(.easeInOut, value: vm.isPaused)
+            }
+        }
     }
 }
 

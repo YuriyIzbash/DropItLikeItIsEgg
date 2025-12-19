@@ -12,9 +12,7 @@ struct LeaderBoardScreen: View {
     @State private var profile = UserProfile()
     
     var body: some View {
-        ZStack {
-            MainBackground()
-            
+        ZStackWithBackground {
             content
         }
     }
@@ -113,15 +111,6 @@ private struct UserInfoRow: View {
             .padding(.horizontal, 16)
         }
         .frame(height: 48)
-    }
-}
-
-private struct MainBackground: View {
-    var body: some View {
-        Image("backgroundMain")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
     }
 }
 

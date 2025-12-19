@@ -9,11 +9,10 @@ import SwiftUI
 
 struct WinScreen: View {
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Color.black.opacity(0.8)
-                .ignoresSafeArea()
-            
+        ZStackWithBackground(color: .black.opacity(0.8)) {
             VStack {
+                Spacer()
+                
                 VStack(spacing: 24) {
                     Text("YOU WIN!")
                         .customFont(size: 32)
@@ -53,7 +52,6 @@ struct WinScreen: View {
                 })
                 .padding(.horizontal, 48)
             }
-            .frame(maxWidth: .infinity, alignment: .bottom)
         }
     }
 }

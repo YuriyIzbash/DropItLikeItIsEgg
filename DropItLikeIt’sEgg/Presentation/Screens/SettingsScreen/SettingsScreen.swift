@@ -17,8 +17,7 @@ struct SettingsScreen: View {
     private let vibroSaver = DefaultsDataSaver<Bool>(key: "settings.vibration")
     
     var body: some View {
-        ZStack {
-            MainBackground()
+        ZStackWithBackground {
             content
         }
     }
@@ -105,15 +104,6 @@ private struct SettingToggleRow: View {
         }
         .padding(.horizontal, 56)
         .padding(.vertical, 16)
-    }
-}
-
-private struct MainBackground: View {
-    var body: some View {
-        Image("backgroundMain")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
     }
 }
 

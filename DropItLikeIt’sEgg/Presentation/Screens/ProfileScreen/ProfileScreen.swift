@@ -24,8 +24,7 @@ struct ProfileScreen: View {
     }
     
     var body: some View {
-        ZStack {
-            MainBackground()
+        ZStackWithBackground {
             content
         }
         .overlay {
@@ -148,10 +147,10 @@ private extension ProfileScreen {
         MainBtn(title: "SAVE") {
             let isUsernameEmpty = profile.username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             let isEmailEmpty = profile.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-
+            
             usernameError = isUsernameEmpty
             emailError = isEmailEmpty
-
+            
             guard !isUsernameEmpty && !isEmailEmpty else {
                 if isUsernameEmpty {
                     focusedField = .username
@@ -160,11 +159,11 @@ private extension ProfileScreen {
                 }
                 return
             }
-
+            
             if profile.image == nil {
-                profile.image = UIImage(named: "chicken-1")
+                profile.image = UIImage(named: "profilePlaceholder")
             }
-
+            
             profileSaver.save(profile)
         }
         .frame(height: 140)
@@ -207,15 +206,6 @@ private struct StyledTextField: View {
             .padding(.vertical, 12)
         }
         .frame(height: 48)
-    }
-}
-
-private struct MainBackground: View {
-    var body: some View {
-        Image("backgroundMain")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
     }
 }
 

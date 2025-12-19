@@ -15,26 +15,18 @@ struct ProgressView: View {
     private let barSize = CGSize(width: 350, height: 50)
     
     var body: some View {
+        GeometryReader { proxy in
         ZStack {
             if showHome {
                 HomeScreen()
                     .transition(.opacity)
             } else {
-                Color.clear
-                    .edgesIgnoringSafeArea(.all)
-                    .background(
-                        ZStack {
-                            Image("backgroundMain")
-                                .resizable()
-                                .scaledToFill()
-                            
-                            Image("chicken-1")
+                        ZStackWithBackground {
+                            Image(.chicken1)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .bottom)
+                                .frame(width: proxy.size.width*0.9, height: proxy.size.height, alignment: .bottom)
                         }
-                            .ignoresSafeArea()
-                    )
                     .overlay(
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 12)
@@ -93,6 +85,7 @@ struct ProgressView: View {
                         }
                     }
                     .transition(.opacity)
+            }
             }
         }
     }
