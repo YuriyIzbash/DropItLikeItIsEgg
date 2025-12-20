@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct InfoView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var appVM: ContentVM
+    
     var body: some View {
         ZStackWithBackground {
                 VStack(alignment: .leading) {
-                    NavBtn(type: .back) {
-                        print("Back tapped")
-                    }
+                    NavBtn(type: .back) { dismiss() }
                     .padding(.bottom, 32)
                     
                     RoundedRectangle(cornerRadius: 8)
@@ -45,3 +46,4 @@ struct InfoView: View {
 #Preview {
     InfoView()
 }
+

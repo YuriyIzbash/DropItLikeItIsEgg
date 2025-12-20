@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PauseView: View {
+    @EnvironmentObject private var appVM: ContentVM
     @Binding var isPresented: Bool
     
     var body: some View {
@@ -18,7 +19,7 @@ struct PauseView: View {
 
             HStack {
                 Button {
-                    print("Home tapped ...")
+                    appVM.popToRoot()
                 } label: {
                     Text("HOME")
                         .customFont(size: 24)
@@ -28,7 +29,7 @@ struct PauseView: View {
                 Spacer()
 
                 Button {
-                    print("Restart tapped ...")
+                    appVM.openGame()
                 } label: {
                     Text("RESTART")
                         .customFont(size: 24)

@@ -5,4 +5,22 @@
 //  Created by yuriy on 16. 12. 25.
 //
 
-import Foundation
+import Combine
+import SwiftUI
+
+@MainActor
+final class HomeScreenVM: ObservableObject {
+    @Published var path: [AppRoute] = []
+    
+    func openInfo() {
+        path.append(.info)
+    }
+    
+    func openMenu() {
+        path.append(.menu)
+    }
+    
+    func openGame() {
+        path.append(.game)
+    }
+}

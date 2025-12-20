@@ -8,31 +8,20 @@
 import SwiftUI
 
 struct ProfileScreen: View {
-    @State private var profile = UserProfile()
-    @FocusState private var focusedField: Field?
-    @State private var showPhotoActionSheet: Bool = false
-    @State private var showCameraPicker: Bool = false
-    @State private var showPhotoPicker: Bool = false
-    @State private var usernameError: Bool = false
-    @State private var emailError: Bool = false
-    
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
-    
-    enum Field: Hashable {
-        case username
-        case email
-    }
+    @Environment(\.dismiss) private var dismiss
+    @StateObject var vm: ProfileScreenVM
+    @FocusState private var focusedField: ProfileScreenVM.Field?
     
     var body: some View {
         ZStackWithBackground {
             content
         }
         .overlay {
-            if showPhotoActionSheet {
+            if vm.showPhotoActionSheet {
                 PhotoActionSheet(
-                    isPresented: $showPhotoActionSheet,
-                    onMakePhoto: { showCameraPicker = true },
-                    onChoosePhoto: { showPhotoPicker = true }
+                    isPresented: $vm.showPhotoActionSheet,
+                    onMakePhoto: { vm.showCameraPicker = true },
+                    onChoosePhoto: { vm.showPhotoPicker = true }
                 )
             }
         }
@@ -47,18 +36,14 @@ struct ProfileScreen: View {
         .padding(.horizontal, 32)
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
-            if let loaded: UserProfile = profileSaver.getValue() {
-                profile = loaded
-            }
+            vm.load()
         }
     }
 }
 
 private extension ProfileScreen {
     var header: some View {
-        NavBtn(type: .back) {
-            print("Back tapped")
-        }
+        NavBtn(type: .back) { dismiss() }
         .padding(.bottom, 32)
     }
     
@@ -84,19 +69,19 @@ private extension ProfileScreen {
             
             StyledTextField(
                 title: "USERNAME",
-                text: $profile.username,
+                text: $vm.profile.username,
                 field: .username,
                 focusedField: $focusedField,
-                isError: usernameError
+                isError: vm.usernameError
             )
             .padding(.top, 12)
             
             StyledTextField(
                 title: "EMAIL",
-                text: $profile.email,
+                text: $vm.profile.email,
                 field: .email,
                 focusedField: $focusedField,
-                isError: emailError
+                isError: vm.emailError
             )
             .padding(.top, 8)
         }
@@ -105,7 +90,7 @@ private extension ProfileScreen {
     
     var avatarButton: some View {
         ZStack {
-            if let image = profile.image {
+            if let image = vm.profile.image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -116,10 +101,10 @@ private extension ProfileScreen {
                             .stroke(Color.appPink, lineWidth: 2)
                     )
                     .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .onTapGesture { showPhotoActionSheet = true }
+                    .onTapGesture { vm.showPhotoActionSheet = true }
             } else {
                 NavBtn(type: .empty, size: 120) {
-                    showPhotoActionSheet = true
+                    vm.showPhotoActionSheet = true
                 }
             }
         }
@@ -133,38 +118,22 @@ private extension ProfileScreen {
                 ),
             alignment: .bottom
         )
-        .sheet(isPresented: $showCameraPicker) {
-            ImagePicker(sourceType: .camera, selectedImage: $profile.image)
+        .sheet(isPresented: $vm.showCameraPicker) {
+            ImagePicker(sourceType: .camera, selectedImage: $vm.profile.image)
                 .ignoresSafeArea()
         }
-        .sheet(isPresented: $showPhotoPicker) {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $profile.image)
+        .sheet(isPresented: $vm.showPhotoPicker) {
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.profile.image)
                 .ignoresSafeArea()
         }
     }
     
     var saveButton: some View {
         MainBtn(title: "SAVE") {
-            let isUsernameEmpty = profile.username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let isEmailEmpty = profile.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            
-            usernameError = isUsernameEmpty
-            emailError = isEmailEmpty
-            
-            guard !isUsernameEmpty && !isEmailEmpty else {
-                if isUsernameEmpty {
-                    focusedField = .username
-                } else if isEmailEmpty {
-                    focusedField = .email
-                }
-                return
+            let fieldToFocus = vm.save()
+            if let field = fieldToFocus {
+                focusedField = field
             }
-            
-            if profile.image == nil {
-                profile.image = UIImage(named: "profilePlaceholder")
-            }
-            
-            profileSaver.save(profile)
         }
         .frame(height: 140)
         .padding(.horizontal, 48)
@@ -174,8 +143,8 @@ private extension ProfileScreen {
 private struct StyledTextField: View {
     let title: String
     @Binding var text: String
-    let field: ProfileScreen.Field
-    @FocusState.Binding var focusedField: ProfileScreen.Field?
+    let field: ProfileScreenVM.Field
+    @FocusState.Binding var focusedField: ProfileScreenVM.Field?
     var isError: Bool = false
     
     var body: some View {
@@ -210,5 +179,5 @@ private struct StyledTextField: View {
 }
 
 #Preview {
-    ProfileScreen()
+    ProfileScreen(vm: ProfileScreenVM())
 }

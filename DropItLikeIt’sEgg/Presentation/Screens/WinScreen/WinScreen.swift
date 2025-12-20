@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct WinScreen: View {
+    @EnvironmentObject private var appVM: ContentVM
+    
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
             VStack {
@@ -26,7 +28,7 @@ struct WinScreen: View {
                     
                     HStack {
                         Button {
-                            print("Home tapped ...")
+                            appVM.popToRoot()
                         } label: {
                             Text("HOME")
                                 .customFont(size: 24)
@@ -36,7 +38,7 @@ struct WinScreen: View {
                         Spacer()
                         
                         Button {
-                            print("Restart tapped ...")
+                            appVM.openGame()
                         } label: {
                             Text("RESTART")
                                 .customFont(size: 24)

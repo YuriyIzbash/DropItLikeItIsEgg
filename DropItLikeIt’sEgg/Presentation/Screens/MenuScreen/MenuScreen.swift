@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct MenuScreen: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var appVM: ContentVM
+    
     var body: some View {
         GeometryReader { proxy in
             ZStackWithBackground {
@@ -16,9 +19,7 @@ struct MenuScreen: View {
             .overlay(alignment: .center) {
                 VStack {
                     HStack {
-                        NavBtn(type: .back) {
-                            print("Back tapped")
-                        }
+                        NavBtn(type: .back) { dismiss() }
                         
                         Spacer()
                         
@@ -45,15 +46,15 @@ struct MenuScreen: View {
                             .padding(.vertical, 16)
                         
                         Group {
-                            MainBtn(title: "PROFILE", action: {})
+                            MainBtn(title: "PROFILE", action: { appVM.openProfile() })
                             
-                            MainBtn(title: "SETTINGS", action: {})
+                            MainBtn(title: "SETTINGS", action: { appVM.openSettings() })
                             
-                            MainBtn(title: "LEADER BOARD", action: {})
+                            MainBtn(title: "LEADER BOARD", action: { appVM.openLeaderboard() })
                             
-                            MainBtn(title: "PRIVACY POLICY", action: {})
+                            MainBtn(title: "PRIVACY POLICY", action: { appVM.openPrivacy() })
                             
-                            MainBtn(title: "TERMS OF USE", action: {})
+                            MainBtn(title: "TERMS OF USE", action: { appVM.openTerms() })
                         }
                         .frame(height: proxy.size.height * 0.1)
                         .padding(.horizontal, proxy.size.width * 0.25)
@@ -79,3 +80,4 @@ struct MenuScreen: View {
 #Preview {
     MenuScreen()
 }
+

@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct PrivacyView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         ZStackWithBackground {
             VStack(alignment: .leading) {
-                NavBtn(type: .back) {
-                    print("Back tapped")
-                }
+                NavBtn(type: .back) { dismiss() }
                 .padding(.bottom, 8)
                 
                 RoundedRectangle(cornerRadius: 8)

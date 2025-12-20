@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LoseScreen: View {
+    @EnvironmentObject private var appVM: ContentVM
+    
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
             VStack {
@@ -25,7 +27,7 @@ struct LoseScreen: View {
                     }
                     
                     Button {
-                        print("Home tapped ...")
+                        appVM.popToRoot()
                     } label: {
                         Text("HOME")
                             .customFont(size: 24)
@@ -36,7 +38,7 @@ struct LoseScreen: View {
                 .padding(.horizontal, 32)
                 
                 MainBtn(title: "TRY AGAIN", action: {
-                    print("TRY AGAIN tapped...")
+                    appVM.openGame()
                 })
                 .padding(.horizontal, 56)
             }

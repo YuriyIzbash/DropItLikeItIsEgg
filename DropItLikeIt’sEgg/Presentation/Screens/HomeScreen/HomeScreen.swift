@@ -8,35 +8,31 @@
 import SwiftUI
 
 struct HomeScreen: View {
+    @EnvironmentObject private var appVM: ContentVM
+    
     var body: some View {
-        GeometryReader { proxy in
-            ZStackWithBackground {
-                Image(.chicken1)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: proxy.size.width * 0.8, height: proxy.size.height)
+        ZStackWithBackground {
+            Image(.chicken1)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 32)
+            
+            MainBtn(title: "PLAY", action: { appVM.openLevels() })
+                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .padding(.horizontal, 56)
+        }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .info) { appVM.openInfo() }
+                
+                Spacer()
+                
+                NavBtn(type: .menu) { appVM.openMenu() }
             }
-            .overlay {
-                ZStack {
-                    HStack {
-                        NavBtn(type: .info) {
-                            print("Info tapped")
-                        }
-                        
-                        Spacer()
-                        
-                        NavBtn(type: .menu) {
-                            print("Info tapped")
-                        }
-                    }
-                    .frame(maxHeight: .infinity, alignment: .top)
-                    .padding(.horizontal, 32)
-                    
-                    MainBtn(title: "PLAY", action: {})
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                        .padding(.horizontal, 48)
-                }
-            }
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
         }
     }
 }

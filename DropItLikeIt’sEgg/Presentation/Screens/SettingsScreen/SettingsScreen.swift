@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingsScreen: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var soundIsOn: Bool = false
     @State private var notificationIsOn: Bool = false
     @State private var vibroIsOn: Bool = false
@@ -44,9 +45,7 @@ struct SettingsScreen: View {
 private extension SettingsScreen {
     var header: some View {
         HStack {
-            NavBtn(type: .back) {
-                print("Back tapped")
-            }
+            NavBtn(type: .back) { dismiss() }
             
             Spacer()
         }

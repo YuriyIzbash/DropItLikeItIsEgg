@@ -9,13 +9,9 @@ import SwiftUI
 import UIKit
 
 struct LeaderBoardScreen: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var profile = UserProfile()
-    
-    var body: some View {
-        ZStackWithBackground {
-            content
-        }
-    }
+    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
     
     private var content: some View {
         VStack(alignment: .leading) {
@@ -24,15 +20,24 @@ struct LeaderBoardScreen: View {
         }
         .padding(.horizontal, 32)
         .frame(maxHeight: .infinity, alignment: .top)
+        .onAppear {
+            if let loaded: UserProfile = profileSaver.getValue() {
+                profile = loaded
+            }
+        }
+    }
+    
+    var body: some View {
+        ZStackWithBackground {
+            content
+        }
     }
 }
 
 private extension LeaderBoardScreen {
     var header: some View {
-        NavBtn(type: .back) {
-            print("Back tapped")
-        }
-        .padding(.bottom, 32)
+        NavBtn(type: .back) { dismiss() }
+            .padding(.bottom, 32)
     }
     
     var leaderBoardCard: some View {

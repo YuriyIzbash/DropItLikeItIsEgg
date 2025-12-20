@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct LevelsScreen: View {
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         ZStackWithBackground {
                 VStack {
                     HStack {
-                        NavBtn(type: .back) {
-                            print("Back tapped")
-                        }
+                        NavBtn(type: .back) { dismiss() }
                         
                         Spacer()
                         
@@ -45,7 +45,9 @@ struct LevelsScreen: View {
     }
 }
 
-private struct GridLevels: View {
+struct GridLevels: View {
+    @EnvironmentObject private var appVM: ContentVM
+    
     var body: some View {
         Grid(horizontalSpacing: 16, verticalSpacing: 24) {
             ForEach(0..<3, id: \.self) { row in
@@ -55,7 +57,7 @@ private struct GridLevels: View {
                         let isLocked = number >= 7
                         NavBtn(type: .empty, size: 96) {
                             if !isLocked {
-                                print("Level \(number) tapped")
+                                appVM.openGame()
                             }
                         }
                         .overlay(

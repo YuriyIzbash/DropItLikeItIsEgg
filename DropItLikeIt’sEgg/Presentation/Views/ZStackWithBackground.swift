@@ -39,6 +39,7 @@ struct ZStackWithBackground<Content: View>: View {
             }
             content()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
