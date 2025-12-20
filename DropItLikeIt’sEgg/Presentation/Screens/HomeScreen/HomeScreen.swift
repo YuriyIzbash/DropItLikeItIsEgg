@@ -16,12 +16,14 @@ struct HomeScreen: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 32)
+                .padding(.horizontal, 48)
+                .padding(.top, 32)
             
             MainBtn(title: "PLAY", action: { appVM.openLevels() })
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .padding(.horizontal, 56)
+                .padding(.bottom, 32)
         }
         .safeAreaInset(edge: .top) {
             HStack {
