@@ -1,14 +1,9 @@
-//
-//  LoseScreen.swift
-//  DropItLikeIt’sEgg
-//
-//  Created by yuriy on 17. 12. 25.
-//
-
 import SwiftUI
 
 struct LoseScreen: View {
     @EnvironmentObject private var appVM: ContentVM
+    let score: Int
+    let best: Int
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -22,8 +17,8 @@ struct LoseScreen: View {
                         .lineLimit(1)
                     
                     VStack {
-                        ScoreRow(title: "SCORE", value: "0000")
-                        ScoreRow(title: "BEST", value: "0000")
+                        ScoreRow(title: "SCORE", value: "\(score)")
+                        ScoreRow(title: "BEST", value: "\(best)")
                     }
                     
                     Button {
@@ -48,5 +43,6 @@ struct LoseScreen: View {
 }
 
 #Preview {
-    LoseScreen()
+    LoseScreen(score: 500, best: 1200)
+        .environmentObject(ContentVM())
 }

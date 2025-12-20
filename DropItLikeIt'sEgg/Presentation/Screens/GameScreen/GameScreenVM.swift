@@ -29,7 +29,7 @@ final class GameScreenVM: ObservableObject {
     
     @Published var isPaused: Bool = false
     @Published var score: Int = 1000
-    @Published var bestScore: Int = 0
+    @Published var bestScore: Int = 1000
     @Published var playerX: CGFloat = 0.5
     @Published var eggs: [Egg] = []
     @Published var blasts: [Blast] = []
@@ -38,7 +38,25 @@ final class GameScreenVM: ObservableObject {
     
     let timer = Timer.publish(every: 1/60, on: .main, in: .common).autoconnect()
     
-    private let totalEggs = 24
+    private let level: Int
+    private var totalEggs: Int {
+        // Level 1: 24 eggs, Level 2: 30, Level 3: 36, Level 4: 42, Level 5: 48, Level 6: 54
+        return 24 + (level - 1) * 6
+    }
+    
+    private var baseFallSpeed: CGFloat {
+        // Level 1: 180-260, Level 2: 200-280, Level 3: 220-300, Level 4: 240-320, Level 5: 260-340, Level 6: 280-360
+        let baseMin: CGFloat = 180 + CGFloat(level - 1) * 20
+        let baseMax: CGFloat = 260 + CGFloat(level - 1) * 20
+        return baseMin
+    }
+    
+    private var fallSpeedRange: ClosedRange<CGFloat> {
+        let minSpeed: CGFloat = 180 + CGFloat(level - 1) * 20
+        let maxSpeed: CGFloat = 260 + CGFloat(level - 1) * 20
+        return minSpeed...maxSpeed
+    }
+    
     private let eggImages: [ImageResource] = [.egg1, .egg2, .egg3, .egg4, .egg5, .egg6, .egg7, .egg8, .egg9, .egg10, .egg11, .egg12]
     private let spawnIntervalRange: ClosedRange<Double> = 0.7...1.3
     private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
@@ -49,6 +67,10 @@ final class GameScreenVM: ObservableObject {
     private var sceneSize: CGSize = .zero
     
     private let bottomPadding: CGFloat = 28
+    
+    init(level: Int = 1) {
+        self.level = max(1, min(6, level)) // Clamp between 1 and 6
+    }
     
     func start(with size: CGSize) {
         sceneSize = size
@@ -153,7 +175,7 @@ final class GameScreenVM: ObservableObject {
             image: eggImages.randomElement() ?? .egg1,
             x: CGFloat.random(in: 0.08...0.92),
             y: initialY,
-            fallSpeed: CGFloat.random(in: 180...260)
+            fallSpeed: CGFloat.random(in: fallSpeedRange)
         )
         eggs.append(egg)
     }
@@ -209,3 +231,4 @@ final class GameScreenVM: ObservableObject {
         profileSaver.save(profile)
     }
 }
+

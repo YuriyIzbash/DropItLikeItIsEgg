@@ -1,14 +1,9 @@
-//
-//  WinScreen.swift
-//  DropItLikeIt’sEgg
-//
-//  Created by yuriy on 17. 12. 25.
-//
-
 import SwiftUI
 
 struct WinScreen: View {
     @EnvironmentObject private var appVM: ContentVM
+    let score: Int
+    let best: Int
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -22,8 +17,8 @@ struct WinScreen: View {
                         .lineLimit(1)
                     
                     VStack {
-                        ScoreRow(title: "SCORE", value: "0000")
-                        ScoreRow(title: "BEST", value: "0000")
+                        ScoreRow(title: "SCORE", value: "\(score)")
+                        ScoreRow(title: "BEST", value: "\(best)")
                     }
                     
                     HStack {
@@ -50,7 +45,7 @@ struct WinScreen: View {
                 .padding(.horizontal, 32)
                 
                 MainBtn(title: "NEXT", action: {
-                    print("NEXT tapped...")
+                    appVM.popToRoot()
                 })
                 .padding(.horizontal, 48)
             }
@@ -85,5 +80,6 @@ struct ScoreRow: View {
 }
 
 #Preview {
-    WinScreen()
+    WinScreen(score: 1200, best: 1500)
+        .environmentObject(ContentVM())
 }

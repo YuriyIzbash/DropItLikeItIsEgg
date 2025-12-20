@@ -4,6 +4,10 @@ struct GameScreen: View {
     @EnvironmentObject private var appVM: ContentVM
     @StateObject var vm: GameScreenVM
     
+    init(level: Int = 1) {
+        _vm = StateObject(wrappedValue: GameScreenVM(level: level))
+    }
+    
     var body: some View {
         GeometryReader { proxy in
             ZStackWithBackground(.backgroundGame) {
@@ -134,6 +138,7 @@ private extension GameScreen {
 }
 
 #Preview {
-    GameScreen(vm: GameScreenVM())
+    GameScreen(level: 1)
         .environmentObject(ContentVM())
 }
+
