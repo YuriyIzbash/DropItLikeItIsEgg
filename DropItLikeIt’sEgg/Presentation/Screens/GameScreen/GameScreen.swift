@@ -16,16 +16,7 @@ struct GameScreen: View {
         }
         .overlay(alignment: .top) {
             ZStack(alignment: .trailing) {
-                ZStack(alignment: .leading) {
-                    Image(.coinCounter)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100)
-                    
-                    Text("1000")
-                        .customFont(size: 12)
-                        .padding(.leading, 8)
-                }
+                CoinCounterView(amount: 1000)
                 .frame(maxWidth: .infinity, alignment: .center)
                 
                 NavBtn(type: .pause) {

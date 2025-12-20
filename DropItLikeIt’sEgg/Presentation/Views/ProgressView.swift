@@ -16,17 +16,17 @@ struct ProgressView: View {
     
     var body: some View {
         GeometryReader { proxy in
-        ZStack {
-            if showHome {
-                HomeScreen()
-                    .transition(.opacity)
-            } else {
-                        ZStackWithBackground {
-                            Image(.chicken1)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: proxy.size.width*0.9, height: proxy.size.height, alignment: .bottom)
-                        }
+            ZStack {
+                if showHome {
+                    HomeScreen()
+                        .transition(.opacity)
+                } else {
+                    ZStackWithBackground {
+                        Image(.chicken1)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: proxy.size.width*0.9, height: proxy.size.height, alignment: .bottom)
+                    }
                     .overlay(
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 12)
@@ -85,7 +85,7 @@ struct ProgressView: View {
                         }
                     }
                     .transition(.opacity)
-            }
+                }
             }
         }
     }

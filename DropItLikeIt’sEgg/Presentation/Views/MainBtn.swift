@@ -7,141 +7,157 @@
 
 import SwiftUI
 
+struct MainButtonStyle {
+    let height: CGFloat
+    let fontSize: CGFloat
+    let horizontalPadding: CGFloat
+    let verticalPadding: CGFloat
+    
+    static let large = MainButtonStyle(
+        height: 140,
+        fontSize: 56,
+        horizontalPadding: 48,
+        verticalPadding: 0
+    )
+    
+    static let small = MainButtonStyle(
+        height: 100,
+        fontSize: 24,
+        horizontalPadding: 80,
+        verticalPadding: 8
+    )
+}
+
 struct MainBtn: View {
-    var title: String
-    var action: () -> Void
-    var enableHaptics: Bool = true
+    
+    enum Size {
+        case large
+        case small
+        
+        var style: MainButtonStyle {
+            switch self {
+            case .large: return .large
+            case .small: return .small
+            }
+        }
+    }
+    
+    let title: String
+    let size: Size
+    let enableHaptics: Bool
+    let action: () -> Void
+    
     @State private var isPressed = false
-    @State private var isMultiline = false
+    
+    init(
+        title: String,
+        size: Size = .large,
+        enableHaptics: Bool = false,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.size = size
+        self.enableHaptics = enableHaptics
+        self.action = action
+    }
     
     var body: some View {
-        Button {
-            if enableHaptics {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        Button(action: performAction) {
+            ZStack {
+                backgroundImage
+                titleView
             }
-            action()
-        } label: {
-            HStack {
-                Text(title)
-                    .padding(.horizontal, 12)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .textOutline(width: 1, color: .appTextOutline)
-                    .customFont(size: isMultiline ? 18 : 56)
-                    .minimumScaleFactor(0.2)
-                    .background(
-                        TextSizeReader(text: title) { isWrapped in
-                            if isMultiline != isWrapped {
-                                isMultiline = isWrapped
-                            }
-                        }
-                            .allowsHitTesting(false)
-                            .accessibilityHidden(true)
-                    )
-            }
-            .padding()
-            .frame(height: 248)
-            .background(
-                ZStack {
-                    Image("btnMain")
-                        .resizable()
-                        .scaledToFit()
-                        .shadow(color: Color.black.opacity(isPressed ? 0.15 : 0.35),
-                                radius: isPressed ? 6 : 16,
-                                x: 0,
-                                y: isPressed ? 2 : 8)
-                }
-            )
+            .frame(height: size.style.height)
+            .contentShape(Rectangle())
             .scaleEffect(isPressed ? 0.97 : 1)
-            .rotation3DEffect(.degrees(isPressed ? 2 : 0),
-                              axis: (x: 1, y: 0, z: 0),
-                              perspective: 0.6)
+            .rotation3DEffect(
+                .degrees(isPressed ? 2 : 0),
+                axis: (x: 1, y: 0, z: 0),
+                perspective: 0.6
+            )
             .offset(y: isPressed ? 1 : 0)
-            .animation(.spring(response: 0.25,
-                               dampingFraction: 0.7),
-                       value: isPressed)
+            .animation(.spring(response: 0.25, dampingFraction: 0.7), value: isPressed)
         }
         .buttonStyle(PressFeedbackStyle(isPressed: $isPressed))
     }
 }
 
+
 struct PressFeedbackStyle: ButtonStyle {
     @Binding var isPressed: Bool
-    
     func makeBody(configuration: Configuration) -> some View {
-        Group {
-            if #available(iOS 17.0, *) {
-                configuration.label
-                    .onChange(of: configuration.isPressed) { _, newValue in
-                        isPressed = newValue
-                    }
-            } else {
-                configuration.label
-                    .background(
-                        GeometryReader { _ in
-                            Color.clear
-                                .onAppear { isPressed = false }
-                        }
-                    )
-                    .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                        isPressed = false
-                    }
-            }
+        Group { if #available(iOS 17.0, *) {
+            configuration.label
+                .onChange(of: configuration.isPressed) { _, newValue
+                    in isPressed = newValue }
+        } else { configuration.label
+                .background( GeometryReader { _ in
+                    Color.clear
+                    .onAppear { isPressed = false } }
+                ) .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                    isPressed = false }
+        }
         }
     }
 }
 
-private struct TextSizeReader: View {
-    let text: String
-    let onWrapChange: (Bool) -> Void
+private extension MainBtn {
     
-    @State private var availableWidth: CGFloat = 0
-    @State private var singleLineWidth: CGFloat = 0
-    
-    var body: some View {
-        GeometryReader { proxy in
-            Color.clear
-                .onAppear { updateAvailableWidth(proxy.size.width) }
-                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                    updateAvailableWidth(proxy.size.width)
-                }
-                .overlay(alignment: .topLeading) {
-                    Text(text)
-                        .fixedSize(horizontal: true, vertical: false)
-                        .opacity(0)
-                        .background(
-                            GeometryReader { textProxy in
-                                Color.clear
-                                    .onAppear {
-                                        singleLineWidth = textProxy.size.width
-                                        notify()
-                                    }
-                            }
-                        )
-                }
-        }
-        .frame(height: 0)
-    }
-    
-    private func updateAvailableWidth(_ width: CGFloat) {
-        if availableWidth != width {
-            availableWidth = width
-            notify()
-        }
-    }
-    
-    private func notify() {
-        let wraps = singleLineWidth > max(0, availableWidth)
-        onWrapChange(wraps)
+    var backgroundImage: some View {
+        Image(.btnMain)
+            .resizable()
+            .scaledToFit()
+            .frame(maxWidth: .infinity, alignment: .center)
     }
 }
+
+private extension MainBtn {
+    
+    var titleView: some View {
+        Text(title)
+            .textOutline(width: 1, color: .appTextOutline)
+            .customFont(size: size.style.fontSize)
+            .multilineTextAlignment(.center)
+            .lineLimit(2)
+            .minimumScaleFactor(0.5)
+            .padding(.horizontal, size.style.horizontalPadding)
+            .padding(.vertical, size.style.verticalPadding)
+    }
+}
+
+private extension MainBtn {
+    
+    func performAction() {
+        if enableHaptics {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+        action()
+    }
+}
+
+private extension MainBtn {
+    
+    init(
+        title: String,
+        size: Size,
+        action: @escaping () -> Void
+    ) {
+        self.init(
+            title: title,
+            size: size,
+            enableHaptics: false,
+            action: action
+        )
+    }
+}
+
 
 #Preview {
     VStack(spacing: 24) {
-        MainBtn(title: "Test", action: { print("Tested with Haptics...") }, enableHaptics: true)
-        
-        MainBtn(title: "Test", action: { print("Tested  no Haptics...") }, enableHaptics: false)
+        MainBtn(title: "LARGE", action: {})
+        MainBtn(title: "LARGE button with long text", action: {})
+        MainBtn(title: "SMALL", size: .small, action: {})
+        MainBtn(title: "SMALL button with long text", size: .small, action: {})
     }
     .padding()
 }

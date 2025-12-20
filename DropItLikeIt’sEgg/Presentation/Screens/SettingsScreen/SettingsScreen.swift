@@ -9,14 +9,7 @@ import SwiftUI
 
 struct SettingsScreen: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var soundIsOn: Bool = false
-    @State private var notificationIsOn: Bool = false
-    @State private var vibroIsOn: Bool = false
-    @State private var showSaveConfirmation: Bool = false
-    
-    private let soundSaver = DefaultsDataSaver<Bool>(key: "settings.sound")
-    private let notificationSaver = DefaultsDataSaver<Bool>(key: "settings.notification")
-    private let vibroSaver = DefaultsDataSaver<Bool>(key: "settings.vibration")
+    @StateObject var vm: SettingsScreenVM
     
     var body: some View {
         ZStackWithBackground {
@@ -25,7 +18,7 @@ struct SettingsScreen: View {
         .customAlert(
             title: "Saved",
             message: "Your settings has been saved.",
-            isPresented: $showSaveConfirmation
+            isPresented: $vm.showSaveConfirmation
         )
     }
     
@@ -33,17 +26,15 @@ struct SettingsScreen: View {
         VStack {
             header
                 .padding(.horizontal, 32)
-
+            
             settingsCard
             saveButton
                 .padding(.horizontal, 32)
-
+            
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
-            if let v = soundSaver.getValue() { soundIsOn = v }
-            if let v = notificationSaver.getValue() { notificationIsOn = v }
-            if let v = vibroSaver.getValue() { vibroIsOn = v }
+            vm.load()
         }
     }
 }
@@ -75,18 +66,15 @@ private extension SettingsScreen {
                 .customFont(size: 24)
                 .padding(.top, 16)
             
-            SettingToggleRow(title: "SOUND", isOn: $soundIsOn)
-            SettingToggleRow(title: "NOTIFICATION", isOn: $notificationIsOn)
-            SettingToggleRow(title: "VIBRATION", isOn: $vibroIsOn)
+            SettingToggleRow(title: "SOUND", isOn: $vm.soundIsOn)
+            SettingToggleRow(title: "NOTIFICATION", isOn: $vm.notificationIsOn)
+            SettingToggleRow(title: "VIBRATION", isOn: $vm.vibroIsOn)
         }
     }
     
     var saveButton: some View {
         MainBtn(title: "SAVE") {
-            soundSaver.save(soundIsOn)
-            notificationSaver.save(notificationIsOn)
-            vibroSaver.save(vibroIsOn)
-            showSaveConfirmation = true
+            vm.save()
         }
         .frame(height: 140)
         .padding(.horizontal, 48)
@@ -97,7 +85,7 @@ private extension SettingsScreen {
 private struct SettingToggleRow: View {
     let title: String
     @Binding var isOn: Bool
-
+    
     var body: some View {
         HStack {
             Text(title)
@@ -114,5 +102,5 @@ private struct SettingToggleRow: View {
 }
 
 #Preview {
-    SettingsScreen()
+    SettingsScreen(vm: SettingsScreenVM())
 }

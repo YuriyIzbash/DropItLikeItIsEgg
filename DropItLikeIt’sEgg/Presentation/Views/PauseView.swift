@@ -16,7 +16,7 @@ struct PauseView: View {
             Text("paused")
                 .customFont(size: 32)
                 .padding(.bottom, 160)
-
+            
             HStack {
                 Button {
                     appVM.popToRoot()
@@ -25,9 +25,9 @@ struct PauseView: View {
                         .customFont(size: 24)
                         .underline(true)
                 }
-
+                
                 Spacer()
-
+                
                 Button {
                     appVM.openGame()
                 } label: {
@@ -37,7 +37,7 @@ struct PauseView: View {
                 }
             }
             .padding(.horizontal, 48)
-
+            
             MainBtn(title: "PLAY", action: {
                 isPresented = false
             })

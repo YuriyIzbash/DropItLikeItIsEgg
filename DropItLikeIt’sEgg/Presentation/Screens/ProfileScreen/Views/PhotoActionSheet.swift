@@ -30,7 +30,7 @@ struct PhotoActionSheet: View {
                                 .customFont(.fredokaSemiBold, size: 18)
                                 .padding(.top, 12)
                                 .padding(.bottom, 8)
-
+                            
                             Divider()
                                 .background(Color.white)
                                 .padding(.bottom, 16)
@@ -67,7 +67,7 @@ struct PhotoActionSheet: View {
                             .cornerRadius(12)
                             .padding(.horizontal, 56)
                             .padding(.bottom, 16)
-                           
+                            
                             Button {
                                 isPresented = false
                             } label: {

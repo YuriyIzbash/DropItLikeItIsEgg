@@ -12,7 +12,7 @@ struct CustomAlert: View {
     let message: String
     let confirmTitle: String
     let onConfirm: () -> Void
-
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.5)
@@ -20,15 +20,15 @@ struct CustomAlert: View {
                 .onTapGesture {
                     onConfirm()
                 }
-
+            
             VStack(spacing: 16) {
                 Text(title)
                     .font(.headline)
-
+                
                 Text(message)
                     .font(.body)
                     .multilineTextAlignment(.center)
-
+                
                 Button(confirmTitle) {
                     onConfirm()
                 }

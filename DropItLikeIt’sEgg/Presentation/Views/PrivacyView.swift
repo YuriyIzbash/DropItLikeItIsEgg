@@ -14,7 +14,7 @@ struct PrivacyView: View {
         ZStackWithBackground {
             VStack(alignment: .leading) {
                 NavBtn(type: .back) { dismiss() }
-                .padding(.bottom, 8)
+                    .padding(.bottom, 8)
                 
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color.appMain)

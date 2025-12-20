@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LevelsScreen: View {
     @Environment(\.dismiss) private var dismiss
+    @StateObject var vm: LevelsScreenVM
     
     var body: some View {
         ZStackWithBackground {
@@ -18,35 +19,29 @@ struct LevelsScreen: View {
                         
                         Spacer()
                         
-                        ZStack(alignment: .trailing) {
-                            ZStack(alignment: .leading) {
-                                Image(.coinCounter)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100)
-                                
-                                Text("1000")
-                                    .customFont(size: 12)
-                                    .padding(.leading, 8)
-                            }
-                        }
+                        CoinCounterView(amount: vm.coinAmount)
                     }
                     
                     Text("CHANGE LEVEL")
                         .customFont(size: 32)
+                        .lineLimit(1)
                         .padding(.top, 16)
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.horizontal, 48)
             
-            GridLevels()
+            GridLevels(vm: vm)
+            .padding(.top, 48)
         }
         .padding(.horizontal, 32)
+        .onAppear {
+            vm.load()
+        }
     }
 }
 
 struct GridLevels: View {
-    @EnvironmentObject private var appVM: ContentVM
+    @ObservedObject var vm: LevelsScreenVM
     
     var body: some View {
         Grid(horizontalSpacing: 16, verticalSpacing: 24) {
@@ -55,9 +50,10 @@ struct GridLevels: View {
                     ForEach(0..<3, id: \.self) { col in
                         let number = row * 3 + col + 1
                         let isLocked = number >= 7
+                        
                         NavBtn(type: .empty, size: 96) {
                             if !isLocked {
-                                appVM.openGame()
+                                vm.openGame(for: number)
                             }
                         }
                         .overlay(
@@ -70,11 +66,9 @@ struct GridLevels: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .padding(.horizontal, 48)
     }
 }
 
 #Preview {
-    LevelsScreen()
+    LevelsScreen(vm: .init(appVM: ContentVM()))
 }

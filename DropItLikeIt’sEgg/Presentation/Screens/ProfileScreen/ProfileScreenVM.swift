@@ -6,12 +6,12 @@
 //
 
 import Combine
-import SwiftUI
 import UIKit
 
 @MainActor
 final class ProfileScreenVM: ObservableObject {
     @Published var profile = UserProfile()
+    @Published var showSaveConfirmation: Bool = false
     @Published var showPhotoActionSheet: Bool = false
     @Published var showCameraPicker: Bool = false
     @Published var showPhotoPicker: Bool = false

@@ -10,8 +10,7 @@ import UIKit
 
 struct LeaderBoardScreen: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var profile = UserProfile()
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
+    @StateObject var vm: LeaderBoardScreenVM
     
     private var content: some View {
         VStack(alignment: .leading) {
@@ -21,9 +20,7 @@ struct LeaderBoardScreen: View {
         .padding(.horizontal, 32)
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
-            if let loaded: UserProfile = profileSaver.getValue() {
-                profile = loaded
-            }
+            vm.load()
         }
     }
     
@@ -59,7 +56,7 @@ private extension LeaderBoardScreen {
                 .padding(.bottom, 16)
             
             ScrollView {
-                UserInfoRow(username: profile.username, score: profile.score)
+                UserInfoRow(username: vm.profile.username, score: vm.profile.score)
                     .padding(.leading, 48)
                 
                 avatarView
@@ -71,7 +68,7 @@ private extension LeaderBoardScreen {
     
     var avatarView: some View {
         Group {
-            if let image = profile.image {
+            if let image = vm.profile.image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -120,5 +117,5 @@ private struct UserInfoRow: View {
 }
 
 #Preview {
-    LeaderBoardScreen()
+    LeaderBoardScreen(vm: LeaderBoardScreenVM())
 }

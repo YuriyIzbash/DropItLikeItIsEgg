@@ -18,17 +18,17 @@ struct ContentView: View {
                     case .info:
                         InfoView()
                     case .menu:
-                        MenuScreen()
+                        MenuScreen(vm: .init(appVM: appVM))
                     case .levels:
-                        LevelsScreen()
+                        LevelsScreen(vm: .init(appVM: appVM))
                     case .game:
-                        GameScreen(vm: GameScreenVM())
+                        GameScreen(vm: .init())
                     case .profile:
-                        ProfileScreen(vm: ProfileScreenVM())
+                        ProfileScreen(vm: .init())
                     case .settings:
-                        SettingsScreen()
+                        SettingsScreen(vm: .init())
                     case .leaderboard:
-                        LeaderBoardScreen()
+                        LeaderBoardScreen(vm: .init())
                     case .privacy:
                         PrivacyView()
                     case .terms:
