@@ -12,6 +12,7 @@ struct SettingsScreen: View {
     @State private var soundIsOn: Bool = false
     @State private var notificationIsOn: Bool = false
     @State private var vibroIsOn: Bool = false
+    @State private var showSaveConfirmation: Bool = false
     
     private let soundSaver = DefaultsDataSaver<Bool>(key: "settings.sound")
     private let notificationSaver = DefaultsDataSaver<Bool>(key: "settings.notification")
@@ -21,6 +22,11 @@ struct SettingsScreen: View {
         ZStackWithBackground {
             content
         }
+        .customAlert(
+            title: "Saved",
+            message: "Your settings has been saved.",
+            isPresented: $showSaveConfirmation
+        )
     }
     
     private var content: some View {
@@ -80,6 +86,7 @@ private extension SettingsScreen {
             soundSaver.save(soundIsOn)
             notificationSaver.save(notificationIsOn)
             vibroSaver.save(vibroIsOn)
+            showSaveConfirmation = true
         }
         .frame(height: 140)
         .padding(.horizontal, 48)

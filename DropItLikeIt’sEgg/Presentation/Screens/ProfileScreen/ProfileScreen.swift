@@ -11,6 +11,7 @@ struct ProfileScreen: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var vm: ProfileScreenVM
     @FocusState private var focusedField: ProfileScreenVM.Field?
+    @State private var showSaveConfirmation: Bool = false
     
     var body: some View {
         ZStackWithBackground {
@@ -25,6 +26,11 @@ struct ProfileScreen: View {
                 )
             }
         }
+        .customAlert(
+            title: "Saved",
+            message: "Your profile has been saved.",
+            isPresented: $showSaveConfirmation
+        )
     }
     
     private var content: some View {
@@ -133,6 +139,8 @@ private extension ProfileScreen {
             let fieldToFocus = vm.save()
             if let field = fieldToFocus {
                 focusedField = field
+            } else {
+                showSaveConfirmation = true
             }
         }
         .frame(height: 140)
