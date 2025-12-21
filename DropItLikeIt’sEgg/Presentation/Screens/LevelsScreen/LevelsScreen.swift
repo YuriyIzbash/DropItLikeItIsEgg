@@ -48,20 +48,23 @@ struct GridLevels: View {
             ForEach(0..<3, id: \.self) { row in
                 GridRow {
                     ForEach(0..<3, id: \.self) { col in
-                        let number = row * 3 + col + 1
-                        let isLocked = number >= 7
+                        let index = row * 3 + col
                         
-                        NavBtn(type: .empty, size: 96) {
-                            if !isLocked {
-                                vm.openGame(for: number)
+                        if index < vm.levels.count {
+                            let level = vm.levels[index]
+                            
+                            NavBtn(type: .empty, size: 96) {
+                                if !level.isLocked {
+                                    vm.openGame(for: level.number)
+                                }
                             }
+                            .overlay(
+                                Text("\(level.number)")
+                                    .customFont(size: 32)
+                            )
+                            .allowsHitTesting(!level.isLocked)
+                            .grayscale(level.isLocked ? 1.0 : 0.0)
                         }
-                        .overlay(
-                            Text("\(number)")
-                                .customFont(size: 32)
-                        )
-                        .allowsHitTesting(!isLocked)
-                        .grayscale(isLocked ? 1.0 : 0.0)
                     }
                 }
             }

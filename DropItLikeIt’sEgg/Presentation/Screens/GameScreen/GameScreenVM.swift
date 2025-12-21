@@ -28,13 +28,15 @@ final class GameScreenVM: ObservableObject {
     }
     
     @Published var isPaused: Bool = false
-    @Published var score: Int = 1000
+    @Published var score: Int = 0
     @Published var bestScore: Int = 0
     @Published var playerX: CGFloat = 0.5
     @Published var eggs: [Egg] = []
     @Published var blasts: [Blast] = []
     @Published var coinEffect: CoinEffect?
     @Published var gameResult: GameResult?
+    
+    var isLoadingScore: Bool = false
     
     let timer = Timer.publish(every: 1/60, on: .main, in: .common).autoconnect()
     
@@ -58,19 +60,28 @@ final class GameScreenVM: ObservableObject {
             speedRange = 150...210
         case 2:
             totalEggs = 30
-            speedRange = 200...260
+            speedRange = 150...260
         case 3:
             totalEggs = 36
-            speedRange = 250...310
+            speedRange = 150...310
         case 4:
             totalEggs = 42
-            speedRange = 300...360
+            speedRange = 150...360
         case 5:
             totalEggs = 48
-            speedRange = 350...410
-        default: // level 6 and above
+            speedRange = 150...410
+        case 6:
+            totalEggs = 48
+            speedRange = 150...460
+        case 7:
+            totalEggs = 48
+            speedRange = 150...510
+        case 8:
+            totalEggs = 48
+            speedRange = 150...560
+        default:
             totalEggs = 54
-            speedRange = 400...460
+            speedRange = 150...460
         }
     }
     
@@ -78,6 +89,12 @@ final class GameScreenVM: ObservableObject {
         sceneSize = size
         resetState()
         loadStoredScore()
+    }
+    
+    func syncScore() {
+        isLoadingScore = true
+        loadStoredScore()
+        isLoadingScore = false
     }
     
     func tick(currentTime: Date) {
@@ -129,9 +146,11 @@ final class GameScreenVM: ObservableObject {
     
     private func loadStoredScore() {
         let stored = profileSaver.getValue()
-        let startingScore = max(stored?.score ?? 0, 1000)
+        let startingScore = stored?.score ?? 0
+        isLoadingScore = true
         score = startingScore
         bestScore = max(stored?.score ?? startingScore, startingScore)
+        isLoadingScore = false
     }
     
     private func moveEggs(delta: TimeInterval) {
@@ -209,12 +228,7 @@ final class GameScreenVM: ObservableObject {
     }
     
     private func checkOutcome() {
-        if score <= 0 {
-            score = 0
-            gameResult = .lose
-            return
-        }
-        
+        // Check win condition first
         if caughtEggs >= totalEggs {
             bestScore = max(bestScore, score)
             persistScore()
@@ -222,8 +236,15 @@ final class GameScreenVM: ObservableObject {
             return
         }
         
+        // Check lose condition
         if handledEggs >= totalEggs {
             gameResult = .lose
+            return
+        }
+        
+        // Score can go to 0 but game continues until all eggs are handled
+        if score <= 0 {
+            score = 0
         }
     }
     
@@ -233,3 +254,4 @@ final class GameScreenVM: ObservableObject {
         profileSaver.save(profile)
     }
 }
+

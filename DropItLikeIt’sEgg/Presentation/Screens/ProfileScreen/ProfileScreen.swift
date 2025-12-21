@@ -43,6 +43,9 @@ struct ProfileScreen: View {
         .onAppear {
             vm.load()
         }
+        .onDisappear {
+            vm.saveOnDisappear()
+        }
     }
 }
 

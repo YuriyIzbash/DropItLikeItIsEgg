@@ -9,7 +9,31 @@ struct GameScreen: View {
             ZStackWithBackground(.backgroundGame) {
                 gameLayer(size: proxy.size)
             }
-            .onAppear { vm.configure(level: appVM.currentLevel); vm.start(with: proxy.size) }
+            .onAppear { 
+                vm.configure(level: appVM.currentLevel)
+                vm.start(with: proxy.size)
+            }
+            .onDisappear {
+                // When leaving game screen (e.g., going to shop), pause the game
+                vm.pause()
+            }
+            .onChange(of: appVM.profile.score) { newScore in
+                // When profile score changes (e.g., coins added in shop), sync to VM
+                if vm.score != newScore && !vm.isLoadingScore {
+                    vm.syncScore()
+                }
+            }
+            .onChange(of: vm.score) { newValue in
+                // Don't sync back to appVM if we're loading from storage
+                guard !vm.isLoadingScore else { return }
+                
+                appVM.profile.score = newValue
+                appVM.saveProfile()
+                if newValue == 0 {
+                    // Present Shop when out of coins
+                    appVM.path.append(.shop)
+                }
+            }
             .onReceive(vm.timer) { vm.tick(currentTime: $0) }
             .overlay(alignment: .top) {
                 topBar
@@ -27,7 +51,7 @@ struct GameScreen: View {
 private extension GameScreen {
     var topBar: some View {
         ZStack(alignment: .trailing) {
-            CoinCounterView(amount: vm.score, isInteractive: false)
+            CoinCounterView(amount: appVM.profile.score, isInteractive: false)
                 .frame(maxWidth: .infinity, alignment: .center)
             
             NavBtn(type: .pause) {
@@ -131,10 +155,5 @@ private extension GameScreen {
             EmptyView()
         }
     }
-}
-
-#Preview {
-    GameScreen(vm: GameScreenVM())
-        .environmentObject(ContentVM())
 }
 

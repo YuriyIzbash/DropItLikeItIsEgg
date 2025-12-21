@@ -52,6 +52,7 @@ struct MenuScreen: View {
             }
             .padding(.horizontal, 32)
         }
+        .onAppear { vm.load() }
     }
 }
 

@@ -54,5 +54,11 @@ final class ProfileScreenVM: ObservableObject {
         profileSaver.save(profile)
         return nil
     }
+    
+    func saveOnDisappear() {
+        // Auto-save profile data when screen disappears
+        // This ensures username, email, and image are persisted even if user doesn't tap SAVE
+        profileSaver.save(profile)
+    }
 }
 
