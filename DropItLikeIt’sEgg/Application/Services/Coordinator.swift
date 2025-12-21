@@ -1,5 +1,5 @@
 //
-//  NavigationRouter.swift
+//  Coordinator.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 19. 12. 25.
@@ -12,6 +12,7 @@ enum AppRoute: Hashable {
     case menu
     case levels
     case game
+    case shop
     case profile
     case settings
     case leaderboard

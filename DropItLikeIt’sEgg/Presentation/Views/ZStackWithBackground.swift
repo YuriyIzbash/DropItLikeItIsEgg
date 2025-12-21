@@ -7,6 +7,7 @@ struct ZStackWithBackground<Content: View>: View {
     }
     
     private let background: Background
+    
     @ViewBuilder let content: () -> Content
     
     init(@ViewBuilder content: @escaping () -> Content) {
@@ -37,6 +38,7 @@ struct ZStackWithBackground<Content: View>: View {
                 color
                     .ignoresSafeArea()
             }
+            
             content()
         }
         .navigationBarBackButtonHidden(true)

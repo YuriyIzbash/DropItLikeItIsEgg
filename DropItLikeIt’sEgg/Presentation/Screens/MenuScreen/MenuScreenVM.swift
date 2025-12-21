@@ -17,6 +17,10 @@ final class MenuScreenVM: ObservableObject {
         self.appVM = appVM
     }
     
+    func openShop() {
+        appVM.openShop()
+    }
+    
     func openProfile() {
         appVM.openProfile()
     }

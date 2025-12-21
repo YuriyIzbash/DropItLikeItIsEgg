@@ -19,7 +19,7 @@ struct MenuScreen: View {
                     
                     Spacer()
                     
-                    CoinCounterView(amount: vm.coinAmount)
+                    CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
                 }
                 .padding(.bottom, 32)
                 

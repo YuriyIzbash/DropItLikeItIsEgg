@@ -16,20 +16,19 @@ struct MainButtonStyle {
     static let large = MainButtonStyle(
         height: 140,
         fontSize: 56,
-        horizontalPadding: 48,
+        horizontalPadding: 32,
         verticalPadding: 0
     )
     
     static let small = MainButtonStyle(
         height: 100,
         fontSize: 24,
-        horizontalPadding: 80,
+        horizontalPadding: 24,
         verticalPadding: 8
     )
 }
 
 struct MainBtn: View {
-    
     enum Size {
         case large
         case small
@@ -63,57 +62,24 @@ struct MainBtn: View {
     
     var body: some View {
         Button(action: performAction) {
-            ZStack {
-                backgroundImage
-                titleView
-            }
-            .frame(height: size.style.height)
-            .contentShape(Rectangle())
-            .scaleEffect(isPressed ? 0.97 : 1)
-            .rotation3DEffect(
-                .degrees(isPressed ? 2 : 0),
-                axis: (x: 1, y: 0, z: 0),
-                perspective: 0.6
-            )
-            .offset(y: isPressed ? 1 : 0)
-            .animation(.spring(response: 0.25, dampingFraction: 0.7), value: isPressed)
+            Image(.btnMain)
+                .resizable()
+                .scaledToFit()
+                .frame(height: size.style.height)
+                .overlay(content: titleView)
+                .scaleEffect(isPressed ? 0.97 : 1)
+                .rotation3DEffect(
+                    .degrees(isPressed ? 2 : 0),
+                    axis: (x: 1, y: 0, z: 0),
+                    perspective: 0.6
+                )
+                .offset(y: isPressed ? 1 : 0)
+                .animation(.spring(response: 0.25, dampingFraction: 0.7), value: isPressed)
         }
         .buttonStyle(PressFeedbackStyle(isPressed: $isPressed))
     }
-}
-
-
-struct PressFeedbackStyle: ButtonStyle {
-    @Binding var isPressed: Bool
-    func makeBody(configuration: Configuration) -> some View {
-        Group { if #available(iOS 17.0, *) {
-            configuration.label
-                .onChange(of: configuration.isPressed) { _, newValue
-                    in isPressed = newValue }
-        } else { configuration.label
-                .background( GeometryReader { _ in
-                    Color.clear
-                    .onAppear { isPressed = false } }
-                ) .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                    isPressed = false }
-        }
-        }
-    }
-}
-
-private extension MainBtn {
     
-    var backgroundImage: some View {
-        Image(.btnMain)
-            .resizable()
-            .scaledToFit()
-            .frame(maxWidth: .infinity, alignment: .center)
-    }
-}
-
-private extension MainBtn {
-    
-    var titleView: some View {
+    private func titleView() -> some View {
         Text(title)
             .textOutline(width: 1, color: .appTextOutline)
             .customFont(size: size.style.fontSize)
@@ -122,6 +88,18 @@ private extension MainBtn {
             .minimumScaleFactor(0.5)
             .padding(.horizontal, size.style.horizontalPadding)
             .padding(.vertical, size.style.verticalPadding)
+    }
+}
+
+struct PressFeedbackStyle: ButtonStyle {
+    @Binding var isPressed: Bool
+    
+    func makeBody(configuration: Configuration) -> some View {
+        Group {
+            configuration.label
+                .onChange(of: configuration.isPressed) { newValue
+                    in isPressed = newValue }
+        }
     }
 }
 

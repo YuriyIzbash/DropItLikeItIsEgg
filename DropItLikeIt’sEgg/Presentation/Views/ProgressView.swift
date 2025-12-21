@@ -61,7 +61,9 @@ struct ProgressView: View {
                     )
                     .onAppear {
                         guard !isAnimating else { return }
+                        
                         isAnimating = true
+                        
                         progress = 0
                         
                         withAnimation(.easeInOut(duration: 1.5)) {

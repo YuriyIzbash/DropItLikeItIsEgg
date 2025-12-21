@@ -28,10 +28,8 @@ final class LevelsScreenVM: ObservableObject {
     func openGame(for level: Int) {
         appVM.openGame()
     }
-}
-
-struct LevelData: Identifiable {
-    let id = UUID()
-    let number: Int
-    let isLocked: Bool
+    
+    func openShop() {
+        appVM.openShop()
+    }
 }

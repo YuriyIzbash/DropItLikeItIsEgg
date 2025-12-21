@@ -26,3 +26,4 @@ struct UserProfile: Codable, Equatable {
     }
 }
 
+

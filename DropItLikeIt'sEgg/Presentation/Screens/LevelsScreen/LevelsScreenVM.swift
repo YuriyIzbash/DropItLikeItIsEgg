@@ -20,9 +20,9 @@ final class LevelsScreenVM: ObservableObject {
     }
     
     func load() {
-        // Unlock 6 levels (Level 1 is always unlocked)
+        // Unlock all 6 levels for now (can add unlock logic later based on progress)
         levels = (1...6).map { number in
-            LevelData(number: number, isLocked: number > 1)
+            LevelData(number: number, isLocked: false)
         }
     }
     

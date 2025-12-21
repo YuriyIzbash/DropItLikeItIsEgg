@@ -15,6 +15,7 @@ final class ContentVM: ObservableObject {
     func openMenu() { path.append(.menu) }
     func openGame() { path.append(.game) }
     func openLevels() { path.append(.levels) }
+    func openShop() { path.append(.shop) }
     func openProfile() { path.append(.profile) }
     func openSettings() { path.append(.settings) }
     func openLeaderboard() { path.append(.leaderboard) }

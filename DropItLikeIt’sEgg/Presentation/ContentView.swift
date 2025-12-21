@@ -33,6 +33,8 @@ struct ContentView: View {
                         PrivacyView()
                     case .terms:
                         TermsView()
+                    case .shop:
+                        ShopScreen()
                     }
                 }
         }

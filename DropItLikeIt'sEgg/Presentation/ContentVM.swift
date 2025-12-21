@@ -24,3 +24,4 @@ final class ContentVM: ObservableObject {
     func pop() { _ = path.popLast() }
     func popToRoot() { path.removeAll() }
 }
+

@@ -27,7 +27,7 @@ struct GameScreen: View {
 private extension GameScreen {
     var topBar: some View {
         ZStack(alignment: .trailing) {
-            CoinCounterView(amount: vm.score)
+            CoinCounterView(amount: vm.score, isInteractive: false)
                 .frame(maxWidth: .infinity, alignment: .center)
             
             NavBtn(type: .pause) {
@@ -137,3 +137,4 @@ private extension GameScreen {
     GameScreen(vm: GameScreenVM())
         .environmentObject(ContentVM())
 }
+

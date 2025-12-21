@@ -38,7 +38,8 @@ final class GameScreenVM: ObservableObject {
     
     let timer = Timer.publish(every: 1/60, on: .main, in: .common).autoconnect()
     
-    private let totalEggs = 24
+    private var totalEggs: Int = 24
+    private var speedRange: ClosedRange<CGFloat> = 150...210
     private let eggImages: [ImageResource] = [.egg1, .egg2, .egg3, .egg4, .egg5, .egg6, .egg7, .egg8, .egg9, .egg10, .egg11, .egg12]
     private let spawnIntervalRange: ClosedRange<Double> = 0.7...1.3
     private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
@@ -49,6 +50,29 @@ final class GameScreenVM: ObservableObject {
     private var sceneSize: CGSize = .zero
     
     private let bottomPadding: CGFloat = 28
+    
+    func configure(level: Int) {
+        switch level {
+        case 1:
+            totalEggs = 24
+            speedRange = 150...210
+        case 2:
+            totalEggs = 30
+            speedRange = 200...260
+        case 3:
+            totalEggs = 36
+            speedRange = 250...310
+        case 4:
+            totalEggs = 42
+            speedRange = 300...360
+        case 5:
+            totalEggs = 48
+            speedRange = 350...410
+        default: // level 6 and above
+            totalEggs = 54
+            speedRange = 400...460
+        }
+    }
     
     func start(with size: CGSize) {
         sceneSize = size
@@ -153,7 +177,7 @@ final class GameScreenVM: ObservableObject {
             image: eggImages.randomElement() ?? .egg1,
             x: CGFloat.random(in: 0.08...0.92),
             y: initialY,
-            fallSpeed: CGFloat.random(in: 180...260)
+            fallSpeed: CGFloat.random(in: speedRange)
         )
         eggs.append(egg)
     }

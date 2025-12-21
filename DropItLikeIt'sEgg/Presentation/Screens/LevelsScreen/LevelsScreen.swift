@@ -1,6 +1,6 @@
 //
 //  LevelsScreen.swift
-//  DropItLikeIt’sEgg
+//  DropItLikeIt'sEgg
 //
 //  Created by yuriy on 17. 12. 25.
 //
@@ -19,7 +19,7 @@ struct LevelsScreen: View {
                         
                         Spacer()
                         
-                        CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
+                        CoinCounterView(amount: vm.coinAmount)
                     }
                     
                     Text("CHANGE LEVEL")
@@ -48,20 +48,25 @@ struct GridLevels: View {
             ForEach(0..<3, id: \.self) { row in
                 GridRow {
                     ForEach(0..<3, id: \.self) { col in
-                        let number = row * 3 + col + 1
-                        let isLocked = number >= 7
-                        
-                        NavBtn(type: .empty, size: 96) {
-                            if !isLocked {
-                                vm.openGame(for: number)
+                        let index = row * 3 + col
+                        if index < vm.levels.count {
+                            let level = vm.levels[index]
+                            NavBtn(type: .empty, size: 96) {
+                                if !level.isLocked {
+                                    vm.openGame(for: level.number)
+                                }
                             }
+                            .overlay(
+                                Text("\(level.number)")
+                                    .customFont(size: 32)
+                            )
+                            .allowsHitTesting(!level.isLocked)
+                            .grayscale(level.isLocked ? 1.0 : 0.0)
+                        } else {
+                            // Empty space for levels beyond available count
+                            Color.clear
+                                .frame(width: 96, height: 96)
                         }
-                        .overlay(
-                            Text("\(number)")
-                                .customFont(size: 32)
-                        )
-                        .allowsHitTesting(!isLocked)
-                        .grayscale(isLocked ? 1.0 : 0.0)
                     }
                 }
             }
@@ -72,3 +77,4 @@ struct GridLevels: View {
 #Preview {
     LevelsScreen(vm: .init(appVM: ContentVM()))
 }
+
