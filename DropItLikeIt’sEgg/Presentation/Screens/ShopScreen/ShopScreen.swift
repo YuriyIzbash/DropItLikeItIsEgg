@@ -10,8 +10,7 @@ import UIKit
 
 struct ShopScreen: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var appVM: ContentVM
-    @State private var showNoCoinsAlert = false
+    @StateObject var vm: ShopScreenVM
     
     private var content: some View {
         VStack(alignment: .leading) {
@@ -27,14 +26,15 @@ struct ShopScreen: View {
             content
         }
         .onAppear {
-            if appVM.profile.score <= 0 {
-                showNoCoinsAlert = true
-            }
+            vm.onAppear()
         }
         .customAlert(
-            title: "Warning",
-            message: "You need coins to play",
-            isPresented: $showNoCoinsAlert
+            title: vm.activeAlertTitle,
+            message: vm.activeAlertMessage,
+            isPresented: Binding(
+                get: { vm.activeAlert != nil },
+                set: { newValue in if !newValue { vm.activeAlert = nil } }
+            )
         )
     }
 }
@@ -42,13 +42,14 @@ struct ShopScreen: View {
 private extension ShopScreen {
     var header: some View {
         HStack {
-            NavBtn(type: .back) { if appVM.profile.score <= 0 { appVM.popToRoot() } else { dismiss() } }
-            
+            NavBtn(type: .back) {
+                vm.handleBackAction { dismiss() }
+            }
             
             Spacer()
             
-            CoinCounterView(amount: appVM.profile.score, isInteractive: false)
-                .id(appVM.profile.score)
+            CoinCounterView(amount: vm.score, isInteractive: false)
+                .id(vm.score)
         }
         .padding(.bottom, 32)
     }
@@ -70,11 +71,22 @@ private extension ShopScreen {
                 .customFont(size: 24)
                 .padding(.top, 56)
                 .padding(.bottom, 16)
-            UserInfoRow(offerName: "1000 coins", price: 1, onTap: { appVM.addCoins(1000) })
             
-            UserInfoRow(offerName: "Unlock levels", price: 1, onTap: { appVM.unlockLevels(upTo: 9) })
+            UserInfoRow(offerName: "1000 coins", price: 1, onTap: {
+                vm.purchaseCoins()
+            })
             
-            UserInfoRow(offerName: "No Ads", price: 3, onTap: {})
+            if !vm.hasUnlockedLevels {
+                UserInfoRow(offerName: "Unlock levels", price: 1, onTap: {
+                    vm.purchaseUnlockLevels()
+                })
+            }
+            
+            if !vm.hasNoAds {
+                UserInfoRow(offerName: "No Ads", price: 3, onTap: {
+                    vm.purchaseNoAds()
+                })
+            }
         }
         .padding(.horizontal, 24)
     }
@@ -108,7 +120,45 @@ private struct UserInfoRow: View {
     }
 }
 
+extension ShopScreenVM {
+    enum ShopAlert: Equatable {
+        case noCoins
+        case coinsPurchased
+        case levelsUnlocked
+        case noAds
+    }
+
+    var activeAlertTitle: String {
+        switch activeAlert {
+        case .noCoins:
+            return "Warning"
+        case .coinsPurchased:
+            return "Congrats!"
+        case .levelsUnlocked:
+            return "Congrats!"
+        case .noAds:
+            return "Congrats!"
+        case .none:
+            return ""
+        }
+    }
+
+    var activeAlertMessage: String {
+        switch activeAlert {
+        case .noCoins:
+            return "You need coins to play"
+        case .coinsPurchased:
+            return "You have purchased 1000 coins!"
+        case .levelsUnlocked:
+            return "You have unlocked all levels!"
+        case .noAds:
+            return "No ads anymore!"
+        case .none:
+            return ""
+        }
+    }
+}
+
 #Preview {
-    ShopScreen()
-        .environmentObject(ContentVM())
+    ShopScreen(vm: ShopScreenVM(appVM: ContentVM()))
 }

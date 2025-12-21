@@ -34,7 +34,7 @@ struct ContentView: View {
                     case .terms:
                         TermsView()
                     case .shop:
-                        ShopScreen()
+                        ShopScreen(vm: .init(appVM: appVM))
                     }
                 }
         }
