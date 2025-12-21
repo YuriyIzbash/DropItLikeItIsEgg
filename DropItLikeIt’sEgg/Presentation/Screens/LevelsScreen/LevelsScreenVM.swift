@@ -26,7 +26,7 @@ final class LevelsScreenVM: ObservableObject {
     }
     
     func openGame(for level: Int) {
-        appVM.openGame()
+        appVM.openGame(level: level)
     }
     
     func openShop() {

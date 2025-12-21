@@ -9,7 +9,7 @@ struct GameScreen: View {
             ZStackWithBackground(.backgroundGame) {
                 gameLayer(size: proxy.size)
             }
-            .onAppear { vm.start(with: proxy.size) }
+            .onAppear { vm.configure(level: appVM.currentLevel); vm.start(with: proxy.size) }
             .onReceive(vm.timer) { vm.tick(currentTime: $0) }
             .overlay(alignment: .top) {
                 topBar

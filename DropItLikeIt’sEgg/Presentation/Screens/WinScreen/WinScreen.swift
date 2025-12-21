@@ -45,7 +45,11 @@ struct WinScreen: View {
                 .padding(.horizontal, 32)
                 
                 MainBtn(title: "NEXT", action: {
-                    appVM.popToRoot()
+                    if appVM.currentLevel < 6 {
+                        appVM.openGame(level: appVM.currentLevel + 1)
+                    } else {
+                        appVM.openShop()
+                    }
                 })
                 .padding(.horizontal, 48)
             }

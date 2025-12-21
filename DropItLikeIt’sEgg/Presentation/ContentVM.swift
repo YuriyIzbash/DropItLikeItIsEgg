@@ -10,10 +10,14 @@ import Combine
 @MainActor
 final class ContentVM: ObservableObject {
     @Published var path: [AppRoute] = []
+    @Published var currentLevel: Int = 1
     
     func openInfo() { path.append(.info) }
     func openMenu() { path.append(.menu) }
-    func openGame() { path.append(.game) }
+    func openGame(level: Int? = nil) {
+        if let level { currentLevel = level }
+        path.append(.game)
+    }
     func openLevels() { path.append(.levels) }
     func openShop() { path.append(.shop) }
     func openProfile() { path.append(.profile) }
@@ -25,3 +29,4 @@ final class ContentVM: ObservableObject {
     func pop() { _ = path.popLast() }
     func popToRoot() { path.removeAll() }
 }
+
