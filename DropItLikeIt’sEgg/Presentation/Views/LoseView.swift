@@ -1,9 +1,9 @@
 import SwiftUI
 
-struct LoseScreen: View {
-    @EnvironmentObject private var appVM: ContentVM
+struct LoseView: View {
     let score: Int
     let best: Int
+    let appVM: ContentVM
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -34,7 +34,7 @@ struct LoseScreen: View {
                 .padding(.horizontal, 32)
                 
                 MainBtn(title: "TRY AGAIN", action: {
-                    appVM.openGame()
+                    appVM.openGame(level: appVM.currentLevel)
                 })
                 .padding(.horizontal, 56)
                 .padding(.bottom, 48)
@@ -45,6 +45,6 @@ struct LoseScreen: View {
 }
 
 #Preview {
-    LoseScreen(score: 500, best: 1200)
-        .environmentObject(ContentVM())
+    LoseView(score: 500, best: 1200, appVM: ContentVM(Services.shared))
+        .environmentObject(ContentVM(Services.shared))
 }

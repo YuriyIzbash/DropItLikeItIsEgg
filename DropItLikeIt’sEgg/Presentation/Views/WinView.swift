@@ -1,9 +1,9 @@
 import SwiftUI
 
-struct WinScreen: View {
-    @EnvironmentObject private var appVM: ContentVM
+struct WinView: View {
     let score: Int
     let best: Int
+    let appVM: ContentVM
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -33,7 +33,7 @@ struct WinScreen: View {
                         Spacer()
                         
                         Button {
-                            appVM.openGame()
+                            appVM.openGame(level: appVM.currentLevel)
                         } label: {
                             Text("RESTART")
                                 .customFont(size: 24)
@@ -90,6 +90,6 @@ struct ScoreRow: View {
 }
 
 #Preview {
-    WinScreen(score: 1200, best: 1500)
-        .environmentObject(ContentVM())
+    WinView(score: 1200, best: 1500, appVM: ContentVM(Services.shared))
+        .environmentObject(ContentVM(Services.shared))
 }

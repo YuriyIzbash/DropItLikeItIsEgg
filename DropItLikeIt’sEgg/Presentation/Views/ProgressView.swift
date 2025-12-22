@@ -10,7 +10,7 @@ import SwiftUI
 struct ProgressView: View {
     @State private var progress: CGFloat = 0
     @State private var isAnimating = false
-    @State private var showHome = false
+    var onFinished: () -> Void = {}
     
     private let barSize = CGSize(width: 340, height: 50)
     private let barCornerRadius: CGFloat = 12
@@ -21,19 +21,10 @@ struct ProgressView: View {
         transition: 0.35
     )
     
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            if showHome {
-                HomeScreen()
-                    .transition(.opacity)
-            } else {
-                loadingContent
-            }
-        }
+        loadingContent
     }
     
-    // MARK: - Loading Content
     private var loadingContent: some View {
         ZStackWithBackground {
             GeometryReader { proxy in
@@ -48,7 +39,6 @@ struct ProgressView: View {
         }
     }
     
-    // MARK: - Components
     private func chickenImage(for proxy: GeometryProxy) -> some View {
         Image(.chicken1)
             .resizable()
@@ -131,8 +121,8 @@ struct ProgressView: View {
             }
             
             await Task.sleep(seconds: animationDurations.finalPhase)
-            withAnimation(.easeInOut(duration: animationDurations.transition)) {
-                showHome = true
+            await MainActor.run {
+                onFinished()
             }
         }
     }

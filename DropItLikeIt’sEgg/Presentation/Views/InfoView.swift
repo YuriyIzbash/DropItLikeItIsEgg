@@ -9,7 +9,6 @@ import SwiftUI
 
 struct InfoView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var appVM: ContentVM
     
     var body: some View {
         ZStackWithBackground {

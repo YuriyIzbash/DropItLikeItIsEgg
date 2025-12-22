@@ -8,10 +8,9 @@
 import SwiftUI
 import Combine
 
-@MainActor
-final class ContentVM: ObservableObject {
+
+final class ContentVM: BaseModel {
     // MARK: - Navigation
-    @Published var path: [AppRoute] = []
     @Published var currentLevel: Int = 1
     @Published var maxUnlockedLevel: Int = 6
 
@@ -22,12 +21,8 @@ final class ContentVM: ObservableObject {
 
     @Published var profile: AppProfile = .init()
 
-    private let scoreSaver = DefaultsDataSaver<Int>(key: "profile.score")
-    private let maxUnlockedSaver = DefaultsDataSaver<Int>(key: "levels.maxUnlocked")
-    private let userProfileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
-    private let lastDailyBonusSaver = DefaultsDataSaver<Date>(key: "user.lastDailyBonus")
-
-    init() {
+    override init(_ services: Services) {
+        super.init(services)
         loadProfile()
         loadLevels()
         checkAndApplyDailyBonus()
@@ -35,7 +30,7 @@ final class ContentVM: ObservableObject {
 
     // MARK: - Levels persistence
     func loadLevels() {
-        if let stored = maxUnlockedSaver.getValue() {
+        if let stored = levelsService.getMaxUnlockedLevel() {
             maxUnlockedLevel = stored
         }
     }
@@ -43,33 +38,27 @@ final class ContentVM: ObservableObject {
     func unlockLevels(upTo level: Int) {
         if level > maxUnlockedLevel {
             maxUnlockedLevel = level
-            maxUnlockedSaver.save(level)
+            levelsService.saveMaxUnlockedLevel(level)
         }
     }
 
     // MARK: - Profile persistence
     func loadProfile() {
-        if let storedProfile = userProfileSaver.getValue() {
+        if let storedProfile = userProfileService.load() {
             profile.score = storedProfile.score
-            return
-        }
-        if let stored = scoreSaver.getValue() {
-            profile.score = stored
         } else {
-            // First time user - give initial 1000 coins
+            // First time user initial 1000 coins
             profile.score = 1000
             saveProfile()
         }
     }
 
     func saveProfile() {
-        scoreSaver.save(profile.score)
-    
-        if var existingProfile = userProfileSaver.getValue() {
+        if var existingProfile = userProfileService.load() {
             existingProfile.score = profile.score
-            userProfileSaver.save(existingProfile)
+            userProfileService.save(existingProfile)
         } else {
-            userProfileSaver.save(UserProfile(score: profile.score))
+            userProfileService.save(UserProfile(score: profile.score))
         }
     }
     
@@ -79,22 +68,38 @@ final class ContentVM: ObservableObject {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         
-        if let lastBonusDate = lastDailyBonusSaver.getValue() {
+        if let lastBonusDate = dailyBonusService.getLastBonusDate() {
             let lastBonusDay = calendar.startOfDay(for: lastBonusDate)
             
             
             if today > lastBonusDay {
                 addCoins(1000)
-                lastDailyBonusSaver.save(today)
+                dailyBonusService.saveLastBonusDate(today)
                 print("Daily bonus applied: 1000 coins")
             } else {
                 print("Daily bonus already claimed today")
             }
         } else {
-            lastDailyBonusSaver.save(today)
+            dailyBonusService.saveLastBonusDate(today)
             print("First launch - daily bonus tracking started")
         }
     }
+
+    // MARK: - Navigation helpers (Coordinator-based)
+    func openInfo() { push(.info) }
+    func openMenu() { push(.menu) }
+    func openLevels() { push(.levels) }
+    func openGame(level: Int) {
+        currentLevel = level
+        push(.game)
+    }
+    func openProfile() { push(.profile) }
+    func openSettings() { push(.settings) }
+    func openLeaderboard() { push(.leaderboard) }
+    func openPrivacy() { push(.privacy) }
+    func openTerms() { push(.terms) }
+    func openShop() { push(.shop) }
+    func openEndGame() { push(.endGame) }
 
     // MARK: - Profile mutations
     func incrementCounter(by amount: Int = 1) {
@@ -105,24 +110,5 @@ final class ContentVM: ObservableObject {
     func addCoins(_ amount: Int) {
         incrementCounter(by: amount)
     }
-
-    // MARK: - Navigation helpers
-    func openInfo() { path.append(.info) }
-    func openMenu() { path.append(.menu) }
-    func openGame(level: Int? = nil) {
-        if let level { currentLevel = level }
-        path.append(.game)
-    }
-    func openLevels() { path.append(.levels) }
-    func openShop() { path.append(.shop) }
-    func openProfile() { path.append(.profile) }
-    func openSettings() { path.append(.settings) }
-    func openLeaderboard() { path.append(.leaderboard) }
-    func openPrivacy() { path.append(.privacy) }
-    func openTerms() { path.append(.terms) }
-    func openEndGame() { path.append(.endGame) }
-
-    func pop() { _ = path.popLast() }
-    func popToRoot() { path.removeAll() }
 }
 

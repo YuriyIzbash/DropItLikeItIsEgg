@@ -5,7 +5,8 @@
 //  Created by yuriy on 19. 12. 25.
 //
 
-import Foundation
+import SwiftUI
+import Combine
 
 enum AppRoute: Hashable {
     case info
@@ -19,4 +20,25 @@ enum AppRoute: Hashable {
     case privacy
     case terms
     case endGame
+}
+
+final class Coordinator: ObservableObject {
+    @Published var path: [AppRoute] = []
+
+    static let shared = Coordinator()
+
+    private init() {}
+
+    // MARK: - Navigation API
+    func push(_ route: AppRoute) {
+        path.append(route)
+    }
+
+    func pop() {
+        _ = path.popLast()
+    }
+
+    func popToRoot() {
+        path.removeAll()
+    }
 }

@@ -119,5 +119,5 @@ private extension LeaderBoardScreen {
 }
 
 #Preview {
-    LeaderBoardScreen(vm: LeaderBoardScreenVM())
+    LeaderBoardScreen(vm: LeaderBoardScreenVM(Services.shared))
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class DefaultsDataSaver<T: Codable> {
+class DefaultsDataSaver<T: Codable> {
     let key: String
     
     init(key: String) {

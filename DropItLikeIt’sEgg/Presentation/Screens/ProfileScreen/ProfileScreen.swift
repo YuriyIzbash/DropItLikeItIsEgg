@@ -148,5 +148,5 @@ private extension ProfileScreen {
 }
 
 #Preview {
-    ProfileScreen(vm: ProfileScreenVM())
+    ProfileScreen(vm: ProfileScreenVM(Services.shared))
 }

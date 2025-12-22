@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct DropItLikeItIsEggApp: App {
+    let services = Services.shared
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(services: services)
         }
     }
 }

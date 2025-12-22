@@ -76,5 +76,5 @@ private extension SettingsScreen {
 }
 
 #Preview {
-    SettingsScreen(vm: SettingsScreenVM())
+    SettingsScreen(vm: SettingsScreenVM(Services.shared))
 }

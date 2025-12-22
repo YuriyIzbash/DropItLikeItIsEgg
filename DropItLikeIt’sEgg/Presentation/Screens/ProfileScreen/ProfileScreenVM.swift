@@ -9,7 +9,7 @@ import Combine
 import UIKit
 
 @MainActor
-final class ProfileScreenVM: ObservableObject {
+final class ProfileScreenVM: BaseModel {
     @Published var profile = UserProfile()
     @Published var showSaveConfirmation: Bool = false
     @Published var showPhotoActionSheet: Bool = false
@@ -18,7 +18,8 @@ final class ProfileScreenVM: ObservableObject {
     @Published var usernameError: Bool = false
     @Published var emailError: Bool = false
     
-    init() {
+    override init(_ services: Services) {
+        super.init(services)
         load()
     }
     
@@ -27,10 +28,8 @@ final class ProfileScreenVM: ObservableObject {
         case email
     }
     
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
-    
     func load() {
-        if let loaded: UserProfile = profileSaver.getValue() {
+        if let loaded = userProfileService.load() {
             profile = loaded
         }
     }
@@ -55,12 +54,12 @@ final class ProfileScreenVM: ObservableObject {
             profile.image = UIImage(named: "profilePlaceholder")
         }
         
-        profileSaver.save(profile)
+        userProfileService.save(profile)
         return nil
     }
     
     func saveOnDisappear() {
-        profileSaver.save(profile)
+        userProfileService.save(profile)
     }
 }
 

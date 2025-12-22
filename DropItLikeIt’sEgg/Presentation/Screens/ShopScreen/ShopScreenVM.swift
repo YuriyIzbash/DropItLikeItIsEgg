@@ -8,24 +8,20 @@
 import Foundation
 import Combine
 
-
 @MainActor
-final class ShopScreenVM: ObservableObject {
+final class ShopScreenVM: BaseModel {
     @Published var showNoCoinsAlert: Bool = false
     @Published var activeAlert: ShopAlert? = nil
-    
     @Published var hasUnlockedLevels: Bool = false
     @Published var hasNoAds: Bool = false
     
     private let appVM: ContentVM
     
-    private let unlockedLevelsSaver = DefaultsDataSaver<Bool>(key: "shop_unlocked_levels")
-    private let noAdsSaver = DefaultsDataSaver<Bool>(key: "shop_no_ads")
-    
-    init(appVM: ContentVM) {
+    init(appVM: ContentVM, services: Services) {
         self.appVM = appVM
-        hasUnlockedLevels = unlockedLevelsSaver.getValue() ?? false
-        hasNoAds = noAdsSaver.getValue() ?? false
+        super.init(services)
+        hasUnlockedLevels = shopService.hasUnlockedLevels()
+        hasNoAds = shopService.hasNoAds()
     }
     
     var score: Int {
@@ -51,7 +47,6 @@ final class ShopScreenVM: ObservableObject {
     }
     
     // MARK: - Shop Actions
-    
     func purchaseCoins() {
         // TODO: Implement actual purchase logic
         print("Purchase 1000 coins for $1")
@@ -64,7 +59,7 @@ final class ShopScreenVM: ObservableObject {
         print("Unlock levels for $1")
         appVM.unlockLevels(upTo: 9)
         hasUnlockedLevels = true
-        unlockedLevelsSaver.save(true)
+        shopService.setUnlockedLevels(true)
         activeAlert = .levelsUnlocked
         appVM.openGame(level: appVM.currentLevel + 1)
     }
@@ -73,7 +68,7 @@ final class ShopScreenVM: ObservableObject {
         // TODO: Implement actual purchase logic
         print("Purchase No Ads for $3")
         hasNoAds = true
-        noAdsSaver.save(true)
+        shopService.setNoAds(true)
         activeAlert = .noAds
     }
 }

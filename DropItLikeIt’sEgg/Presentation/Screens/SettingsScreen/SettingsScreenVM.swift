@@ -8,29 +8,27 @@
 import Combine
 
 @MainActor
-final class SettingsScreenVM: ObservableObject {
+final class SettingsScreenVM: BaseModel {
     @Published var soundIsOn: Bool = false
     @Published var notificationIsOn: Bool = false
     @Published var vibroIsOn: Bool = false
     @Published var showSaveConfirmation: Bool = false
     
-    private let soundSaver = DefaultsDataSaver<Bool>(key: "settings.sound")
-    private let notificationSaver = DefaultsDataSaver<Bool>(key: "settings.notification")
-    private let vibroSaver = DefaultsDataSaver<Bool>(key: "settings.vibration")
-    
-    init() {
+    override init(_ services: Services) {
+        super.init(services)
         load()
     }
+    
     func load() {
-        if let v = soundSaver.getValue() { soundIsOn = v }
-        if let v = notificationSaver.getValue() { notificationIsOn = v }
-        if let v = vibroSaver.getValue() { vibroIsOn = v }
+        if let v = settingsService.getSoundEnabled() { soundIsOn = v }
+        if let v = settingsService.getNotificationEnabled() { notificationIsOn = v }
+        if let v = settingsService.getVibroEnabled() { vibroIsOn = v }
     }
     
     func save() {
-        soundSaver.save(soundIsOn)
-        notificationSaver.save(notificationIsOn)
-        vibroSaver.save(vibroIsOn)
+        settingsService.setSoundEnabled(soundIsOn)
+        settingsService.setNotificationEnabled(notificationIsOn)
+        settingsService.setVibroEnabled(vibroIsOn)
         showSaveConfirmation = true
     }
 }

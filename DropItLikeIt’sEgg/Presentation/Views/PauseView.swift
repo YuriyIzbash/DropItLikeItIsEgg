@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PauseView: View {
-    @EnvironmentObject private var appVM: ContentVM
     @Binding var isPresented: Bool
+    let appVM: ContentVM
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -29,7 +29,7 @@ struct PauseView: View {
                 Spacer()
                 
                 Button {
-                    appVM.openGame()
+                    appVM.openGame(level: appVM.currentLevel)
                 } label: {
                     Text("RESTART")
                         .customFont(size: 24)
@@ -49,5 +49,5 @@ struct PauseView: View {
 }
 
 #Preview {
-    PauseView(isPresented: .constant(true))
+    PauseView(isPresented: .constant(true), appVM: ContentVM(Services.shared))
 }
