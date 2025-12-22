@@ -79,7 +79,7 @@ struct PhotoActionSheet: View {
                                     .padding(.horizontal, 104)
                             }
                         }
-                        .padding(.bottom, geometry.safeAreaInsets.bottom)
+                        .padding(.bottom, 24)
                         .frame(height: geometry.size.height * 0.4)
                         .background(Color.appSheetBackground)
                         .cornerRadius(20, corners: [.topLeft, .topRight])

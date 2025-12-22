@@ -12,10 +12,7 @@ struct TermsView: View {
     
     var body: some View {
         ZStackWithBackground {
-            VStack(alignment: .leading) {
-                NavBtn(type: .back) { dismiss() }
-                    .padding(.bottom, 8)
-                
+            VStack {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color.appMain)
                     .overlay(
@@ -39,8 +36,16 @@ struct TermsView: View {
                         alignment: .top
                     )
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(32)
+        }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+            }
             .padding(.horizontal, 32)
+            .padding(.top, 16)
         }
     }
 }

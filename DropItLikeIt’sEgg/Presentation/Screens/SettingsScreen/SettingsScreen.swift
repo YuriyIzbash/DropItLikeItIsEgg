@@ -15,6 +15,15 @@ struct SettingsScreen: View {
         ZStackWithBackground {
             content
         }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
+        }
         .customAlert(
             title: "Saved",
             message: "Your settings has been saved.",
@@ -24,15 +33,12 @@ struct SettingsScreen: View {
     
     private var content: some View {
         VStack {
-            header
-                .padding(.horizontal, 32)
-            
             settingsCard
-            saveButton
-                .padding(.horizontal, 32)
             
+            saveButton
+                .padding(.bottom, 48)
         }
-        .frame(maxHeight: .infinity, alignment: .top)
+        .frame(maxHeight: .infinity, alignment: .bottom)
         .onAppear {
             vm.load()
         }
@@ -40,15 +46,6 @@ struct SettingsScreen: View {
 }
 
 private extension SettingsScreen {
-    var header: some View {
-        HStack {
-            NavBtn(type: .back) { dismiss() }
-            
-            Spacer()
-        }
-        .padding(.bottom, 104)
-    }
-    
     var settingsCard: some View {
         RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(Color.appMain)
@@ -56,15 +53,17 @@ private extension SettingsScreen {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .stroke(Color.appPink, lineWidth: 2)
             )
-            .overlay(settingsContent, alignment: .top)
-            .frame(width: 350, height: 300, alignment: .center)
+            .overlay(settingsContent, alignment: .center)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 16)
+            .padding(.top, 80)
+
     }
     
     var settingsContent: some View {
         VStack {
             Text("SETTINGS")
-                .customFont(size: 24)
-                .padding(.top, 16)
+                .customFont(size: 32)
             
             SettingToggleRow(title: "SOUND", isOn: $vm.soundIsOn)
             SettingToggleRow(title: "NOTIFICATION", isOn: $vm.notificationIsOn)
@@ -76,28 +75,7 @@ private extension SettingsScreen {
         MainBtn(title: "SAVE") {
             vm.save()
         }
-        .frame(height: 140)
-        .padding(.horizontal, 48)
         .padding(.top, 80)
-    }
-}
-
-private struct SettingToggleRow: View {
-    let title: String
-    @Binding var isOn: Bool
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .customFont(size: 16)
-                .layoutPriority(1)
-            Spacer()
-            Toggle("", isOn: $isOn)
-                .labelsHidden()
-                .toggleStyle(SwitchToggleStyle())
-        }
-        .padding(.horizontal, 56)
-        .padding(.vertical, 16)
     }
 }
 

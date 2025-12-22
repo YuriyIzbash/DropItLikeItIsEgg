@@ -11,24 +11,24 @@ final class GameScreenVM: ObservableObject {
     struct Egg: Identifiable {
         let id = UUID()
         let image: ImageResource
-        var x: CGFloat      // 0...1 relative to screen width
-        var y: CGFloat      // center Y in points
+        var x: CGFloat
+        var y: CGFloat
         var fallSpeed: CGFloat
     }
     
     struct Coin: Identifiable {
         let id = UUID()
         let image: ImageResource
-        var x: CGFloat      // 0...1 relative to screen width
-        var y: CGFloat      // center Y in points
+        var x: CGFloat
+        var y: CGFloat
         var fallSpeed: CGFloat
         var value: Int
     }
     
     struct Blast: Identifiable {
         let id = UUID()
-        var x: CGFloat      // 0...1 relative to screen width
-        var y: CGFloat      // Y position in points
+        var x: CGFloat
+        var y: CGFloat
         var createdAt: Date
     }
     
@@ -166,13 +166,10 @@ final class GameScreenVM: ObservableObject {
     }
     
     func groundLine(for size: CGSize) -> CGFloat {
-        // Calculate the ground line at the player's bottom edge
-        // Player center Y = size.height - playerSize.height/2 - 12
-        // Player bottom Y = center Y + playerSize.height/2 = size.height - 12
         let playerSize = playerSize(for: size.width)
         let playerCenterY = size.height - playerSize.height/2 - 12
-        let playerBottomY = playerCenterY + playerSize.height/2
-        return playerBottomY // This equals: size.height - 12
+        let playerTopY = playerCenterY - playerSize.height/2
+        return playerTopY
     }
     
     private func resetState() {
@@ -192,10 +189,9 @@ final class GameScreenVM: ObservableObject {
     
     private func loadStoredScore() {
         let stored = profileSaver.getValue()
-        let startingScore = stored?.score ?? 0
         isLoadingScore = true
-        score = startingScore
-        bestScore = max(stored?.score ?? startingScore, startingScore)
+        score = stored?.score ?? 0
+        bestScore = stored?.score ?? 0
         isLoadingScore = false
     }
     
@@ -229,9 +225,7 @@ final class GameScreenVM: ObservableObject {
                 continue
             }
             
-            // Check if egg's bottom edge has reached or passed the ground line
-            let eggBottomY = eggs[index].y + eggSize.height/2
-            if eggBottomY >= groundY {
+            if eggs[index].y >= groundY {
                 handleMiss(at: index)
                 continue
             }
@@ -243,7 +237,7 @@ final class GameScreenVM: ObservableObject {
         let coinSize = coinSize(for: sceneSize.width)
         let playerSize = playerSize(for: sceneSize.width)
         let groundY = groundLine(for: sceneSize)
-
+        
         let playerCenterY = sceneSize.height - playerSize.height/2 - 12
         let playerRect = CGRect(
             x: playerX * sceneSize.width - playerSize.width/2,
@@ -251,10 +245,10 @@ final class GameScreenVM: ObservableObject {
             width: playerSize.width,
             height: playerSize.height
         )
-
+        
         for index in coins.indices.reversed() {
             coins[index].y += coins[index].fallSpeed * CGFloat(delta)
-
+            
             let coinOriginY = coins[index].y - coinSize.height/2
             let coinRect = CGRect(
                 x: coins[index].x * sceneSize.width - coinSize.width/2,
@@ -262,15 +256,15 @@ final class GameScreenVM: ObservableObject {
                 width: coinSize.width,
                 height: coinSize.height
             )
-
+            
             if coinRect.intersects(playerRect) {
                 handleCoinCatch(at: index)
                 continue
             }
-
-            // Check if coin's bottom edge has reached or passed the ground line
-            let coinBottomY = coins[index].y + coinSize.height/2
-            if coinBottomY >= groundY {
+            
+            let coinBottomY = coins[index].y
+            let coinGroundLine = groundY
+            if coinBottomY >= coinGroundLine {
                 handleCoinGround(at: index)
                 continue
             }
@@ -326,14 +320,9 @@ final class GameScreenVM: ObservableObject {
         handledEggs += 1
         score = max(score - 100, 0)
         
-        // Calculate the blast Y position: where the egg's bottom edge hit the ground
-        let eggSize = eggSize(for: sceneSize.width)
         let groundY = groundLine(for: sceneSize)
-        // Blast should appear at the ground, accounting for half the egg height
-        // so it appears at the bottom of the egg
-        let blastY = groundY - eggSize.height / 2
         
-        blasts.append(Blast(x: egg.x, y: blastY, createdAt: Date()))
+        blasts.append(Blast(x: egg.x, y: groundY, createdAt: Date()))
         persistScore()
         checkOutcome()
     }
@@ -344,7 +333,7 @@ final class GameScreenVM: ObservableObject {
         coinEffect = CoinEffect(createdAt: Date())
         persistScore()
     }
-
+    
     private func handleCoinGround(at index: Int) {
         coins.remove(at: index)
     }
@@ -357,19 +346,22 @@ final class GameScreenVM: ObservableObject {
     }
     
     private func checkOutcome() {
-        if caughtEggs >= totalEggs {
-            bestScore = max(bestScore, score)
-            persistScore()
-            gameResult = .win
-            return
-        }
-        
         if handledEggs >= totalEggs {
-            gameResult = .lose
+            if caughtEggs >= totalEggs {
+                gameResult = .win
+            } else {
+                gameResult = .lose
+            }
+            
+            if score > bestScore {
+                bestScore = score
+                persistBestScore()
+            }
             return
         }
         
-        if score <= 0 {
+        
+        if score < 0 {
             score = 0
         }
     }
@@ -377,6 +369,12 @@ final class GameScreenVM: ObservableObject {
     private func persistScore() {
         var profile = profileSaver.getValue() ?? UserProfile(score: score)
         profile.score = score
+        profileSaver.save(profile)
+    }
+    
+    private func persistBestScore() {
+        var profile = profileSaver.getValue() ?? UserProfile(score: bestScore)
+        profile.score = bestScore
         profileSaver.save(profile)
     }
 }

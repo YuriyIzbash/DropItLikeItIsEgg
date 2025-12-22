@@ -10,7 +10,7 @@ import SwiftUI
 fileprivate struct TextOutlineModifier: ViewModifier {
     let width: CGFloat
     let color: Color
-
+    
     func body(content: Content) -> some View {
         ZStack {
             outline(content)
@@ -18,7 +18,7 @@ fileprivate struct TextOutlineModifier: ViewModifier {
         }
         .compositingGroup()
     }
-
+    
     @ViewBuilder
     private func outline(_ content: Content) -> some View {
         ForEach(offsets.indices, id: \.self) { index in
@@ -28,7 +28,7 @@ fileprivate struct TextOutlineModifier: ViewModifier {
                 .offset(x: offset.width, y: offset.height)
         }
     }
-
+    
     private var offsets: [CGSize] {
         let w = width
         return [

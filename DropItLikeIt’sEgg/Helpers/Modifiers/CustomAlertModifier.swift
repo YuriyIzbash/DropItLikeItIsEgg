@@ -9,16 +9,16 @@ import SwiftUI
 
 struct CustomAlertModifier: ViewModifier {
     @Binding var isPresented: Bool
-
+    
     let title: String
     let message: String
     let confirmTitle: String
-
+    
     func body(content: Content) -> some View {
         ZStack {
             content
                 .allowsHitTesting(!isPresented)
-
+            
             if isPresented {
                 CustomAlert(
                     title: title,

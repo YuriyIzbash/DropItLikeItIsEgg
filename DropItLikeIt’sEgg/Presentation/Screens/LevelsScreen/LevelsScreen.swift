@@ -13,61 +13,29 @@ struct LevelsScreen: View {
     
     var body: some View {
         ZStackWithBackground {
-                VStack {
-                    HStack {
-                        NavBtn(type: .back) { dismiss() }
-                        
-                        Spacer()
-                        
-                        CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
-                    }
-                    
-                    Text("CHANGE LEVEL")
-                        .customFont(size: 32)
-                        .lineLimit(1)
-                        .padding(.top, 16)
-                }
+            Text("CHANGE LEVEL")
+                .customFont(size: 32)
+                .lineLimit(1)
+                .padding(.top, 16)
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.horizontal, 48)
             
             GridLevels(vm: vm)
-            .padding(.top, 48)
+                .padding(.top, 48)
         }
-        .padding(.horizontal, 32)
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+                
+                CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
+            }
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
+        }
         .onAppear {
             vm.load()
-        }
-    }
-}
-
-struct GridLevels: View {
-    @ObservedObject var vm: LevelsScreenVM
-    
-    var body: some View {
-        Grid(horizontalSpacing: 16, verticalSpacing: 24) {
-            ForEach(0..<3, id: \.self) { row in
-                GridRow {
-                    ForEach(0..<3, id: \.self) { col in
-                        let index = row * 3 + col
-                        
-                        if index < vm.levels.count {
-                            let level = vm.levels[index]
-                            
-                            NavBtn(type: .empty, size: 96) {
-                                if !level.isLocked {
-                                    vm.openGame(for: level.number)
-                                }
-                            }
-                            .overlay(
-                                Text("\(level.number)")
-                                    .customFont(size: 32)
-                            )
-                            .allowsHitTesting(!level.isLocked)
-                            .grayscale(level.isLocked ? 1.0 : 0.0)
-                        }
-                    }
-                }
-            }
         }
     }
 }

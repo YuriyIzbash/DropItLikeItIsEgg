@@ -35,8 +35,8 @@ struct ProgressView: View {
     
     // MARK: - Loading Content
     private var loadingContent: some View {
-            ZStackWithBackground {
-                GeometryReader { proxy in
+        ZStackWithBackground {
+            GeometryReader { proxy in
                 chickenImage(for: proxy)
             }
             .overlay(alignment: .bottom) {

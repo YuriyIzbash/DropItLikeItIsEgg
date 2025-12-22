@@ -16,6 +16,15 @@ struct ProfileScreen: View {
         ZStackWithBackground {
             content
         }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
+        }
         .overlay {
             if vm.showPhotoActionSheet {
                 PhotoActionSheet(
@@ -33,13 +42,12 @@ struct ProfileScreen: View {
     }
     
     private var content: some View {
-        VStack(alignment: .leading) {
-            header
+        VStack(spacing: 12) {
             profileCard
+            
             saveButton
         }
-        .padding(.horizontal, 32)
-        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.top, 24)
         .onAppear {
             vm.load()
         }
@@ -50,11 +58,6 @@ struct ProfileScreen: View {
 }
 
 private extension ProfileScreen {
-    var header: some View {
-        NavBtn(type: .back) { dismiss() }
-            .padding(.bottom, 32)
-    }
-    
     var profileCard: some View {
         RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(Color.appMain)
@@ -145,46 +148,6 @@ private extension ProfileScreen {
                 vm.showSaveConfirmation = true
             }
         }
-        .frame(height: 140)
-        .padding(.horizontal, 48)
-    }
-}
-
-private struct StyledTextField: View {
-    let title: String
-    @Binding var text: String
-    let field: ProfileScreenVM.Field
-    @FocusState.Binding var focusedField: ProfileScreenVM.Field?
-    var isError: Bool = false
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.appPink)
-            
-            HStack(spacing: 12) {
-                ZStack(alignment: .leading) {
-                    if text.isEmpty && focusedField != field {
-                        Text(title)
-                            .customFont(size: 16)
-                            .foregroundStyle(isError ? Color.red : Color.white)
-                    }
-                    
-                    TextField("", text: $text)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled(true)
-                        .customFont(size: 16)
-                        .tint(.white)
-                        .focused($focusedField, equals: field)
-                }
-                
-                Image(systemName: "square.and.pencil")
-                    .foregroundStyle(Color.white.opacity(0.9))
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
-        }
-        .frame(height: 48)
     }
 }
 

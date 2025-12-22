@@ -1,3 +1,11 @@
+//
+//  UserProfile.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 18. 12. 25.
+//
+
+
 import UIKit
 
 struct UserProfile: Codable, Equatable {

@@ -39,9 +39,11 @@ struct StoredImage: Codable, Hashable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        
         fileName = try container.decode(String.self)
         
         let parts = fileName.split(separator: separator, maxSplits: 1, omittingEmptySubsequences: true)
+        
         guard let folderPart = parts.first else {
             throw DecodingError.dataCorruptedError(
                 in: container,
@@ -49,6 +51,7 @@ struct StoredImage: Codable, Hashable {
         }
         
         self.folderName = String(folderPart)
+        
         if let data = try? fileService.load(from: fileName) {
             self.image = UIImage(data: data)
         } else {

@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BlastView: View {
-    let blast: GameScreenVM.Blast
-    let size: CGSize
-
     @State private var scale: CGFloat = 0.2
     @State private var opacity: Double = 1.0
+    
+    let blast: GameScreenVM.Blast
+    let size: CGSize
 
     var body: some View {
         Image(.blast)

@@ -14,11 +14,9 @@ struct LeaderBoardScreen: View {
     
     private var content: some View {
         VStack(alignment: .leading) {
-            header
             leaderBoardCard
         }
         .padding(.horizontal, 32)
-        .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
             vm.load()
         }
@@ -27,16 +25,21 @@ struct LeaderBoardScreen: View {
     var body: some View {
         ZStackWithBackground {
             content
+                .padding(.top, 32)
+        }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
         }
     }
 }
 
 private extension LeaderBoardScreen {
-    var header: some View {
-        NavBtn(type: .back) { dismiss() }
-            .padding(.bottom, 32)
-    }
-    
     var leaderBoardCard: some View {
         RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(Color.appMain)
@@ -52,8 +55,7 @@ private extension LeaderBoardScreen {
         VStack(spacing: 0) {
             Text("LEADER BOARD")
                 .customFont(size: 24)
-                .padding(.top, 56)
-                .padding(.bottom, 16)
+                .padding(.vertical, 16)
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 12) {
@@ -116,30 +118,6 @@ private extension LeaderBoardScreen {
                     .stroke(Color.appPink, lineWidth: 2)
             )
             .contentShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-private struct UserInfoRow: View {
-    let username: String
-    let score: Int
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.appPink)
-            
-            HStack(spacing: 12) {
-                Text(username.isEmpty ? "USERNAME" : username)
-                    .customFont(size: 16)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                Text("\(score)")
-                    .customFont(size: 16)
-            }
-            .padding(.horizontal, 16)
-        }
-        .frame(height: 48)
     }
 }
 

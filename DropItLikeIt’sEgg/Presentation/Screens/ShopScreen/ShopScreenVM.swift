@@ -78,3 +78,41 @@ final class ShopScreenVM: ObservableObject {
     }
 }
 
+extension ShopScreenVM {
+    enum ShopAlert: Equatable {
+        case noCoins
+        case coinsPurchased
+        case levelsUnlocked
+        case noAds
+    }
+
+    var activeAlertTitle: String {
+        switch activeAlert {
+        case .noCoins:
+            return "Warning"
+        case .coinsPurchased:
+            return "Congrats!"
+        case .levelsUnlocked:
+            return "Congrats!"
+        case .noAds:
+            return "Congrats!"
+        case .none:
+            return ""
+        }
+    }
+
+    var activeAlertMessage: String {
+        switch activeAlert {
+        case .noCoins:
+            return "You need coins to play"
+        case .coinsPurchased:
+            return "You have purchased 1000 coins!"
+        case .levelsUnlocked:
+            return "You have unlocked all levels!"
+        case .noAds:
+            return "No ads anymore!"
+        case .none:
+            return ""
+        }
+    }
+}

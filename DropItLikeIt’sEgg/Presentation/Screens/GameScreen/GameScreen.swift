@@ -105,11 +105,11 @@ private extension GameScreen {
     func coinLayer(size: CGSize) -> some View {
         let coinSize = vm.coinSize(for: size.width)
         let playerHeight = vm.playerSize(for: size.width).height
-        let groundY = size.height - playerHeight/2 - 12
+        let groundY = size.height - playerHeight/2
         return ZStack {
             ForEach(vm.coins) { coin in
                 let halfH = coinSize.height / 2
-                let groundTop = groundY - halfH
+                let groundTop = groundY
                 if coin.y < groundTop {
                     Image(coin.image)
                         .resizable()
@@ -126,16 +126,16 @@ private extension GameScreen {
                 Image(.coin)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 48, height: 48)
+                    .frame(width: 32, height: 32)
                     .position(
                         x: vm.playerX * size.width,
-                        y: size.height - vm.playerSize(for: size.width).height - 60
+                        y: size.height - vm.playerSize(for: size.width).height - 40
                     )
                     .transition(.opacity)
             }
         }
     }
-
+    
     
     func playerLayer(size: CGSize) -> some View {
         let playerSize = vm.playerSize(for: size.width)

@@ -9,7 +9,7 @@ import Foundation
 
 final class DefaultsDataSaver<T: Codable> {
     let key: String
-
+    
     init(key: String) {
         self.key = key
     }

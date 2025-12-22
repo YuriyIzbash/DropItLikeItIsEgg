@@ -13,10 +13,7 @@ struct InfoView: View {
     
     var body: some View {
         ZStackWithBackground {
-            VStack(alignment: .leading) {
-                NavBtn(type: .back) { dismiss() }
-                    .padding(.bottom, 32)
-                
+            VStack {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color.appMain)
                     .overlay(
@@ -37,8 +34,16 @@ struct InfoView: View {
                         alignment: .top
                     )
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(32)
+        }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+            }
             .padding(.horizontal, 32)
+            .padding(.top, 16)
         }
     }
 }
