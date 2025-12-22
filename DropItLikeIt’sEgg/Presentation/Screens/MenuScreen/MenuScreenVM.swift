@@ -7,7 +7,6 @@
 
 import Combine
 
-@MainActor
 final class MenuScreenVM: BaseModel {
     @Published var coinAmount: Int = 0
     

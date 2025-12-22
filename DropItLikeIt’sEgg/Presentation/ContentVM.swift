@@ -13,46 +13,45 @@ final class ContentVM: BaseModel {
     // MARK: - Navigation
     @Published var currentLevel: Int = 1
     @Published var maxUnlockedLevel: Int = 6
-
+    
     // MARK: - Shared reactive profile
     struct AppProfile {
         var score: Int = 0
     }
-
+    
     @Published var profile: AppProfile = .init()
-
+    
     override init(_ services: Services) {
         super.init(services)
         loadProfile()
         loadLevels()
         checkAndApplyDailyBonus()
     }
-
+    
     // MARK: - Levels persistence
     func loadLevels() {
         if let stored = levelsService.getMaxUnlockedLevel() {
             maxUnlockedLevel = stored
         }
     }
-
+    
     func unlockLevels(upTo level: Int) {
         if level > maxUnlockedLevel {
             maxUnlockedLevel = level
             levelsService.saveMaxUnlockedLevel(level)
         }
     }
-
+    
     // MARK: - Profile persistence
     func loadProfile() {
         if let storedProfile = userProfileService.load() {
             profile.score = storedProfile.score
         } else {
-            // First time user initial 1000 coins
             profile.score = 1000
             saveProfile()
         }
     }
-
+    
     func saveProfile() {
         if var existingProfile = userProfileService.load() {
             existingProfile.score = profile.score
@@ -84,7 +83,7 @@ final class ContentVM: BaseModel {
             print("First launch - daily bonus tracking started")
         }
     }
-
+    
     // MARK: - Navigation helpers (Coordinator-based)
     func openInfo() { push(.info) }
     func openMenu() { push(.menu) }
@@ -100,13 +99,13 @@ final class ContentVM: BaseModel {
     func openTerms() { push(.terms) }
     func openShop() { push(.shop) }
     func openEndGame() { push(.endGame) }
-
+    
     // MARK: - Profile mutations
     func incrementCounter(by amount: Int = 1) {
         profile.score += amount
         saveProfile()
     }
-
+    
     func addCoins(_ amount: Int) {
         incrementCounter(by: amount)
     }

@@ -34,6 +34,9 @@ struct LevelsScreen: View {
             .padding(.horizontal, 32)
             .padding(.top, 16)
         }
+        .onAppear {
+            vm.load()
+        }
     }
 }
 

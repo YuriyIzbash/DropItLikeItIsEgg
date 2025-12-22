@@ -7,7 +7,6 @@
 
 import Combine
 
-@MainActor
 final class SettingsScreenVM: BaseModel {
     @Published var soundIsOn: Bool = false
     @Published var notificationIsOn: Bool = false

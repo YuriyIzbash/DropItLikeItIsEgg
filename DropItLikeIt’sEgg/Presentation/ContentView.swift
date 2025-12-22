@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var coordinator = Coordinator.shared
+    @ObservedObject private var coordinator = Coordinator.shared
     @StateObject private var appVM: ContentVM
     
     private let services: Services
@@ -48,7 +48,6 @@ struct ContentView: View {
                     }
                 }
         }
-        .environmentObject(appVM)
     }
 }
 

@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-@MainActor
 final class LevelsScreenVM: BaseModel {
     @Published var coinAmount: Int = 1000
     @Published var levels: [LevelData] = []

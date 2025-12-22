@@ -9,7 +9,6 @@ import Foundation
 import Combine
 import UIKit
 
-@MainActor
 final class LeaderBoardScreenVM: BaseModel {
     @Published var profile = UserProfile()
     @Published var leaderboardMockData: [LeaderboardMockData] = []
