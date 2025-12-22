@@ -28,7 +28,7 @@ struct InfoView: View {
                             
                             Text("""
                                 1. 
-                                Catch falling eggs in your basket by moving left and right. 
+                                Catch falling eggs by moving chicken left and right. 
                                 
                                 2. 
                                 Each caught egg earns you 10 points, but missing an egg costs you 100 points!
