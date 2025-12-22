@@ -14,19 +14,9 @@ struct MenuScreen: View {
     var body: some View {
         ZStackWithBackground {
             VStack {
-                HStack {
-                    NavBtn(type: .back) { dismiss() }
-                    
-                    Spacer()
-                    
-                    CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
-                }
-                .padding(.bottom, 32)
-                
                 VStack(spacing: 16) {
                     Text("MENU")
-                        .customFont(size: 32)
-                        .padding(.top, 16)
+                        .customFont(size: 32, scaleFactor: 1.0)
                     
                     Group {
                         MainBtn(title: "PROFILE", size: .small, action: vm.openProfile)
@@ -40,7 +30,8 @@ struct MenuScreen: View {
                         MainBtn(title: "TERMS OF USE", size: .small, action: vm.openTerms)
                     }
                 }
-                .padding(.bottom, 32)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.appMain)
@@ -51,6 +42,17 @@ struct MenuScreen: View {
                 )
             }
             .padding(.horizontal, 32)
+        }
+        .safeAreaInset(edge: .top) {
+            HStack {
+                NavBtn(type: .back) { dismiss() }
+                
+                Spacer()
+                
+                CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
+            }
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
         }
         .onAppear { vm.load() }
     }

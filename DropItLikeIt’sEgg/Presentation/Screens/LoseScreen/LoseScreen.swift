@@ -12,7 +12,7 @@ struct LoseScreen: View {
                 
                 VStack(spacing: 24) {
                     Text("YOU LOSE!")
-                        .customFont(size: 32)
+                        .customFont(size: 48)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                     
@@ -29,6 +29,7 @@ struct LoseScreen: View {
                             .underline(true)
                     }
                     .padding(.horizontal, 12)
+                    .padding(.bottom, 32)
                 }
                 .padding(.horizontal, 32)
                 
@@ -36,6 +37,7 @@ struct LoseScreen: View {
                     appVM.openGame()
                 })
                 .padding(.horizontal, 56)
+                .padding(.bottom, 48)
             }
             .frame(maxWidth: .infinity, alignment: .bottom)
         }

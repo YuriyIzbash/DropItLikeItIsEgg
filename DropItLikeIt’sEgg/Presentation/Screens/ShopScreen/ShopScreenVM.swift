@@ -66,6 +66,7 @@ final class ShopScreenVM: ObservableObject {
         hasUnlockedLevels = true
         unlockedLevelsSaver.save(true)
         activeAlert = .levelsUnlocked
+        appVM.openGame(level: appVM.currentLevel + 1)
     }
     
     func purchaseNoAds() {

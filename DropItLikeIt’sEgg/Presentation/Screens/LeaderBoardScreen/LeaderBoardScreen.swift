@@ -55,13 +55,27 @@ private extension LeaderBoardScreen {
                 .padding(.top, 56)
                 .padding(.bottom, 16)
             
-            ScrollView {
-                UserInfoRow(username: vm.profile.username, score: vm.profile.score)
-                    .padding(.leading, 48)
-                
-                avatarView
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 12) {
+                    HStack(spacing: 12) {
+                        avatarView
+                        
+                        UserInfoRow(username: vm.profile.username, score: vm.profile.score)
+                    }
+                    
+                    Divider()
+                        .background(Color.gray)
+                    
+                    ForEach(Array(vm.leaderboardMockData.enumerated()), id: \.element.id) { index, entry in
+                        HStack(spacing: 12) {
+                            mockAvatarView(image: entry.image)
+                            
+                            UserInfoRow(username: entry.username, score: entry.score)
+                        }
+                    }
+                }
             }
+            .padding(.bottom, 32)
         }
         .padding(.horizontal, 24)
     }
@@ -89,6 +103,19 @@ private extension LeaderBoardScreen {
                     )
             }
         }
+    }
+    
+    func mockAvatarView(image: UIImage) -> some View {
+        Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 60, height: 60)
+            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(Color.appPink, lineWidth: 2)
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 8))
     }
 }
 

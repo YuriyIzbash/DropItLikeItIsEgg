@@ -18,4 +18,5 @@ enum AppRoute: Hashable {
     case leaderboard
     case privacy
     case terms
+    case endGame
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct GameScreen: View {
     @EnvironmentObject private var appVM: ContentVM
     @StateObject var vm: GameScreenVM
+    @State private var isReady = false
     
     var body: some View {
         GeometryReader { proxy in
@@ -10,27 +11,26 @@ struct GameScreen: View {
                 gameLayer(size: proxy.size)
             }
             .onAppear { 
-                vm.configure(level: appVM.currentLevel)
-                vm.start(with: proxy.size)
+                if !isReady {
+                    vm.configure(level: appVM.currentLevel)
+                    vm.start(with: proxy.size)
+                    isReady = true
+                }
             }
             .onDisappear {
-                // When leaving game screen (e.g., going to shop), pause the game
                 vm.pause()
             }
             .onChange(of: appVM.profile.score) { newScore in
-                // When profile score changes (e.g., coins added in shop), sync to VM
                 if vm.score != newScore && !vm.isLoadingScore {
                     vm.syncScore()
                 }
             }
             .onChange(of: vm.score) { newValue in
-                // Don't sync back to appVM if we're loading from storage
                 guard !vm.isLoadingScore else { return }
                 
                 appVM.profile.score = newValue
                 appVM.saveProfile()
                 if newValue == 0 {
-                    // Present Shop when out of coins
                     appVM.path.append(.shop)
                 }
             }
@@ -95,20 +95,33 @@ private extension GameScreen {
     
     func blastsLayer(size: CGSize) -> some View {
         ForEach(vm.blasts) { blast in
-            Image(.blast)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 80, height: 80)
-                .position(
-                    x: blast.x * size.width,
-                    y: size.height - 20
-                )
-                .transition(.opacity)
+            BlastView(
+                blast: blast,
+                size: size
+            )
         }
     }
     
     func coinLayer(size: CGSize) -> some View {
-        Group {
+        let coinSize = vm.coinSize(for: size.width)
+        let playerHeight = vm.playerSize(for: size.width).height
+        let groundY = size.height - playerHeight/2 - 12
+        return ZStack {
+            ForEach(vm.coins) { coin in
+                let halfH = coinSize.height / 2
+                let groundTop = groundY - halfH
+                if coin.y < groundTop {
+                    Image(coin.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: coinSize.width, height: coinSize.height)
+                        .position(
+                            x: coin.x * size.width,
+                            y: coin.y
+                        )
+                }
+            }
+            
             if vm.coinEffect != nil {
                 Image(.coin)
                     .resizable()
@@ -122,6 +135,7 @@ private extension GameScreen {
             }
         }
     }
+
     
     func playerLayer(size: CGSize) -> some View {
         let playerSize = vm.playerSize(for: size.width)
@@ -156,4 +170,6 @@ private extension GameScreen {
         }
     }
 }
+
+
 

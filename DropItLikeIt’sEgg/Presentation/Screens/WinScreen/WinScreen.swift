@@ -12,7 +12,7 @@ struct WinScreen: View {
                 
                 VStack(spacing: 24) {
                     Text("YOU WIN!")
-                        .customFont(size: 32)
+                        .customFont(size: 48)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                     
@@ -41,17 +41,23 @@ struct WinScreen: View {
                         }
                     }
                     .padding(.horizontal, 12)
+                    .padding(.bottom, 32)
                 }
                 .padding(.horizontal, 32)
                 
                 MainBtn(title: "NEXT", action: {
-                    if appVM.currentLevel < 6 {
+                    let maxLevel = appVM.maxUnlockedLevel > 6 ? 9 : 6
+                    
+                    if appVM.currentLevel < maxLevel {
                         appVM.openGame(level: appVM.currentLevel + 1)
+                    } else if appVM.maxUnlockedLevel > 6 {
+                        appVM.openEndGame()
                     } else {
                         appVM.openShop()
                     }
                 })
                 .padding(.horizontal, 48)
+                .padding(.bottom, 48)
             }
         }
     }

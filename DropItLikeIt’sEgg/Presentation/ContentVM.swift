@@ -74,6 +74,7 @@ final class ContentVM: ObservableObject {
     }
     
     // MARK: - Daily Bonus
+    // TODO: - Add Notification Later
     func checkAndApplyDailyBonus() {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -85,14 +86,13 @@ final class ContentVM: ObservableObject {
             if today > lastBonusDay {
                 addCoins(1000)
                 lastDailyBonusSaver.save(today)
-                print("✅ Daily bonus applied: 1000 coins")
+                print("Daily bonus applied: 1000 coins")
             } else {
-                print("ℹ️ Daily bonus already claimed today")
+                print("Daily bonus already claimed today")
             }
         } else {
-            // First time opening the app - give bonus and mark today
             lastDailyBonusSaver.save(today)
-            print("✅ First launch - daily bonus tracking started")
+            print("First launch - daily bonus tracking started")
         }
     }
 
@@ -120,6 +120,7 @@ final class ContentVM: ObservableObject {
     func openLeaderboard() { path.append(.leaderboard) }
     func openPrivacy() { path.append(.privacy) }
     func openTerms() { path.append(.terms) }
+    func openEndGame() { path.append(.endGame) }
 
     func pop() { _ = path.popLast() }
     func popToRoot() { path.removeAll() }

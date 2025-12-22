@@ -35,6 +35,8 @@ struct ContentView: View {
                         TermsView()
                     case .shop:
                         ShopScreen(vm: .init(appVM: appVM))
+                    case .endGame:
+                        EndGameView()
                     }
                 }
         }

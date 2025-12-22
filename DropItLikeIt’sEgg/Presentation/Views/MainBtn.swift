@@ -21,7 +21,7 @@ struct MainButtonStyle {
     )
     
     static let small = MainButtonStyle(
-        height: 100,
+        height: 84,
         fontSize: 24,
         horizontalPadding: 24,
         verticalPadding: 8
@@ -85,6 +85,7 @@ struct MainBtn: View {
             .customFont(size: size.style.fontSize)
             .multilineTextAlignment(.center)
             .lineLimit(2)
+            .lineSpacing(1)
             .minimumScaleFactor(0.5)
             .padding(.horizontal, size.style.horizontalPadding)
             .padding(.vertical, size.style.verticalPadding)
