@@ -8,42 +8,49 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var appVM = ContentVM()
+    @ObservedObject private var coordinator = Coordinator.shared
+    @StateObject private var appVM: ContentVM
+    
+    private let services: Services
+    
+    init(services: Services) {
+        self.services = services
+        _appVM = StateObject(wrappedValue: ContentVM(services))
+    }
     
     var body: some View {
-        NavigationStack(path: $appVM.path) {
-            ProgressView()
+        NavigationStack(path: $coordinator.path) {
+            HomeScreen(services: services)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .info:
                         InfoView()
                     case .menu:
-                        MenuScreen(vm: .init(appVM: appVM))
+                        MenuScreen(vm: .init(appVM: appVM, services: services))
                     case .levels:
-                        LevelsScreen(vm: .init(appVM: appVM))
+                        LevelsScreen(vm: .init(appVM: appVM, services: services))
                     case .game:
-                        GameScreen(vm: .init())
+                        GameScreen(vm: .init(services), appVM: appVM)
                     case .profile:
-                        ProfileScreen(vm: .init())
+                        ProfileScreen(vm: .init(services))
                     case .settings:
-                        SettingsScreen(vm: .init())
+                        SettingsScreen(vm: .init(services))
                     case .leaderboard:
-                        LeaderBoardScreen(vm: .init())
+                        LeaderBoardScreen(vm: .init(services))
                     case .privacy:
                         PrivacyView()
                     case .terms:
                         TermsView()
                     case .shop:
-                        ShopScreen(vm: .init(appVM: appVM))
+                        ShopScreen(vm: .init(appVM: appVM, services: services))
                     case .endGame:
-                        EndGameView()
+                        EndGameView(appVM: appVM)
                     }
                 }
         }
-        .environmentObject(appVM)
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(services: Services.shared)
 }

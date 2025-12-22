@@ -7,8 +7,13 @@
 
 import Foundation
 
-struct FileService {
+final class FileService {
+    static let shared = FileService(folderName: "AppData")
     let folderName: String
+    
+    init(folderName: String) {
+        self.folderName = folderName
+    }
     
     private var directoryURL: URL {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -36,3 +41,4 @@ struct FileService {
         }
     }
 }
+

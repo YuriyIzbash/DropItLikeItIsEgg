@@ -17,7 +17,6 @@ struct ShopScreen: View {
             shopCard
         }
         .padding(.horizontal, 32)
-        .frame(maxHeight: .infinity, alignment: .top)
     }
     
     var body: some View {
@@ -39,7 +38,7 @@ struct ShopScreen: View {
             .padding(.top, 16)
         }
         .onAppear {
-            vm.onAppear()
+            vm.alertOnAppear()
         }
         .customAlert(
             title: vm.activeAlertTitle,
@@ -92,5 +91,5 @@ private extension ShopScreen {
 }
 
 #Preview {
-    ShopScreen(vm: ShopScreenVM(appVM: ContentVM()))
+    ShopScreen(vm: ShopScreenVM(appVM: ContentVM(Services.shared), services: Services.shared))
 }

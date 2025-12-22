@@ -19,8 +19,8 @@ struct PrivacyView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.appPink, lineWidth: 2)
                     )
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .overlay(
+                    .frame(maxWidth: .infinity)
+                    .overlay(alignment: .top) {
                         VStack {
                             Text("PRIVACY POLICY")
                                 .customFont(size: 24)
@@ -28,11 +28,10 @@ struct PrivacyView: View {
                             
                             Text("TEXT")
                                 .customFont(size: 12)
-                                .frame(maxHeight: .infinity, alignment: .center)
+                                .frame(maxHeight: .infinity)
                         }
-                            .padding(16),
-                        alignment: .top
-                    )
+                        .padding(16)
+                    }
             }
             .padding(32)
         }

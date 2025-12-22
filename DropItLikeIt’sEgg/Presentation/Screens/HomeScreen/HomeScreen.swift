@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct HomeScreen: View {
-    @EnvironmentObject private var appVM: ContentVM
+    @StateObject private var vm: HomeVM
+    @State private var showProgress = true
+    
+    init(services: Services) {
+        _vm = StateObject(wrappedValue: HomeVM(services))
+    }
     
     var body: some View {
         ZStackWithBackground {
@@ -19,7 +24,7 @@ struct HomeScreen: View {
                 .padding(.horizontal, 48)
                 .padding(.top, 32)
             
-            MainBtn(title: "PLAY", action: { appVM.openLevels() })
+            MainBtn(title: "PLAY", action: { vm.openLevels() })
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .padding(.horizontal, 56)
@@ -27,18 +32,29 @@ struct HomeScreen: View {
         }
         .safeAreaInset(edge: .top) {
             HStack {
-                NavBtn(type: .info) { appVM.openInfo() }
+                NavBtn(type: .info) { vm.openInfo() }
                 
                 Spacer()
                 
-                NavBtn(type: .menu) { appVM.openMenu() }
+                NavBtn(type: .menu) { vm.openMenu() }
             }
             .padding(.horizontal, 32)
             .padding(.top, 16)
         }
+        .overlay {
+            if showProgress {
+                ProgressView(onFinished: {
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        showProgress = false
+                    }
+                })
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.35), value: showProgress)
     }
 }
 
 #Preview {
-    HomeScreen()
+    HomeScreen(services: Services.shared)
 }

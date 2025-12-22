@@ -12,5 +12,5 @@ struct LeaderboardMockData: Identifiable {
     let id = UUID()
     let username: String
     let score: Int
-    let image: UIImage = UIImage(imageLiteralResourceName: "profilePlaceholder")
+    let image: UIImage
 }

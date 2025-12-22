@@ -19,8 +19,8 @@ struct TermsView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.appPink, lineWidth: 2)
                     )
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .overlay(
+                    .frame(maxWidth: .infinity)
+                    .overlay(alignment: .top) {
                         VStack {
                             Text("TERMS OF USE")
                                 .customFont(size: 24)
@@ -30,11 +30,10 @@ struct TermsView: View {
                             
                             Text("TEXT")
                                 .customFont(size: 12)
-                                .frame(maxHeight: .infinity, alignment: .center)
+                                .frame(maxHeight: .infinity)
                         }
-                            .padding(16),
-                        alignment: .top
-                    )
+                        .padding(16)
+                    }
             }
             .padding(32)
         }

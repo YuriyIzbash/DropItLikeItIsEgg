@@ -7,15 +7,15 @@
 
 import Combine
 
-@MainActor
-final class MenuScreenVM: ObservableObject {
+final class MenuScreenVM: BaseModel {
     @Published var coinAmount: Int = 0
     
     private let appVM: ContentVM
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
     
-    init(appVM: ContentVM) {
+    init(appVM: ContentVM, services: Services) {
         self.appVM = appVM
+        super.init(services)
+        load() 
     }
     
     func openShop() {
@@ -43,6 +43,6 @@ final class MenuScreenVM: ObservableObject {
     }
     
     func load() {
-        coinAmount = profileSaver.getValue()?.score ?? 0
+        coinAmount = userProfileService.load()?.score ?? 0
     }
 }

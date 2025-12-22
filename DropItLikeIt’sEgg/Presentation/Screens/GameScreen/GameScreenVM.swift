@@ -1,8 +1,15 @@
+//
+//  GameScreenVM.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 22. 12. 25.
+//
+
 import SwiftUI
 import Combine
 
 @MainActor
-final class GameScreenVM: ObservableObject {
+final class GameScreenVM: BaseModel {
     enum GameResult {
         case win
         case lose
@@ -57,7 +64,6 @@ final class GameScreenVM: ObservableObject {
     private let coinImages: [ImageResource] = [.coin1, .coin2, .coin3]
     private let spawnIntervalRange: ClosedRange<Double> = 0.7...1.3
     private let coinSpawnIntervalRange: ClosedRange<Double> = 1.4...3.9
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
     private var handledEggs: Int = 0
     private var caughtEggs: Int = 0
     private var coinsSpawned: Int = 0
@@ -188,7 +194,7 @@ final class GameScreenVM: ObservableObject {
     }
     
     private func loadStoredScore() {
-        let stored = profileSaver.getValue()
+        let stored = userProfileService.load()
         isLoadingScore = true
         score = stored?.score ?? 0
         bestScore = stored?.score ?? 0
@@ -367,15 +373,15 @@ final class GameScreenVM: ObservableObject {
     }
     
     private func persistScore() {
-        var profile = profileSaver.getValue() ?? UserProfile(score: score)
+        var profile = userProfileService.load() ?? UserProfile(score: score)
         profile.score = score
-        profileSaver.save(profile)
+        userProfileService.save(profile)
     }
     
     private func persistBestScore() {
-        var profile = profileSaver.getValue() ?? UserProfile(score: bestScore)
+        var profile = userProfileService.load() ?? UserProfile(score: bestScore)
         profile.score = bestScore
-        profileSaver.save(profile)
+        userProfileService.save(profile)
     }
 }
 

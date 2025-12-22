@@ -8,28 +8,26 @@
 import Foundation
 import Combine
 
-@MainActor
-final class LevelsScreenVM: ObservableObject {
+final class LevelsScreenVM: BaseModel {
     @Published var coinAmount: Int = 1000
     @Published var levels: [LevelData] = []
     @Published var maxUnlockedLevel: Int = 6
     
     private let appVM: ContentVM
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
     
-    init(appVM: ContentVM) {
+    init(appVM: ContentVM, services: Services) {
         self.appVM = appVM
-        // Initialize levels array to prevent index out of range
         self.levels = (1...9).map { number in
             LevelData(number: number, isLocked: true)
         }
+        super.init(services)
+        load()
     }
     
     func load() {
-        coinAmount = profileSaver.getValue()?.score ?? 0
+        coinAmount = userProfileService.load()?.score ?? 0
         maxUnlockedLevel = appVM.maxUnlockedLevel
         
-        // If score is 0, lock all levels
         let shouldLockAll = coinAmount == 0
         
         levels = (1...9).map { number in
@@ -45,3 +43,4 @@ final class LevelsScreenVM: ObservableObject {
         appVM.openShop()
     }
 }
+

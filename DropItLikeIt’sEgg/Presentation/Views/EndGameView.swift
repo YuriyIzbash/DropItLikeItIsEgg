@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EndGameView: View {
-    @EnvironmentObject private var appVM: ContentVM
+    let appVM: ContentVM
     
     var body: some View {
         ZStackWithBackground(.backgroundWin) {
@@ -22,5 +22,5 @@ struct EndGameView: View {
 }
 
 #Preview {
-    EndGameView()
+    EndGameView(appVM: ContentVM(Services.shared))
 }

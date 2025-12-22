@@ -1,9 +1,22 @@
+//
+//  GameScreen.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 22. 12. 25.
+//
+
 import SwiftUI
 
 struct GameScreen: View {
-    @EnvironmentObject private var appVM: ContentVM
     @StateObject var vm: GameScreenVM
     @State private var isReady = false
+    
+    let appVM: ContentVM
+    
+    init(vm: GameScreenVM, appVM: ContentVM) {
+        _vm = StateObject(wrappedValue: vm)
+        self.appVM = appVM
+    }
     
     var body: some View {
         GeometryReader { proxy in
@@ -31,7 +44,7 @@ struct GameScreen: View {
                 appVM.profile.score = newValue
                 appVM.saveProfile()
                 if newValue == 0 {
-                    appVM.path.append(.shop)
+                    appVM.openShop()
                 }
             }
             .onReceive(vm.timer) { vm.tick(currentTime: $0) }
@@ -108,7 +121,6 @@ private extension GameScreen {
         let groundY = size.height - playerHeight/2
         return ZStack {
             ForEach(vm.coins) { coin in
-                let halfH = coinSize.height / 2
                 let groundTop = groundY
                 if coin.y < groundTop {
                     Image(coin.image)
@@ -152,7 +164,7 @@ private extension GameScreen {
     @ViewBuilder
     var pauseOverlay: some View {
         if vm.isPaused {
-            PauseView(isPresented: $vm.isPaused)
+            PauseView(isPresented: $vm.isPaused, appVM: appVM)
                 .transition(.opacity)
                 .animation(.easeInOut, value: vm.isPaused)
         }
@@ -162,14 +174,11 @@ private extension GameScreen {
     var resultOverlay: some View {
         switch vm.gameResult {
         case .win:
-            WinScreen(score: vm.score, best: vm.bestScore)
+            WinView(score: vm.score, best: vm.bestScore, appVM: appVM)
         case .lose:
-            LoseScreen(score: vm.score, best: vm.bestScore)
+            LoseView(score: vm.score, best: vm.bestScore, appVM: appVM)
         case .none:
             EmptyView()
         }
     }
 }
-
-
-

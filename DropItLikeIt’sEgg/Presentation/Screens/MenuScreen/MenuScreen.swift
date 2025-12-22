@@ -54,11 +54,13 @@ struct MenuScreen: View {
             .padding(.horizontal, 32)
             .padding(.top, 16)
         }
-        .onAppear { vm.load() }
+        .onAppear {
+            vm.load()
+        }
     }
 }
 
 #Preview {
-    MenuScreen(vm: .init(appVM: ContentVM()))
+    MenuScreen(vm: .init(appVM: ContentVM(Services.shared), services: Services.shared))
 }
 

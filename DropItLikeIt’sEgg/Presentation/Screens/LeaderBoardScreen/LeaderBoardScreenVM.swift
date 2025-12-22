@@ -7,31 +7,31 @@
 
 import Foundation
 import Combine
+import UIKit
 
-@MainActor
-final class LeaderBoardScreenVM: ObservableObject {
+final class LeaderBoardScreenVM: BaseModel {
     @Published var profile = UserProfile()
     @Published var leaderboardMockData: [LeaderboardMockData] = []
     
-    private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
+    override init(_ services: Services) {
+        super.init(services)
+        load()
+    }
     
     func load() {
-        if let loaded: UserProfile = profileSaver.getValue() {
+        if let loaded: UserProfile = userProfileService.load() {
             profile = loaded
         }
         loadMockLeaderboard()
     }
     
     private func loadMockLeaderboard() {
-        leaderboardMockData = [
-            LeaderboardMockData(username: "EggMaster3000", score: 1000),
-            LeaderboardMockData(username: "DropQueen", score: 1200),
-            LeaderboardMockData(username: "YolkSlayer", score: 11200),
-            LeaderboardMockData(username: "ShellShock", score: 9800),
-            LeaderboardMockData(username: "EggCellent", score: 8500),
-            LeaderboardMockData(username: "Scrambler", score: 7300),
-            LeaderboardMockData(username: "OmeletteKing", score: 6500),
-            LeaderboardMockData(username: "HatchMaster", score: 5800),
-        ].sorted { $0.score > $1.score }
+        let entries = leaderboardService.getMockLeaderboard(currentUser: profile)
+        leaderboardMockData = entries.map { entry in
+            let image = UIImage(named: entry.imageName) ?? UIImage(imageLiteralResourceName: "profilePlaceholder")
+            return LeaderboardMockData(username: entry.username, score: entry.score, image: image)
+        }
+        .sorted { $0.score > $1.score }
     }
 }
+

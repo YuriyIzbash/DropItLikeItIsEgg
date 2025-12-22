@@ -38,10 +38,6 @@ struct SettingsScreen: View {
             saveButton
                 .padding(.bottom, 48)
         }
-        .frame(maxHeight: .infinity, alignment: .bottom)
-        .onAppear {
-            vm.load()
-        }
     }
 }
 
@@ -57,7 +53,7 @@ private extension SettingsScreen {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 16)
             .padding(.top, 80)
-
+        
     }
     
     var settingsContent: some View {
@@ -80,5 +76,5 @@ private extension SettingsScreen {
 }
 
 #Preview {
-    SettingsScreen(vm: SettingsScreenVM())
+    SettingsScreen(vm: SettingsScreenVM(Services.shared))
 }

@@ -32,10 +32,10 @@ struct ImagePicker: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
     
-    func makeCoordinator() -> Coordinator { Coordinator(self) }
+    func makeCoordinator() -> ImageCoordinator { Coordinator(self) }
 }
 
-final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+final class ImageCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     let parent: ImagePicker
     
     init(_ parent: ImagePicker) { self.parent = parent }

@@ -48,9 +48,6 @@ struct ProfileScreen: View {
             saveButton
         }
         .padding(.top, 24)
-        .onAppear {
-            vm.load()
-        }
         .onDisappear {
             vm.saveOnDisappear()
         }
@@ -119,16 +116,15 @@ private extension ProfileScreen {
                 }
             }
         }
-        .overlay(
+        .overlay(alignment: .bottom) {
             Image(systemName: "square.and.pencil")
                 .foregroundStyle(Color.white)
                 .padding(3)
                 .background(
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
                         .fill(Color.appLightGreen)
-                ),
-            alignment: .bottom
-        )
+                )
+        }
         .sheet(isPresented: $vm.showCameraPicker) {
             ImagePicker(sourceType: .camera, selectedImage: $vm.profile.image)
                 .ignoresSafeArea()
@@ -152,5 +148,5 @@ private extension ProfileScreen {
 }
 
 #Preview {
-    ProfileScreen(vm: ProfileScreenVM())
+    ProfileScreen(vm: ProfileScreenVM(Services.shared))
 }
