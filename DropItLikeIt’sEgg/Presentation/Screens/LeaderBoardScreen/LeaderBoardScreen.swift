@@ -17,9 +17,6 @@ struct LeaderBoardScreen: View {
             leaderBoardCard
         }
         .padding(.horizontal, 32)
-        .onAppear {
-            vm.load()
-        }
     }
     
     var body: some View {

@@ -108,7 +108,6 @@ private extension GameScreen {
         let groundY = size.height - playerHeight/2
         return ZStack {
             ForEach(vm.coins) { coin in
-                let halfH = coinSize.height / 2
                 let groundTop = groundY
                 if coin.y < groundTop {
                     Image(coin.image)

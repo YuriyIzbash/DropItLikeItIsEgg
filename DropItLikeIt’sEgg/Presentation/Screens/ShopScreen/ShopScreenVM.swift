@@ -36,7 +36,7 @@ final class ShopScreenVM: ObservableObject {
         appVM.profile.score <= 0
     }
     
-    func onAppear() {
+    func alertOnAppear() {
         if hasNoCoins {
             activeAlert = .noCoins
         }

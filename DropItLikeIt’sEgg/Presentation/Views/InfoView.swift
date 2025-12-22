@@ -20,8 +20,8 @@ struct InfoView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.appPink, lineWidth: 2)
                     )
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .overlay(
+                    .frame(maxWidth: .infinity)
+                    .overlay(alignment: .top) {
                         VStack {
                             Text("HOW TO PLAY")
                                 .customFont(size: 24)
@@ -39,13 +39,12 @@ struct InfoView: View {
                                 4. 
                                 Catch all the eggs to win the level!
                                 """)
-                                .customFont(size: 16)
-                                .multilineTextAlignment(.center)
-                                .frame(maxHeight: .infinity, alignment: .center)
+                            .customFont(size: 16)
+                            .multilineTextAlignment(.center)
+                            .frame(maxHeight: .infinity)
                         }
-                            .padding(16),
-                        alignment: .top
-                    )
+                        .padding(16)
+                    }
             }
             .padding(32)
         }

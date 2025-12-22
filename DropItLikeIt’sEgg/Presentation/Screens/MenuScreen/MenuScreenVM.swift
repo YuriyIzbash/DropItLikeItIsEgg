@@ -16,6 +16,8 @@ final class MenuScreenVM: ObservableObject {
     
     init(appVM: ContentVM) {
         self.appVM = appVM
+        
+        load() 
     }
     
     func openShop() {

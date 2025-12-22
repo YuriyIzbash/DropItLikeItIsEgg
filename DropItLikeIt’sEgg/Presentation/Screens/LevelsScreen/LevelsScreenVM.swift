@@ -19,10 +19,11 @@ final class LevelsScreenVM: ObservableObject {
     
     init(appVM: ContentVM) {
         self.appVM = appVM
-        // Initialize levels array to prevent index out of range
         self.levels = (1...9).map { number in
             LevelData(number: number, isLocked: true)
         }
+        
+        load()
     }
     
     func load() {
@@ -45,3 +46,4 @@ final class LevelsScreenVM: ObservableObject {
         appVM.openShop()
     }
 }
+

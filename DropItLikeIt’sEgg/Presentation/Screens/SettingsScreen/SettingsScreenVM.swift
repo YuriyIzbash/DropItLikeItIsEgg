@@ -18,6 +18,9 @@ final class SettingsScreenVM: ObservableObject {
     private let notificationSaver = DefaultsDataSaver<Bool>(key: "settings.notification")
     private let vibroSaver = DefaultsDataSaver<Bool>(key: "settings.vibration")
     
+    init() {
+        load()
+    }
     func load() {
         if let v = soundSaver.getValue() { soundIsOn = v }
         if let v = notificationSaver.getValue() { notificationIsOn = v }

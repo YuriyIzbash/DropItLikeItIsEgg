@@ -15,6 +15,10 @@ final class LeaderBoardScreenVM: ObservableObject {
     
     private let profileSaver = DefaultsDataSaver<UserProfile>(key: "user.profile")
     
+    init() {
+        load()
+    }
+    
     func load() {
         if let loaded: UserProfile = profileSaver.getValue() {
             profile = loaded
@@ -35,3 +39,4 @@ final class LeaderBoardScreenVM: ObservableObject {
         ].sorted { $0.score > $1.score }
     }
 }
+

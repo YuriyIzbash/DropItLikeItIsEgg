@@ -18,6 +18,10 @@ final class ProfileScreenVM: ObservableObject {
     @Published var usernameError: Bool = false
     @Published var emailError: Bool = false
     
+    init() {
+        load()
+    }
+    
     enum Field: Hashable {
         case username
         case email

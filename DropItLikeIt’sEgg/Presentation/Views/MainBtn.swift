@@ -29,7 +29,7 @@ struct MainButtonStyle {
 }
 
 struct MainBtn: View {
-    enum Size {
+    enum BtnSize {
         case large
         case small
         
@@ -42,7 +42,7 @@ struct MainBtn: View {
     }
     
     let title: String
-    let size: Size
+    let size: BtnSize
     let enableHaptics: Bool
     let action: () -> Void
     
@@ -50,7 +50,7 @@ struct MainBtn: View {
     
     init(
         title: String,
-        size: Size = .large,
+        size: BtnSize = .large,
         enableHaptics: Bool = false,
         action: @escaping () -> Void
     ) {
@@ -118,7 +118,7 @@ private extension MainBtn {
     
     init(
         title: String,
-        size: Size,
+        size: BtnSize,
         action: @escaping () -> Void
     ) {
         self.init(
