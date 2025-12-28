@@ -24,5 +24,3 @@ final class HomeScreenVM: ObservableObject {
         path.append(.game(level: 1))
     }
 }
-
-

@@ -231,5 +231,3 @@ final class GameScreenVM: ObservableObject {
         profileSaver.save(profile)
     }
 }
-
-
