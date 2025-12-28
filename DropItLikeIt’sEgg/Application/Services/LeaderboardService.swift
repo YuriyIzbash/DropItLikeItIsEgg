@@ -17,7 +17,6 @@ struct LeaderboardEntry: Identifiable, Equatable {
     }
 }
 
-@MainActor
 final class LeaderboardService {
     static let shared = LeaderboardService()
     private init() {}
