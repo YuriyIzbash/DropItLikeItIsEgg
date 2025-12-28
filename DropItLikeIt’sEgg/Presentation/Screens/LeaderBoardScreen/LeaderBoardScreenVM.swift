@@ -28,7 +28,7 @@ final class LeaderBoardScreenVM: BaseModel {
     private func loadMockLeaderboard() {
         let entries = leaderboardService.getMockLeaderboard(currentUser: profile)
         leaderboardMockData = entries.map { entry in
-            let image = UIImage(named: entry.imageName) ?? UIImage(imageLiteralResourceName: "profilePlaceholder")
+            let image = entry.image ?? UIImage(named: entry.imageName).flatMap { $0 } ?? UIImage(imageLiteralResourceName: "profilePlaceholder")
             return LeaderboardMockData(username: entry.username, score: entry.score, image: image)
         }
         .sorted { $0.score > $1.score }

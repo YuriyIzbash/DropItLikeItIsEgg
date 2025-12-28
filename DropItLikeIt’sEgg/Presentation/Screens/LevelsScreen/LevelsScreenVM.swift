@@ -20,7 +20,9 @@ final class LevelsScreenVM: BaseModel {
         self.levels = (1...9).map { number in
             LevelData(number: number, isLocked: true)
         }
+        
         super.init(services)
+        
         load()
     }
     

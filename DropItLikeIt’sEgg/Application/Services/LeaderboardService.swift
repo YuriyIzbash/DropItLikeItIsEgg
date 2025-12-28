@@ -1,17 +1,19 @@
 import Foundation
 import UIKit
 
-struct LeaderboardEntry: Identifiable, Equatable, Codable {
+struct LeaderboardEntry: Identifiable, Equatable {
     let id: UUID
     var username: String
     var score: Int
     var imageName: String
+    var image: UIImage?
     
-    init(id: UUID = UUID(), username: String, score: Int, imageName: String) {
+    init(id: UUID = UUID(), username: String, score: Int, imageName: String = "", image: UIImage? = nil) {
         self.id = id
         self.username = username
         self.score = score
         self.imageName = imageName
+        self.image = image
     }
 }
 
@@ -29,9 +31,12 @@ final class LeaderboardService {
             LeaderboardEntry(username: "TYKE", score: 1500, imageName: "avatar4")
         ]
         
-        let me = LeaderboardEntry(username: currentUser.username.isEmpty ? "YOU" : currentUser.username,
-                                  score: currentUser.score,
-                                  imageName: "profilePlaceholder")
+        let me = LeaderboardEntry(
+            username: currentUser.username.isEmpty ? "YOU" : currentUser.username,
+            score: currentUser.score,
+            imageName: "",
+            image: currentUser.image ?? UIImage(imageLiteralResourceName: "profilePlaceholder")
+        )
         entries.insert(me, at: 0)
         return entries
     }
