@@ -25,5 +25,3 @@ struct UserProfile: Codable, Equatable {
         self._image = StoredImage(wrappedValue: image, in: "ProfileImages")
     }
 }
-
-

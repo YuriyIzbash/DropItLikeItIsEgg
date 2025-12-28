@@ -18,5 +18,3 @@ enum AppRoute: Hashable {
     case privacy
     case terms
 }
-
-

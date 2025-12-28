@@ -141,5 +141,3 @@ private extension GameScreen {
     GameScreen(level: 1)
         .environmentObject(ContentVM())
 }
-
-
