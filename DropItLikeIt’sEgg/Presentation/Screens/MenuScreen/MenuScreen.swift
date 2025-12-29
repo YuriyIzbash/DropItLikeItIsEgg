@@ -43,17 +43,14 @@ struct MenuScreen: View {
             }
             .padding(.horizontal, 32)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-                
-                CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
+        .topBar(
+            leading: {
+                NavBtn(type: .back, action: dismiss.callAsFunction)
+            },
+            trailing: {
+                CoinCounterView(amount: vm.coinAmount, action: vm.openShop)
             }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        )
         .onAppear {
             vm.load()
         }

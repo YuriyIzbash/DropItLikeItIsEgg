@@ -8,22 +8,13 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject var vm: SettingsScreenVM
     
     var body: some View {
         ZStackWithBackground {
             content
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        .topBackBar()
         .customAlert(
             title: "Saved",
             message: "Your settings has been saved.",

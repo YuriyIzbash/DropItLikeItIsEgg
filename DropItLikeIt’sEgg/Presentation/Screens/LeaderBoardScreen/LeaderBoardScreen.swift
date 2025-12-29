@@ -9,7 +9,6 @@ import SwiftUI
 import UIKit
 
 struct LeaderBoardScreen: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject var vm: LeaderBoardScreenVM
     
     private var content: some View {
@@ -24,15 +23,7 @@ struct LeaderBoardScreen: View {
             content
                 .padding(.top, 32)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        .topBackBar()
     }
 }
 

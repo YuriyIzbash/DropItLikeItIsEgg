@@ -29,13 +29,8 @@ final class Coordinator: ObservableObject {
 
     private init() {}
 
-    // MARK: - Navigation API
     func push(_ route: AppRoute) {
         path.append(route)
-    }
-
-    func pop() {
-        _ = path.popLast()
     }
 
     func popToRoot() {

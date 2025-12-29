@@ -35,9 +35,6 @@ class BaseModel: ObservableObject {
         coordinator.push(route)
     }
 
-    func pop() {
-        coordinator.pop()
-    }
 
     func popToRoot() {
         coordinator.popToRoot()

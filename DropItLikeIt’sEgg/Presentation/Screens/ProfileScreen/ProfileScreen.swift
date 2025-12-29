@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ProfileScreen: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject var vm: ProfileScreenVM
     @FocusState private var focusedField: ProfileScreenVM.Field?
     
@@ -16,15 +15,7 @@ struct ProfileScreen: View {
         ZStackWithBackground {
             content
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        .topBackBar()
         .overlay {
             if vm.showPhotoActionSheet {
                 PhotoActionSheet(

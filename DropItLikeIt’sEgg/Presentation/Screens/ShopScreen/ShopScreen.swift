@@ -23,20 +23,17 @@ struct ShopScreen: View {
         ZStackWithBackground {
             content
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
+        .topBar(
+            leading: {
                 NavBtn(type: .back) {
-                    vm.handleBackAction { dismiss() }
+                    vm.handleBackAction(dismiss: dismiss.callAsFunction)
                 }
-                
-                Spacer()
-                
+            },
+            trailing: {
                 CoinCounterView(amount: vm.score, isInteractive: false)
                     .id(vm.score)
             }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        )
         .onAppear {
             vm.alertOnAppear()
         }

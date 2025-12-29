@@ -11,7 +11,7 @@ import Combine
 struct CoinCounterView: View {
     let amount: Int
     var isInteractive: Bool = true
-    var onTap: (() -> Void)? = nil
+    var action: (() -> Void)? = nil
 
     @State private var scale: CGFloat = 1.0
     @State private var shimmerOffset: CGFloat = -180
@@ -29,7 +29,7 @@ struct CoinCounterView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             guard isInteractive else { return }
-            onTap?()
+            action?()
         }
         .onReceive(animationTimer) { _ in
             guard isInteractive else { return }
@@ -99,5 +99,5 @@ struct CoinCounterView: View {
 }
 
 #Preview {
-    CoinCounterView(amount: 1000, isInteractive: true, onTap: { print("Coin tapped") })
+    CoinCounterView(amount: 1000, isInteractive: true, action: { print("Coin tapped") })
 }
