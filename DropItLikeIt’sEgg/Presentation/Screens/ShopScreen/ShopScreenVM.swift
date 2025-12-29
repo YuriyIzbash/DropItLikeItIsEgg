@@ -9,10 +9,10 @@ import Foundation
 import Combine
 
 final class ShopScreenVM: BaseModel {
-    @Published var showNoCoinsAlert: Bool = false
+    @Published private(set) var showNoCoinsAlert: Bool = false
     @Published var activeAlert: ShopAlert? = nil
-    @Published var hasUnlockedLevels: Bool = false
-    @Published var hasNoAds: Bool = false
+    @Published private(set) var hasUnlockedLevels: Bool = false
+    @Published private(set) var hasNoAds: Bool = false
     
     private let appVM: ContentVM
     

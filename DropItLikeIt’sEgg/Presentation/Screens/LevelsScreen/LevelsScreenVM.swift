@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 final class LevelsScreenVM: BaseModel {
-    @Published var coinAmount: Int = 1000
-    @Published var levels: [LevelData] = []
-    @Published var maxUnlockedLevel: Int = 6
+    @Published private(set) var coinAmount: Int = 1000
+    @Published private(set) var levels: [LevelData] = []
+    @Published private(set) var maxUnlockedLevel: Int = 6
     
     private let appVM: ContentVM
     

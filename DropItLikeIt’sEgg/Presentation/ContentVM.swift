@@ -11,8 +11,8 @@ import Combine
 
 final class ContentVM: BaseModel {
     // MARK: - Navigation
-    @Published var currentLevel: Int = 1
-    @Published var maxUnlockedLevel: Int = 6
+    @Published private(set) var currentLevel: Int = 1
+    @Published private(set) var maxUnlockedLevel: Int = 6
     
     // MARK: - Shared reactive profile
     struct AppProfile {

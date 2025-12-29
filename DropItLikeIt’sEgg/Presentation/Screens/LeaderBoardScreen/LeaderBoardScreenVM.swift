@@ -10,8 +10,8 @@ import Combine
 import UIKit
 
 final class LeaderBoardScreenVM: BaseModel {
-    @Published var profile = UserProfile()
-    @Published var leaderboardMockData: [LeaderboardMockData] = []
+    @Published private(set) var profile = UserProfile()
+    @Published private(set) var leaderboardMockData: [LeaderboardMockData] = []
     
     override init(_ services: Services) {
         super.init(services)

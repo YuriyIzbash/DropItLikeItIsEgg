@@ -8,7 +8,7 @@
 import Combine
 
 final class MenuScreenVM: BaseModel {
-    @Published var coinAmount: Int = 0
+    @Published private(set) var coinAmount: Int = 0
     
     private let appVM: ContentVM
     

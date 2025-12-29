@@ -14,8 +14,8 @@ final class ProfileScreenVM: BaseModel {
     @Published var showPhotoActionSheet: Bool = false
     @Published var showCameraPicker: Bool = false
     @Published var showPhotoPicker: Bool = false
-    @Published var usernameError: Bool = false
-    @Published var emailError: Bool = false
+    @Published private(set) var usernameError: Bool = false
+    @Published private(set) var emailError: Bool = false
     
     override init(_ services: Services) {
         super.init(services)

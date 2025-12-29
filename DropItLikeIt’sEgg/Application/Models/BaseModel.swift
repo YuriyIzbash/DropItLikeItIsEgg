@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 @MainActor
-class BaseModel: ObservableObject {    
+class BaseModel: ObservableObject {
     let settingsService: SettingsService
     let fileService: FileService
     let userProfileService: UserProfileService
@@ -20,22 +20,21 @@ class BaseModel: ObservableObject {
     let coordinator: Coordinator
     
     init(_ services: Services) {
-            self.settingsService = services.settingsService
-            self.fileService = services.fileService
-            self.userProfileService = services.userProfileService
-            self.leaderboardService = services.leaderboardService
-            self.levelsService = services.levelsService
-            self.dailyBonusService = services.dailyBonusService
-            self.shopService = services.shopService
+        self.settingsService = services.settingsService
+        self.fileService = services.fileService
+        self.userProfileService = services.userProfileService
+        self.leaderboardService = services.leaderboardService
+        self.levelsService = services.levelsService
+        self.dailyBonusService = services.dailyBonusService
+        self.shopService = services.shopService
         
-            self.coordinator = services.coordinator
-        }
+        self.coordinator = services.coordinator
+    }
     
     func push(_ route: AppRoute) {
         coordinator.push(route)
     }
-
-
+    
     func popToRoot() {
         coordinator.popToRoot()
     }

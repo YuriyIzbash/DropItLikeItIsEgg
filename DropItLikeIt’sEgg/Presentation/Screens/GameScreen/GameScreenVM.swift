@@ -10,49 +10,15 @@ import Combine
 
 @MainActor
 final class GameScreenVM: BaseModel {
-    enum GameResult {
-        case win
-        case lose
-    }
-    
-    struct Egg: Identifiable {
-        let id = UUID()
-        let image: ImageResource
-        var x: CGFloat
-        var y: CGFloat
-        var fallSpeed: CGFloat
-    }
-    
-    struct Coin: Identifiable {
-        let id = UUID()
-        let image: ImageResource
-        var x: CGFloat
-        var y: CGFloat
-        var fallSpeed: CGFloat
-        var value: Int
-    }
-    
-    struct Blast: Identifiable {
-        let id = UUID()
-        var x: CGFloat
-        var y: CGFloat
-        var createdAt: Date
-    }
-    
-    struct CoinEffect {
-        let id = UUID()
-        let createdAt: Date
-    }
-    
     @Published var isPaused: Bool = false
-    @Published var score: Int = 0
-    @Published var bestScore: Int = 0
-    @Published var playerX: CGFloat = 0.5
-    @Published var eggs: [Egg] = []
-    @Published var coins: [Coin] = []
-    @Published var blasts: [Blast] = []
-    @Published var coinEffect: CoinEffect?
-    @Published var gameResult: GameResult?
+    @Published private(set) var score: Int = 0
+    @Published private(set) var bestScore: Int = 0
+    @Published private(set) var playerX: CGFloat = 0.5
+    @Published private(set) var eggs: [Egg] = []
+    @Published private(set) var coins: [Coin] = []
+    @Published private(set) var blasts: [Blast] = []
+    @Published private(set) var coinEffect: CoinEffect?
+    @Published private(set) var gameResult: GameResult?
     
     var isLoadingScore: Bool = false
     
@@ -385,3 +351,39 @@ final class GameScreenVM: BaseModel {
     }
 }
 
+extension GameScreenVM {
+    enum GameResult {
+        case win
+        case lose
+    }
+    
+    struct Egg: Identifiable {
+        let id = UUID()
+        let image: ImageResource
+        var x: CGFloat
+        var y: CGFloat
+        var fallSpeed: CGFloat
+    }
+    
+    struct Coin: Identifiable {
+        let id = UUID()
+        let image: ImageResource
+        var x: CGFloat
+        var y: CGFloat
+        var fallSpeed: CGFloat
+        var value: Int
+    }
+    
+    struct Blast: Identifiable {
+        let id = UUID()
+        var x: CGFloat
+        var y: CGFloat
+        var createdAt: Date
+    }
+    
+    struct CoinEffect {
+        let id = UUID()
+        let createdAt: Date
+    }
+    
+}
