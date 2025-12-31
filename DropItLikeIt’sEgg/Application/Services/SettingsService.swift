@@ -7,32 +7,45 @@
 
 import Foundation
 
+@MainActor
 final class SettingsService {
-    private let soundSaver = DefaultsDataSaver<Bool>(key: "settings.sound")
-    private let notificationSaver = DefaultsDataSaver<Bool>(key: "settings.notification")
-    private let vibroSaver = DefaultsDataSaver<Bool>(key: "settings.vibration")
-    
-    func getSoundEnabled() -> Bool? {
-        soundSaver.getValue()
+    private let isSoundEnabledStorage = DefaultsDataSaver<Bool>(key: "settings.isSoundEnabled")
+    private let isNotificationEnabledStorage = DefaultsDataSaver<Bool>(key: "settings.isNotificationEnabled")
+    private let isVibroEnabledStorage = DefaultsDataSaver<Bool>(key: "settings.isViibrationEnabled")
+}
+
+//MARK: - Sound Setting
+
+extension SettingsService {
+    func getSoundEnabled() -> Bool {
+        isSoundEnabledStorage.getValue() ?? false
     }
     
     func setSoundEnabled(_ value: Bool) {
-        soundSaver.save(value)
+        isSoundEnabledStorage.save(value)
     }
-    
-    func getNotificationEnabled() -> Bool? {
-        notificationSaver.getValue()
+}
+
+//MARK: - Notification Setting
+
+extension SettingsService {
+    func getNotificationEnabled() -> Bool {
+        isNotificationEnabledStorage.getValue() ?? false
     }
     
     func setNotificationEnabled(_ value: Bool) {
-        notificationSaver.save(value)
+        isNotificationEnabledStorage.save(value)
     }
-    
-    func getVibroEnabled() -> Bool? {
-        vibroSaver.getValue()
+}
+
+//MARK: - Vibro Setting
+
+extension SettingsService {
+    func getVibroEnabled() -> Bool {
+        isVibroEnabledStorage.getValue() ?? false
     }
     
     func setVibroEnabled(_ value: Bool) {
-        vibroSaver.save(value)
+        isVibroEnabledStorage.save(value)
     }
 }
