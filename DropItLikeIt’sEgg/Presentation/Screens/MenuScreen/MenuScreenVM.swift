@@ -19,27 +19,27 @@ final class MenuScreenVM: BaseModel {
     }
     
     func openShop() {
-        appVM.openShop()
+        push(.shop)
     }
     
     func openProfile() {
-        appVM.openProfile()
+        push(.profile)
     }
     
     func openSettings() {
-        appVM.openSettings()
+        push(.settings)
     }
     
     func openLeaderboard() {
-        appVM.openLeaderboard()
+        push(.leaderboard)
     }
     
     func openPrivacy() {
-        appVM.openPrivacy()
+        push(.privacy)
     }
     
     func openTerms() {
-        appVM.openTerms()
+        push(.terms)
     }
     
     func load() {

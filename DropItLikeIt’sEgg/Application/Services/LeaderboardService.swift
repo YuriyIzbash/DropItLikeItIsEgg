@@ -1,42 +1,50 @@
-import Foundation
+//
+//  LeaderboardService.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 18. 12. 25.
+//
+
 import UIKit
 
-struct LeaderboardEntry: Identifiable, Equatable {
-    let id: UUID
-    var username: String
-    var score: Int
-    var imageName: String
-    var image: UIImage?
-    
-    init(id: UUID = UUID(), username: String, score: Int, imageName: String = "", image: UIImage? = nil) {
-        self.id = id
-        self.username = username
-        self.score = score
-        self.imageName = imageName
-        self.image = image
-    }
-}
-
+@MainActor
 final class LeaderboardService {
     static let shared = LeaderboardService()
     private init() {}
     
     // TODO: - Fetch from network or persistence
-    func getMockLeaderboard(currentUser: UserProfile) -> [LeaderboardEntry] {
-        var entries: [LeaderboardEntry] = [
-            LeaderboardEntry(username: "TOM", score: 2500, imageName: "avatar1"),
-            LeaderboardEntry(username: "JERRY", score: 2200, imageName: "avatar2"),
-            LeaderboardEntry(username: "SPIKE", score: 1800, imageName: "avatar3"),
-            LeaderboardEntry(username: "TYKE", score: 1500, imageName: "avatar4")
+    func getMockLeaderboard(currentUser: UserProfile) -> [LeaderboardMockData] {
+        var entries: [LeaderboardMockData] = [
+            LeaderboardMockData(
+                username: "TOM",
+                score: 2500,
+                image: UIImage(imageLiteralResourceName: "profilePlaceholder")
+            ),
+            LeaderboardMockData(
+                username: "JERRY",
+                score: 2200,
+                image: UIImage(imageLiteralResourceName: "profilePlaceholder")
+            ),
+            LeaderboardMockData(
+                username: "SPIKE",
+                score: 1800,
+                image: UIImage(imageLiteralResourceName: "profilePlaceholder")
+            ),
+            LeaderboardMockData(
+                username: "TYKE",
+                score: 1500,
+                image: UIImage(imageLiteralResourceName: "coin1")
+            )
         ]
         
-        let me = LeaderboardEntry(
+        let me = LeaderboardMockData(
             username: currentUser.username.isEmpty ? "YOU" : currentUser.username,
             score: currentUser.score,
-            imageName: "",
             image: currentUser.image ?? UIImage(imageLiteralResourceName: "profilePlaceholder")
         )
+        
         entries.insert(me, at: 0)
+        
         return entries
     }
 }

@@ -42,7 +42,7 @@ final class LevelsScreenVM: BaseModel {
     }
     
     func openShop() {
-        appVM.openShop()
+        push(.shop)
     }
 }
 

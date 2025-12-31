@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class UserProfileService: DefaultsDataSaver<UserProfile> {
     init() {
         super.init(key: "user.profile")

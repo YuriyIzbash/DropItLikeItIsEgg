@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class FileService {
     static let shared = FileService(folderName: "AppData")
     let folderName: String

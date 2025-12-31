@@ -22,6 +22,7 @@ enum AppRoute: Hashable {
     case endGame
 }
 
+@MainActor
 final class Coordinator: ObservableObject {
     @Published var path: [AppRoute] = []
 

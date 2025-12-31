@@ -5,9 +5,10 @@
 //  Created by yuriy on 22. 12. 25.
 //
 
-import Foundation
+import Combine
 
-final class LevelsService: DefaultsDataSaver<Int> {
+@MainActor
+final class LevelsService: DefaultsDataSaver<Int>, ObservableObject {
     init() {
         super.init(key: "levels.maxUnlocked")
     }

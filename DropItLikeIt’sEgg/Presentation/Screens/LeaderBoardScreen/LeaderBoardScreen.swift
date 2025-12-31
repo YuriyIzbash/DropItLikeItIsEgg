@@ -58,7 +58,7 @@ private extension LeaderBoardScreen {
                     
                     ForEach(Array(vm.leaderboardMockData.enumerated()), id: \.element.id) { index, entry in
                         HStack(spacing: 12) {
-                            mockAvatarView(image: entry.image)
+                            mockAvatarView(image: entry.image ?? UIImage(imageLiteralResourceName: "profilePlaceholder"))
                             
                             UserInfoRow(username: entry.username, score: entry.score)
                         }
