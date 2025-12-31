@@ -8,7 +8,6 @@
 import SwiftUI
 
 final class HomeVM: BaseModel {
-    // MARK: - Navigation
     func openInfo() {
         push(.info)
     }

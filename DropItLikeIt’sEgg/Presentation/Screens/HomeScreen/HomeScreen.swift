@@ -30,20 +30,17 @@ struct HomeScreen: View {
                 .padding(.horizontal, 56)
                 .padding(.bottom, 32)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .info) { vm.openInfo() }
-                
-                Spacer()
-                
+        .topBar(
+            leading: {
+                NavBtn(type: .info) { vm.openInfo()}
+            },
+            trailing: {
                 NavBtn(type: .menu) { vm.openMenu() }
             }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        )
         .overlay {
             if showProgress {
-                ProgressView(onFinished: {
+                CustomProgressView(onFinished: {
                     withAnimation(.easeInOut(duration: 0.35)) {
                         showProgress = false
                     }
