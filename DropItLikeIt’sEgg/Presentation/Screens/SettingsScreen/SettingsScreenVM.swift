@@ -19,9 +19,9 @@ final class SettingsScreenVM: BaseModel {
     }
     
     func load() {
-        if let v = settingsService.getSoundEnabled() { soundIsOn = v }
-        if let v = settingsService.getNotificationEnabled() { notificationIsOn = v }
-        if let v = settingsService.getVibroEnabled() { vibroIsOn = v }
+        soundIsOn = settingsService.getSoundEnabled()
+        notificationIsOn = settingsService.getNotificationEnabled()
+        vibroIsOn = settingsService.getVibroEnabled()
     }
     
     func save() {

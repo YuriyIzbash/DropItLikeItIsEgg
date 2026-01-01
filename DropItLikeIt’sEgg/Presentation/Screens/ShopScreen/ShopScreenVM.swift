@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import os
 
 final class ShopScreenVM: BaseModel {
     @Published private(set) var showNoCoinsAlert: Bool = false
@@ -48,14 +49,14 @@ final class ShopScreenVM: BaseModel {
     // MARK: - Shop Actions
     func purchaseCoins() {
         // TODO: Implement actual purchase logic
-        print("Purchase 1000 coins for $1")
+        logger.log("Purchase 1000 coins for $1")
         appVM.addCoins(1000)
         activeAlert = .coinsPurchased
     }
     
     func purchaseUnlockLevels() {
         // TODO: Implement actual purchase logic
-        print("Unlock levels for $1")
+        logger.log("Unlock levels for $1")
         appVM.unlockLevels(upTo: 9)
         hasUnlockedLevels = true
         shopService.setUnlockedLevels(true)
@@ -65,7 +66,7 @@ final class ShopScreenVM: BaseModel {
     
     func purchaseNoAds() {
         // TODO: Implement actual purchase logic
-        print("Purchase No Ads for $3")
+        logger.log("Purchase No Ads for $3")
         hasNoAds = true
         shopService.setNoAds(true)
         activeAlert = .noAds

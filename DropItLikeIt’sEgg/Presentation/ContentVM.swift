@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-
+import os
 
 final class ContentVM: BaseModel {
     // MARK: - Navigation
@@ -74,13 +74,13 @@ final class ContentVM: BaseModel {
             if today > lastBonusDay {
                 addCoins(1000)
                 dailyBonusService.saveLastBonusDate(today)
-                print("Daily bonus applied: 1000 coins")
+                logger.log("Daily bonus applied: 1000 coins")
             } else {
-                print("Daily bonus already claimed today")
+                logger.log("Daily bonus already claimed today")
             }
         } else {
             dailyBonusService.saveLastBonusDate(today)
-            print("First launch - daily bonus tracking started")
+            logger.log("First launch - daily bonus tracking started")
         }
     }
     

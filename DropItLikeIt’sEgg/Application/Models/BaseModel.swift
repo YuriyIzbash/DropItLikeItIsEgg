@@ -7,9 +7,10 @@
 
 import SwiftUI
 import Combine
+import os
 
 @MainActor
-class BaseModel: ObservableObject {
+class BaseModel: ObservableObject, Loggerable {
     let settingsService: SettingsService
     let fileService: FileService
     let userProfileService: UserProfileService
