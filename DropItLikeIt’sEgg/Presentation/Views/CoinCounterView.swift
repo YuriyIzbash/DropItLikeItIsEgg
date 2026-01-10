@@ -24,7 +24,7 @@ struct CoinCounterView: View {
 
             Text("\(amount)")
                 .customFont(size: 12)
-                .padding(.leading, -56)
+                .padding(.leading, -64)
         }
         .contentShape(Rectangle())
         .onTapGesture {
@@ -48,7 +48,7 @@ struct CoinCounterView: View {
         Image(.coinCounter)
             .resizable()
             .scaledToFit()
-            .frame(height: 64)
+            .frame(height: 72)
             .scaleEffect(scale)
             .overlay(alignment: .center) {
                 if isInteractive {
@@ -58,7 +58,7 @@ struct CoinCounterView: View {
                                 .resizable()
                                 .scaledToFit()
                         )
-                        .frame(height: 64)
+                        .frame(height: 72)
                 }
             }
     }
@@ -73,7 +73,7 @@ struct CoinCounterView: View {
             startPoint: .top,
             endPoint: .bottom
         )
-        .frame(width: 120)
+        .frame(width: 160)
         .rotationEffect(.degrees(25))
         .offset(x: shimmerOffset)
         .blendMode(.screen)

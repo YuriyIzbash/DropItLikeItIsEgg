@@ -13,17 +13,11 @@ struct LeaderBoardScreen: View {
     
     var body: some View {
         ZStackWithBackground {
-            content()
+            leaderBoardCard
                 .padding(.top, 32)
+                .padding(.horizontal, 32)
         }
         .topBackBar()
-    }
-    
-    private func content() -> some View {
-        VStack(alignment: .leading) {
-            leaderBoardCard
-        }
-        .padding(.horizontal, 32)
     }
 }
 

@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct CustomAlertModifier: ViewModifier {
-    @Binding var isPresented: Bool
+struct CustomAlertModifier<State>: ViewModifier {
+    @Binding var state: State?
     
     let title: String
     let message: String
     let confirmTitle: String
+    
+    private var isPresented: Bool { state != nil }
     
     func body(content: Content) -> some View {
         ZStack {
@@ -25,10 +27,28 @@ struct CustomAlertModifier: ViewModifier {
                     message: message,
                     confirmTitle: confirmTitle
                 ) {
-                    isPresented = false
+                    state = nil
                 }
             }
         }
         .animation(.easeOut(duration: 0.25), value: isPresented)
+    }
+}
+
+extension View {
+    func customAlert<State>(
+        state: Binding<State?>,
+        title: String,
+        message: String,
+        confirmTitle: String = "OK"
+    ) -> some View {
+        modifier(
+            CustomAlertModifier(
+                state: state,
+                title: title,
+                message: message,
+                confirmTitle: confirmTitle
+            )
+        )
     }
 }

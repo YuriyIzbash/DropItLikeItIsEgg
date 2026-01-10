@@ -11,15 +11,13 @@ struct SettingsScreen: View {
     @StateObject var vm: SettingsScreenVM
     
     var body: some View {
-        ZStackWithBackground {
-            content()
-        }
-        .topBackBar()
-        .customAlert(
-            title: "Saved",
-            message: "Your settings has been saved.",
-            isPresented: $vm.showSaveConfirmation
-        )
+        ZStackWithBackground(content: content)
+            .topBackBar()
+            .customAlert(
+                title: "Saved",
+                message: "Your settings has been saved.",
+                isPresented: $vm.showSaveConfirmation
+            )
     }
     
     private func content() -> some View {

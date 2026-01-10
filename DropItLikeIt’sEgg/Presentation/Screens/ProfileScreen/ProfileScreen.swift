@@ -12,24 +12,22 @@ struct ProfileScreen: View {
     @FocusState private var focusedField: ProfileScreenVM.Field?
     
     var body: some View {
-        ZStackWithBackground {
-            content()
-        }
-        .topBackBar()
-        .overlay {
-            if vm.showPhotoActionSheet {
-                PhotoActionSheet(
-                    isPresented: $vm.showPhotoActionSheet,
-                    onMakePhoto: { vm.showCameraPicker = true },
-                    onChoosePhoto: { vm.showPhotoPicker = true }
-                )
+        ZStackWithBackground(content: content)
+            .topBackBar()
+            .overlay {
+                if vm.showPhotoActionSheet {
+                    PhotoActionSheet(
+                        isPresented: $vm.showPhotoActionSheet,
+                        onMakePhoto: { vm.showCameraPicker = true },
+                        onChoosePhoto: { vm.showPhotoPicker = true }
+                    )
+                }
             }
-        }
-        .customAlert(
-            title: "Saved",
-            message: "Your profile has been saved.",
-            isPresented: $vm.showSaveConfirmation
-        )
+            .customAlert(
+                title: "Saved",
+                message: "Your profile has been saved.",
+                isPresented: $vm.showSaveConfirmation
+            )
     }
     
     private func content() -> some View {

@@ -14,7 +14,8 @@ struct ShopScreen: View {
     
     var body: some View {
         ZStackWithBackground {
-            content()
+            shopCard
+                .padding(.horizontal, 32)
         }
         .topBar(
             leading: {
@@ -28,23 +29,13 @@ struct ShopScreen: View {
             }
         )
         .onAppear {
-            vm.alertOnAppear()
+            vm.showAlertOnAppear()
         }
         .customAlert(
-            title: vm.activeAlert?.activeAlertTitle ?? "",
-            message: vm.activeAlert?.activeAlertMessage ?? "",
-            isPresented: Binding(
-                get: { vm.activeAlert != nil },
-                set: { newValue in if !newValue { vm.activeAlert = nil } }
-            )
+            state: $vm.activeAlert,
+            title: vm.activeAlert?.title ?? "",
+            message: vm.activeAlert?.message ?? ""
         )
-    }
-    
-    private func content() -> some View {
-        VStack(alignment: .leading) {
-            shopCard
-        }
-        .padding(.horizontal, 32)
     }
 }
 
@@ -90,3 +81,4 @@ private extension ShopScreen {
 #Preview {
     ShopScreen(vm: ShopScreenVM(appVM: ContentVM(Services.shared), services: Services.shared))
 }
+

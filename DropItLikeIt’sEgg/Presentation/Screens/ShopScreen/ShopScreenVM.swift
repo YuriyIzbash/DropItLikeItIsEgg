@@ -32,7 +32,7 @@ final class ShopScreenVM: BaseModel {
         appVM.profile.score <= 0
     }
     
-    func alertOnAppear() {
+    func showAlertOnAppear() {
         if hasNoCoins {
             activeAlert = .noCoins
         }
@@ -80,7 +80,7 @@ extension ShopScreenVM {
         case levelsUnlocked
         case noAds
         
-        var activeAlertTitle: String {
+        var title: String {
             switch self {
             case .noCoins: "Warning"
             case .coinsPurchased: "Congrats!"
@@ -89,7 +89,7 @@ extension ShopScreenVM {
             }
         }
         
-        var activeAlertMessage: String {
+        var message: String {
             switch self {
             case .noCoins: "You need coins to play"
             case .coinsPurchased: "You have purchased 1000 coins!"
