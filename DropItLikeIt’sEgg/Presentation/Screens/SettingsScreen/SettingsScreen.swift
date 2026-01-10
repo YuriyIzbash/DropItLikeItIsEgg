@@ -12,7 +12,7 @@ struct SettingsScreen: View {
     
     var body: some View {
         ZStackWithBackground {
-            content
+            content()
         }
         .topBackBar()
         .customAlert(
@@ -22,7 +22,7 @@ struct SettingsScreen: View {
         )
     }
     
-    private var content: some View {
+    private func content() -> some View {
         VStack {
             settingsCard
             

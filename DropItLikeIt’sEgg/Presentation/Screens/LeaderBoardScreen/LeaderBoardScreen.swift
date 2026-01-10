@@ -11,19 +11,19 @@ import UIKit
 struct LeaderBoardScreen: View {
     @StateObject var vm: LeaderBoardScreenVM
     
-    private var content: some View {
+    var body: some View {
+        ZStackWithBackground {
+            content()
+                .padding(.top, 32)
+        }
+        .topBackBar()
+    }
+    
+    private func content() -> some View {
         VStack(alignment: .leading) {
             leaderBoardCard
         }
         .padding(.horizontal, 32)
-    }
-    
-    var body: some View {
-        ZStackWithBackground {
-            content
-                .padding(.top, 32)
-        }
-        .topBackBar()
     }
 }
 

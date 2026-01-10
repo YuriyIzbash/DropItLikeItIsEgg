@@ -13,7 +13,7 @@ struct ProfileScreen: View {
     
     var body: some View {
         ZStackWithBackground {
-            content
+            content()
         }
         .topBackBar()
         .overlay {
@@ -32,7 +32,7 @@ struct ProfileScreen: View {
         )
     }
     
-    private var content: some View {
+    private func content() -> some View {
         VStack(spacing: 12) {
             profileCard
             

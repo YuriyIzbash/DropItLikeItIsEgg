@@ -12,16 +12,9 @@ struct ShopScreen: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var vm: ShopScreenVM
     
-    private var content: some View {
-        VStack(alignment: .leading) {
-            shopCard
-        }
-        .padding(.horizontal, 32)
-    }
-    
     var body: some View {
         ZStackWithBackground {
-            content
+            content()
         }
         .topBar(
             leading: {
@@ -38,13 +31,20 @@ struct ShopScreen: View {
             vm.alertOnAppear()
         }
         .customAlert(
-            title: vm.activeAlertTitle,
-            message: vm.activeAlertMessage,
+            title: vm.activeAlert?.activeAlertTitle ?? "",
+            message: vm.activeAlert?.activeAlertMessage ?? "",
             isPresented: Binding(
                 get: { vm.activeAlert != nil },
                 set: { newValue in if !newValue { vm.activeAlert = nil } }
             )
         )
+    }
+    
+    private func content() -> some View {
+        VStack(alignment: .leading) {
+            shopCard
+        }
+        .padding(.horizontal, 32)
     }
 }
 
