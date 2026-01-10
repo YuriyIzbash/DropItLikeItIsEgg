@@ -58,20 +58,14 @@ private extension ShopScreen {
                 .padding(.top, 56)
                 .padding(.bottom, 16)
             
-            ShopRow(offerName: "1000 coins", price: 1, onTap: {
-                vm.purchaseCoins()
-            })
+            ShopRow(offerName: "1000 coins", price: 1, action: vm.purchaseCoins)
             
             if !vm.hasUnlockedLevels {
-                ShopRow(offerName: "Unlock levels", price: 1, onTap: {
-                    vm.purchaseUnlockLevels()
-                })
+                ShopRow(offerName: "Unlock levels", price: 1, action: vm.purchaseUnlockLevels)
             }
             
             if !vm.hasNoAds {
-                ShopRow(offerName: "No Ads", price: 3, onTap: {
-                    vm.purchaseNoAds()
-                })
+                ShopRow(offerName: "No Ads", price: 3, action: vm.purchaseNoAds)
             }
         }
         .padding(.horizontal, 12)

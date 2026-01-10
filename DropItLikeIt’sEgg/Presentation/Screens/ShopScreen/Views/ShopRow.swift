@@ -11,7 +11,7 @@ import os
 struct ShopRow: View, Loggerable {
     let offerName: String
     let price: Int
-    var onTap: (() -> Void)? = nil
+    var action: (() -> Void)? = nil
     
     var body: some View {
         ZStack {
@@ -23,7 +23,7 @@ struct ShopRow: View, Loggerable {
                 
                 NavBtn(type: .empty, action: {
                     logger.log("Follow to paywall")
-                    onTap?()
+                    action?()
                 })
                 .overlay(
                     Text("\(price)$")
