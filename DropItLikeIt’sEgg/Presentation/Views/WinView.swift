@@ -80,7 +80,9 @@ struct ScoreRow: View {
             
             HStack(spacing: 18) {
                 Text(title)
+                
                 Spacer()
+                
                 Text(value)
             }
             .padding(.horizontal, 18)

@@ -9,13 +9,12 @@ import SwiftUI
 import Combine
 
 struct CoinCounterView: View {
+    @State private var scale: CGFloat = 1.0
+    @State private var shimmerOffset: CGFloat = -180
+    
     let amount: Int
     var isInteractive: Bool = true
     var action: (() -> Void)? = nil
-
-    @State private var scale: CGFloat = 1.0
-    @State private var shimmerOffset: CGFloat = -180
-
     private let animationTimer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
 
     var body: some View {
