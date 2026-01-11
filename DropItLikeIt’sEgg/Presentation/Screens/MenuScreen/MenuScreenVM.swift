@@ -7,42 +7,47 @@
 
 import Combine
 
+@MainActor
 final class MenuScreenVM: BaseModel {
-    @Published var coinAmount: Int = 0
+    var coinAmount: Int {
+        userProfileService.profile.score
+    }
     
-    private let appVM: ContentVM
+    private var cancellables = Set<AnyCancellable>()
     
-    init(appVM: ContentVM, services: Services) {
-        self.appVM = appVM
+    override init(_ services: Services) {
         super.init(services)
-        load() 
+        
+        userProfileService.$profile
+            .map { $0.score }
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     func openShop() {
-        appVM.openShop()
+        push(.shop)
     }
     
     func openProfile() {
-        appVM.openProfile()
+        push(.profile)
     }
     
     func openSettings() {
-        appVM.openSettings()
+        push(.settings)
     }
     
     func openLeaderboard() {
-        appVM.openLeaderboard()
+        push(.leaderboard)
     }
     
     func openPrivacy() {
-        appVM.openPrivacy()
+        push(.privacy)
     }
     
     func openTerms() {
-        appVM.openTerms()
-    }
-    
-    func load() {
-        coinAmount = userProfileService.load()?.score ?? 0
+        push(.terms)
     }
 }

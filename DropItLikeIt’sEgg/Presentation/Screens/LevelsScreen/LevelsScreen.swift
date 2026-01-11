@@ -23,23 +23,17 @@ struct LevelsScreen: View {
             GridLevels(vm: vm)
                 .padding(.top, 48)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-                
-                CoinCounterView(amount: vm.coinAmount, onTap: vm.openShop)
+        .topBar(
+            leading: {
+                NavBtn(type: .back, action: dismiss.callAsFunction)
+            },
+            trailing: {
+                CoinCounterView(amount: vm.coinAmount, action: vm.openShop)
             }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
-        .onAppear {
-            vm.load()
-        }
+        )
     }
 }
 
 #Preview {
-    LevelsScreen(vm: .init(appVM: ContentVM(Services.shared), services: Services.shared))
+    LevelsScreen(vm: .init(Services.shared))
 }

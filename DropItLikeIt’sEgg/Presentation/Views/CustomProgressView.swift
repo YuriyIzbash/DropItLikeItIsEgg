@@ -1,5 +1,5 @@
 //
-//  ProgressView.swift
+//  CustomProgressView.swift
 //  DropItLikeIt’sEgg
 //
 //  Created by yuriy on 17. 12. 25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProgressView: View {
+struct CustomProgressView: View {
     @State private var progress: CGFloat = 0
     @State private var isAnimating = false
     var onFinished: () -> Void = {}
@@ -135,5 +135,5 @@ extension Task where Success == Never, Failure == Never {
 }
 
 #Preview {
-    ProgressView()
+    CustomProgressView()
 }

@@ -7,9 +7,10 @@
 
 import SwiftUI
 import Combine
+import os
 
 @MainActor
-class BaseModel: ObservableObject {    
+class BaseModel: ObservableObject, Loggerable {
     let settingsService: SettingsService
     let fileService: FileService
     let userProfileService: UserProfileService
@@ -17,28 +18,26 @@ class BaseModel: ObservableObject {
     let levelsService: LevelsService
     let dailyBonusService: DailyBonusService
     let shopService: ShopService
+    let gameProgressionService: GameProgressionService
     let coordinator: Coordinator
     
     init(_ services: Services) {
-            self.settingsService = services.settingsService
-            self.fileService = services.fileService
-            self.userProfileService = services.userProfileService
-            self.leaderboardService = services.leaderboardService
-            self.levelsService = services.levelsService
-            self.dailyBonusService = services.dailyBonusService
-            self.shopService = services.shopService
+        self.settingsService = services.settingsService
+        self.fileService = services.fileService
+        self.userProfileService = services.userProfileService
+        self.leaderboardService = services.leaderboardService
+        self.levelsService = services.levelsService
+        self.dailyBonusService = services.dailyBonusService
+        self.shopService = services.shopService
+        self.gameProgressionService = services.gameProgressionService
         
-            self.coordinator = services.coordinator
-        }
+        self.coordinator = services.coordinator
+    }
     
     func push(_ route: AppRoute) {
         coordinator.push(route)
     }
-
-    func pop() {
-        coordinator.pop()
-    }
-
+    
     func popToRoot() {
         coordinator.popToRoot()
     }

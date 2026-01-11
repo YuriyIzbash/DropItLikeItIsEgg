@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import os
 
-struct ShopRow: View {
+struct ShopRow: View, Loggerable {
     let offerName: String
     let price: Int
-    var onTap: (() -> Void)? = nil
+    var action: (() -> Void)? = nil
     
     var body: some View {
         ZStack {
@@ -21,8 +22,8 @@ struct ShopRow: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 NavBtn(type: .empty, action: {
-                    print("Follow to paywall")
-                    onTap?()
+                    logger.log("Follow to paywall")
+                    action?()
                 })
                 .overlay(
                     Text("\(price)$")

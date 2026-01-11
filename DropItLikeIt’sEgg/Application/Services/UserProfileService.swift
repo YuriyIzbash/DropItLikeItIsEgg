@@ -5,18 +5,10 @@
 //  Created by yuriy on 22. 12. 25.
 //
 
-import Foundation
+import Combine
 
-final class UserProfileService: DefaultsDataSaver<UserProfile> {
-    init() {
-        super.init(key: "user.profile")
-    }
-    
-    func load() -> UserProfile? {
-        super.getValue()
-    }
-    
-    func save(_ profile: UserProfile) {
-        super.save(profile)
-    }
+@MainActor
+final class UserProfileService: ObservableObject {
+    @PublishedStored(key: "user.profile") 
+    var profile = UserProfile()
 }

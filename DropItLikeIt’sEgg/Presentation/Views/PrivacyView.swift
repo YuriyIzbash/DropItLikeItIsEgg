@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct PrivacyView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     var body: some View {
         ZStackWithBackground {
             VStack {
@@ -35,15 +33,7 @@ struct PrivacyView: View {
             }
             .padding(32)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        .topBackBar()
     }
 }
 

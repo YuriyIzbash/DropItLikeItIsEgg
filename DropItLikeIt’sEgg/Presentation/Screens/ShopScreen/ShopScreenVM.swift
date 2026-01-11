@@ -7,31 +7,41 @@
 
 import Foundation
 import Combine
+import os
 
+@MainActor
 final class ShopScreenVM: BaseModel {
-    @Published var showNoCoinsAlert: Bool = false
+    @Published private(set) var showNoCoinsAlert: Bool = false
     @Published var activeAlert: ShopAlert? = nil
-    @Published var hasUnlockedLevels: Bool = false
-    @Published var hasNoAds: Bool = false
-    
-    private let appVM: ContentVM
-    
-    init(appVM: ContentVM, services: Services) {
-        self.appVM = appVM
-        super.init(services)
-        hasUnlockedLevels = shopService.hasUnlockedLevels()
-        hasNoAds = shopService.hasNoAds()
-    }
+    @Published private(set) var hasUnlockedLevels: Bool = false
+    @Published private(set) var hasNoAds: Bool = false
     
     var score: Int {
-        appVM.profile.score
+        userProfileService.profile.score
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    override init(_ services: Services) {
+        super.init(services)
+        
+        hasUnlockedLevels = shopService.hasUnlockedLevels()
+        hasNoAds = shopService.hasNoAds()
+        
+        userProfileService.$profile
+            .map { $0.score }
+            .removeDuplicates()
+            .sink { [weak self] newScore in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     var hasNoCoins: Bool {
-        appVM.profile.score <= 0
+        score <= 0
     }
     
-    func alertOnAppear() {
+    func showAlertOnAppear() {
         if hasNoCoins {
             activeAlert = .noCoins
         }
@@ -39,7 +49,7 @@ final class ShopScreenVM: BaseModel {
     
     func handleBackAction(dismiss: () -> Void) {
         if hasNoCoins {
-            appVM.popToRoot()
+            popToRoot()
         } else {
             dismiss()
         }
@@ -47,25 +57,28 @@ final class ShopScreenVM: BaseModel {
     
     // MARK: - Shop Actions
     func purchaseCoins() {
-        // TODO: Implement actual purchase logic
-        print("Purchase 1000 coins for $1")
-        appVM.addCoins(1000)
+        logger.log("Purchase 1000 coins for $1")
+        let added = 1000
+        
+        var updatedProfile = userProfileService.profile
+        updatedProfile.score += added
+        userProfileService.profile = updatedProfile
+        
         activeAlert = .coinsPurchased
     }
     
     func purchaseUnlockLevels() {
-        // TODO: Implement actual purchase logic
-        print("Unlock levels for $1")
-        appVM.unlockLevels(upTo: 9)
+        logger.log("Unlock levels for $1")
+        levelsService.saveMaxUnlockedLevel(9)
         hasUnlockedLevels = true
         shopService.setUnlockedLevels(true)
         activeAlert = .levelsUnlocked
-        appVM.openGame(level: appVM.currentLevel + 1)
+        push(.game(level: 7))
     }
     
     func purchaseNoAds() {
         // TODO: Implement actual purchase logic
-        print("Purchase No Ads for $3")
+        logger.log("Purchase No Ads for $3")
         hasNoAds = true
         shopService.setNoAds(true)
         activeAlert = .noAds
@@ -78,35 +91,23 @@ extension ShopScreenVM {
         case coinsPurchased
         case levelsUnlocked
         case noAds
-    }
-
-    var activeAlertTitle: String {
-        switch activeAlert {
-        case .noCoins:
-            return "Warning"
-        case .coinsPurchased:
-            return "Congrats!"
-        case .levelsUnlocked:
-            return "Congrats!"
-        case .noAds:
-            return "Congrats!"
-        case .none:
-            return ""
+        
+        var title: String {
+            switch self {
+            case .noCoins: "Warning"
+            case .coinsPurchased: "Congrats!"
+            case .levelsUnlocked: "Congrats!"
+            case .noAds: "Congrats!"
+            }
         }
-    }
-
-    var activeAlertMessage: String {
-        switch activeAlert {
-        case .noCoins:
-            return "You need coins to play"
-        case .coinsPurchased:
-            return "You have purchased 1000 coins!"
-        case .levelsUnlocked:
-            return "You have unlocked all levels!"
-        case .noAds:
-            return "No ads anymore!"
-        case .none:
-            return ""
+        
+        var message: String {
+            switch self {
+            case .noCoins: "You need coins to play"
+            case .coinsPurchased: "You have purchased 1000 coins!"
+            case .levelsUnlocked: "You have unlocked all levels!"
+            case .noAds: "No ads anymore!"
+            }
         }
     }
 }

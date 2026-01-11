@@ -8,18 +8,20 @@
 import Combine
 import UIKit
 
+@MainActor
 final class ProfileScreenVM: BaseModel {
-    @Published var profile = UserProfile()
+    @Published var editableProfile: UserProfile = UserProfile()
     @Published var showSaveConfirmation: Bool = false
     @Published var showPhotoActionSheet: Bool = false
     @Published var showCameraPicker: Bool = false
     @Published var showPhotoPicker: Bool = false
-    @Published var usernameError: Bool = false
-    @Published var emailError: Bool = false
+    @Published private(set) var usernameError: Bool = false
+    @Published private(set) var emailError: Bool = false
     
     override init(_ services: Services) {
         super.init(services)
-        load()
+        
+        editableProfile = userProfileService.profile
     }
     
     enum Field: Hashable {
@@ -27,15 +29,9 @@ final class ProfileScreenVM: BaseModel {
         case email
     }
     
-    func load() {
-        if let loaded = userProfileService.load() {
-            profile = loaded
-        }
-    }
-    
     func save() -> Field? {
-        let isUsernameEmpty = profile.username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let isEmailEmpty = profile.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let isUsernameEmpty = editableProfile.username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let isEmailEmpty = editableProfile.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         
         usernameError = isUsernameEmpty
         emailError = isEmailEmpty
@@ -49,16 +45,19 @@ final class ProfileScreenVM: BaseModel {
             return nil
         }
         
-        if profile.image == nil {
-            profile.image = UIImage(named: "profilePlaceholder")
+        if editableProfile.image == nil {
+            editableProfile.image = UIImage(named: "profilePlaceholder")
         }
         
-        userProfileService.save(profile)
+        userProfileService.profile = editableProfile
+        
         return nil
     }
     
     func saveOnDisappear() {
-        userProfileService.save(profile)
+        if !editableProfile.username.isEmpty && !editableProfile.email.isEmpty {
+            userProfileService.profile = editableProfile
+        }
     }
 }
 

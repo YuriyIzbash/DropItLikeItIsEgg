@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct NavBtn: View {
+    @State private var isPressed = false
+    
     let type: SquareBtnType
     var size: CGFloat = 72
     let action: () -> Void
-    @State private var isPressed = false
     
     var body: some View {
         Button {

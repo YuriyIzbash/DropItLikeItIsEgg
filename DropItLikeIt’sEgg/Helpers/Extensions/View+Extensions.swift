@@ -28,9 +28,13 @@ extension View {
         confirmTitle: String = "OK",
         isPresented: Binding<Bool>
     ) -> some View {
-        modifier(
+        let stateBinding: Binding<Bool?> = Binding<Bool?>(
+            get: { isPresented.wrappedValue ? true : nil },
+            set: { newValue in isPresented.wrappedValue = (newValue != nil) }
+        )
+        return modifier(
             CustomAlertModifier(
-                isPresented: isPresented,
+                state: stateBinding,
                 title: title,
                 message: message,
                 confirmTitle: confirmTitle
@@ -38,3 +42,4 @@ extension View {
         )
     }
 }
+

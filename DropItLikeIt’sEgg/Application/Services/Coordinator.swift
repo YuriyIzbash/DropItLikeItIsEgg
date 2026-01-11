@@ -12,7 +12,7 @@ enum AppRoute: Hashable {
     case info
     case menu
     case levels
-    case game
+    case game(level: Int)
     case shop
     case profile
     case settings
@@ -22,6 +22,7 @@ enum AppRoute: Hashable {
     case endGame
 }
 
+@MainActor
 final class Coordinator: ObservableObject {
     @Published var path: [AppRoute] = []
 
@@ -29,16 +30,12 @@ final class Coordinator: ObservableObject {
 
     private init() {}
 
-    // MARK: - Navigation API
     func push(_ route: AppRoute) {
         path.append(route)
-    }
-
-    func pop() {
-        _ = path.popLast()
     }
 
     func popToRoot() {
         path.removeAll()
     }
 }
+

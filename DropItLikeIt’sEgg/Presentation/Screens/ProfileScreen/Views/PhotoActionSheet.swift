@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os
 
 struct PhotoActionSheet: View {
     @Binding var isPresented: Bool
@@ -112,7 +113,7 @@ private extension View {
     }
 }
 
-struct PreviewWrapper: View {
+struct PreviewWrapper: View, Loggerable {
     @State private var showSheet = false
     
     var body: some View {
@@ -122,9 +123,9 @@ struct PreviewWrapper: View {
                 showSheet = true
             }
             PhotoActionSheet(isPresented: $showSheet, onMakePhoto: {
-                print("Make Photo tapped")
+                logger.log("Make Photo tapped")
             }, onChoosePhoto: {
-                print("Choose Photo tapped")
+                logger.log("Choose Photo tapped")
             })
         }
     }

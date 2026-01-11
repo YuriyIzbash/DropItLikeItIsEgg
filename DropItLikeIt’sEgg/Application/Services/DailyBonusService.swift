@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class DailyBonusService: DefaultsDataSaver<Date> {
     init() {
         super.init(key: "user.lastDailyBonus")

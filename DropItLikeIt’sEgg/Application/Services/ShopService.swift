@@ -7,9 +7,10 @@
 
 import Foundation
 
+@MainActor
 final class ShopService {
-    private let unlockedLevelsSaver = DefaultsDataSaver<Bool>(key: "shop_unlocked_levels")
-    private let noAdsSaver = DefaultsDataSaver<Bool>(key: "shop_no_ads")
+    private let unlockedLevelsSaver = DefaultsDataSaver<Bool>(key: "shop.isLevelsUnlocked")
+    private let noAdsSaver = DefaultsDataSaver<Bool>(key: "shop.isAdsDisabled")
     
     func hasUnlockedLevels() -> Bool {
         unlockedLevelsSaver.getValue() ?? false

@@ -1,9 +1,23 @@
+//
+//  LoseScreen.swift
+//  DropItLikeIt’sEgg
+//
+//  Created by yuriy on 10. 1. 26.
+//
+
 import SwiftUI
 
-struct LoseView: View {
+struct LoseScreen: View {
+    @StateObject var vm: ResultScreenVM
+    
     let score: Int
     let best: Int
-    let appVM: ContentVM
+    
+    init(score: Int, best: Int, vm: ResultScreenVM) {
+        self.score = score
+        self.best = best
+        _vm = StateObject(wrappedValue: vm)
+    }
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -22,7 +36,7 @@ struct LoseView: View {
                     }
                     
                     Button {
-                        appVM.popToRoot()
+                        vm.popToRoot()
                     } label: {
                         Text("HOME")
                             .customFont(size: 24)
@@ -33,9 +47,7 @@ struct LoseView: View {
                 }
                 .padding(.horizontal, 32)
                 
-                MainBtn(title: "TRY AGAIN", action: {
-                    appVM.openGame(level: appVM.currentLevel)
-                })
+                MainBtn(title: "TRY AGAIN", action: vm.restartLevel)
                 .padding(.horizontal, 56)
                 .padding(.bottom, 48)
             }
@@ -45,6 +57,6 @@ struct LoseView: View {
 }
 
 #Preview {
-    LoseView(score: 500, best: 1200, appVM: ContentVM(Services.shared))
+    LoseScreen(score: 500, best: 1200, vm: .init(services: Services.shared, currentLevel: 1, outcome: GameOutcome.lose))
         .environmentObject(ContentVM(Services.shared))
 }

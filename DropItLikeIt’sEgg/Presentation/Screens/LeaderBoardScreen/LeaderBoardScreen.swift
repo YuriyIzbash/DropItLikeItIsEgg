@@ -9,30 +9,15 @@ import SwiftUI
 import UIKit
 
 struct LeaderBoardScreen: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject var vm: LeaderBoardScreenVM
-    
-    private var content: some View {
-        VStack(alignment: .leading) {
-            leaderBoardCard
-        }
-        .padding(.horizontal, 32)
-    }
     
     var body: some View {
         ZStackWithBackground {
-            content
+            leaderBoardCard
                 .padding(.top, 32)
+                .padding(.horizontal, 32)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        .topBackBar()
     }
 }
 
@@ -67,7 +52,7 @@ private extension LeaderBoardScreen {
                     
                     ForEach(Array(vm.leaderboardMockData.enumerated()), id: \.element.id) { index, entry in
                         HStack(spacing: 12) {
-                            mockAvatarView(image: entry.image)
+                            mockAvatarView(image: entry.image ?? UIImage(imageLiteralResourceName: "profilePlaceholder"))
                             
                             UserInfoRow(username: entry.username, score: entry.score)
                         }

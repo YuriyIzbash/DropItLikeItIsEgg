@@ -8,30 +8,19 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject var vm: SettingsScreenVM
     
     var body: some View {
-        ZStackWithBackground {
-            content
-        }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                NavBtn(type: .back) { dismiss() }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
-        .customAlert(
-            title: "Saved",
-            message: "Your settings has been saved.",
-            isPresented: $vm.showSaveConfirmation
-        )
+        ZStackWithBackground(content: content)
+            .topBackBar()
+            .customAlert(
+                title: "Saved",
+                message: "Your settings has been saved.",
+                isPresented: $vm.showSaveConfirmation
+            )
     }
     
-    private var content: some View {
+    private func content() -> some View {
         VStack {
             settingsCard
             
@@ -68,9 +57,7 @@ private extension SettingsScreen {
     }
     
     var saveButton: some View {
-        MainBtn(title: "SAVE") {
-            vm.save()
-        }
+        MainBtn(title: "SAVE", action: vm.save)
         .padding(.top, 80)
     }
 }

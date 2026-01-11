@@ -7,25 +7,48 @@
 
 import SwiftUI
 import Combine
+import os
 
-
+@MainActor
 final class ContentVM: BaseModel {
-    // MARK: - Navigation
-    @Published var currentLevel: Int = 1
-    @Published var maxUnlockedLevel: Int = 6
+    @Published private(set) var currentLevel: Int = 1
+    @Published private(set) var maxUnlockedLevel: Int = 6
+    @Published var isProgressVisible: Bool = true
     
-    // MARK: - Shared reactive profile
-    struct AppProfile {
-        var score: Int = 0
+    var profile: UserProfile {
+        userProfileService.profile
     }
     
-    @Published var profile: AppProfile = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     override init(_ services: Services) {
         super.init(services)
-        loadProfile()
+        
         loadLevels()
         checkAndApplyDailyBonus()
+        levelsService.$maxUnlockedLevel.assign(to: &$maxUnlockedLevel)
+        
+        userProfileService.$profile
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+    }
+    
+    func openInfo() {
+        push(.info)
+    }
+    
+    func openMenu() {
+        push(.menu)
+    }
+    
+    func openLevels() {
+        push(.levels)
+    }
+    
+    func hideProgress() {
+        isProgressVisible = false
     }
     
     // MARK: - Levels persistence
@@ -42,25 +65,6 @@ final class ContentVM: BaseModel {
         }
     }
     
-    // MARK: - Profile persistence
-    func loadProfile() {
-        if let storedProfile = userProfileService.load() {
-            profile.score = storedProfile.score
-        } else {
-            profile.score = 1000
-            saveProfile()
-        }
-    }
-    
-    func saveProfile() {
-        if var existingProfile = userProfileService.load() {
-            existingProfile.score = profile.score
-            userProfileService.save(existingProfile)
-        } else {
-            userProfileService.save(UserProfile(score: profile.score))
-        }
-    }
-    
     // MARK: - Daily Bonus
     // TODO: - Add Notification Later
     func checkAndApplyDailyBonus() {
@@ -74,36 +78,19 @@ final class ContentVM: BaseModel {
             if today > lastBonusDay {
                 addCoins(1000)
                 dailyBonusService.saveLastBonusDate(today)
-                print("Daily bonus applied: 1000 coins")
+                logger.log("Daily bonus applied: 1000 coins")
             } else {
-                print("Daily bonus already claimed today")
+                logger.log("Daily bonus already claimed today")
             }
         } else {
             dailyBonusService.saveLastBonusDate(today)
-            print("First launch - daily bonus tracking started")
+            logger.log("First launch - daily bonus tracking started")
         }
     }
     
-    // MARK: - Navigation helpers (Coordinator-based)
-    func openInfo() { push(.info) }
-    func openMenu() { push(.menu) }
-    func openLevels() { push(.levels) }
-    func openGame(level: Int) {
-        currentLevel = level
-        push(.game)
-    }
-    func openProfile() { push(.profile) }
-    func openSettings() { push(.settings) }
-    func openLeaderboard() { push(.leaderboard) }
-    func openPrivacy() { push(.privacy) }
-    func openTerms() { push(.terms) }
-    func openShop() { push(.shop) }
-    func openEndGame() { push(.endGame) }
-    
     // MARK: - Profile mutations
     func incrementCounter(by amount: Int = 1) {
-        profile.score += amount
-        saveProfile()
+        userProfileService.profile.score += amount
     }
     
     func addCoins(_ amount: Int) {

@@ -1,9 +1,16 @@
 import SwiftUI
 
-struct WinView: View {
+struct WinScreen: View {
+    @StateObject var vm: ResultScreenVM
+    
     let score: Int
     let best: Int
-    let appVM: ContentVM
+    
+    init(score: Int, best: Int, vm: ResultScreenVM) {
+        self.score = score
+        self.best = best
+        _vm = StateObject(wrappedValue: vm)
+    }
     
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
@@ -23,7 +30,7 @@ struct WinView: View {
                     
                     HStack {
                         Button {
-                            appVM.popToRoot()
+                            vm.goHome()
                         } label: {
                             Text("HOME")
                                 .customFont(size: 24)
@@ -33,7 +40,7 @@ struct WinView: View {
                         Spacer()
                         
                         Button {
-                            appVM.openGame(level: appVM.currentLevel)
+                            vm.restartLevel()
                         } label: {
                             Text("RESTART")
                                 .customFont(size: 24)
@@ -45,17 +52,7 @@ struct WinView: View {
                 }
                 .padding(.horizontal, 32)
                 
-                MainBtn(title: "NEXT", action: {
-                    let maxLevel = appVM.maxUnlockedLevel > 6 ? 9 : 6
-                    
-                    if appVM.currentLevel < maxLevel {
-                        appVM.openGame(level: appVM.currentLevel + 1)
-                    } else if appVM.maxUnlockedLevel > 6 {
-                        appVM.openEndGame()
-                    } else {
-                        appVM.openShop()
-                    }
-                })
+                MainBtn(title: "NEXT", action: vm.nextAction)
                 .padding(.horizontal, 48)
                 .padding(.bottom, 48)
             }
@@ -80,7 +77,9 @@ struct ScoreRow: View {
             
             HStack(spacing: 18) {
                 Text(title)
+                
                 Spacer()
+                
                 Text(value)
             }
             .padding(.horizontal, 18)
@@ -90,6 +89,6 @@ struct ScoreRow: View {
 }
 
 #Preview {
-    WinView(score: 1200, best: 1500, appVM: ContentVM(Services.shared))
+    WinScreen(score: 1200, best: 1500, vm: ResultScreenVM(services: Services.shared, currentLevel: 1, outcome: GameOutcome.win))
         .environmentObject(ContentVM(Services.shared))
 }

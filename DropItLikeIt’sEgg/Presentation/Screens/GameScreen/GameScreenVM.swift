@@ -10,54 +10,28 @@ import Combine
 
 @MainActor
 final class GameScreenVM: BaseModel {
-    enum GameResult {
-        case win
-        case lose
-    }
-    
-    struct Egg: Identifiable {
-        let id = UUID()
-        let image: ImageResource
-        var x: CGFloat
-        var y: CGFloat
-        var fallSpeed: CGFloat
-    }
-    
-    struct Coin: Identifiable {
-        let id = UUID()
-        let image: ImageResource
-        var x: CGFloat
-        var y: CGFloat
-        var fallSpeed: CGFloat
-        var value: Int
-    }
-    
-    struct Blast: Identifiable {
-        let id = UUID()
-        var x: CGFloat
-        var y: CGFloat
-        var createdAt: Date
-    }
-    
-    struct CoinEffect {
-        let id = UUID()
-        let createdAt: Date
-    }
-    
+    @Published private(set) var currentLevel: Int = 1
+    @Published var isReady: Bool = false
     @Published var isPaused: Bool = false
-    @Published var score: Int = 0
-    @Published var bestScore: Int = 0
-    @Published var playerX: CGFloat = 0.5
-    @Published var eggs: [Egg] = []
-    @Published var coins: [Coin] = []
-    @Published var blasts: [Blast] = []
-    @Published var coinEffect: CoinEffect?
-    @Published var gameResult: GameResult?
+    @Published private(set) var score: Int = 0
+    @Published private(set) var bestScore: Int = 0
+    @Published private(set) var playerX: CGFloat = 0.5
+    @Published private(set) var eggs: [Egg] = []
+    @Published private(set) var coins: [Coin] = []
+    @Published private(set) var blasts: [Blast] = []
+    @Published private(set) var coinEffect: CoinEffect?
+    @Published private(set) var gameResult: GameResult?
     
+    override init(_ services: Services) {
+        super.init(services)
+    }
+    
+    // MARK: - Timing & Flags
     var isLoadingScore: Bool = false
     
     let timer = Timer.publish(every: 1/60, on: .main, in: .common).autoconnect()
     
+    // MARK: - Game Parameters & Runtime State
     private var totalEggs: Int = 24
     private var speedRange: ClosedRange<CGFloat> = 150...210
     private let eggImages: [ImageResource] = [.egg1, .egg2, .egg3, .egg4, .egg5, .egg6, .egg7, .egg8, .egg9, .egg10, .egg11, .egg12]
@@ -72,11 +46,16 @@ final class GameScreenVM: BaseModel {
     private var coinSpawnCooldown: Double = 0
     private var sceneSize: CGSize = .zero
     
+    // MARK: - Layout Constants
     private let bottomPadding: CGFloat = 28
     
+    // MARK: - Limits
     private let maxCoinsPerLevel: Int = 9
     
+    // MARK: - Game Lifecycle
     func configure(level: Int) {
+        currentLevel = level
+        
         switch level {
         case 1:
             totalEggs = 24
@@ -147,6 +126,7 @@ final class GameScreenVM: BaseModel {
         trimEffects(currentTime: currentTime)
     }
     
+    // MARK: - Player Controls
     func movePlayer(to normalizedX: CGFloat) {
         playerX = min(max(normalizedX, 0.08), 0.92)
     }
@@ -154,7 +134,12 @@ final class GameScreenVM: BaseModel {
     func togglePause() { isPaused.toggle() }
     func pause() { isPaused = true }
     func resume() { isPaused = false }
+    func restart() {
+        resetState()
+        loadStoredScore()
+    }
     
+    // MARK: - Sizing Helpers
     func playerSize(for width: CGFloat) -> CGSize {
         let w = max(width * 0.25, 120)
         return CGSize(width: w, height: w * 1.15)
@@ -171,6 +156,7 @@ final class GameScreenVM: BaseModel {
         return CGSize(width: baseSize.width * multiplier, height: baseSize.height * multiplier)
     }
     
+    // MARK: - Layout Helpers
     func groundLine(for size: CGSize) -> CGFloat {
         let playerSize = playerSize(for: size.width)
         let playerCenterY = size.height - playerSize.height/2 - 12
@@ -178,6 +164,12 @@ final class GameScreenVM: BaseModel {
         return playerTopY
     }
     
+    // MARK: - Navigation
+    func openShop() {
+        push(.shop)
+    }
+    
+    // MARK: - State Management
     private func resetState() {
         isPaused = false
         gameResult = nil
@@ -194,13 +186,13 @@ final class GameScreenVM: BaseModel {
     }
     
     private func loadStoredScore() {
-        let stored = userProfileService.load()
         isLoadingScore = true
-        score = stored?.score ?? 0
-        bestScore = stored?.score ?? 0
+        score = userProfileService.profile.score
+        bestScore = userProfileService.profile.score
         isLoadingScore = false
     }
     
+    // MARK: - Movement
     private func moveEggs(delta: TimeInterval) {
         guard sceneSize.width > 0 else { return }
         let eggSize = eggSize(for: sceneSize.width)
@@ -277,6 +269,7 @@ final class GameScreenVM: BaseModel {
         }
     }
     
+    // MARK: - Spawning
     private func spawnEgg() {
         guard sceneSize.width > 0 else { return }
         let initialY = -eggSize(for: sceneSize.width).height
@@ -311,6 +304,7 @@ final class GameScreenVM: BaseModel {
         coinsSpawned += 1
     }
     
+    // MARK: - Collision Handling
     private func handleCatch(at index: Int) {
         eggs.remove(at: index)
         caughtEggs += 1
@@ -351,10 +345,12 @@ final class GameScreenVM: BaseModel {
         }
     }
     
+    // MARK: - Outcome & Persistence
     private func checkOutcome() {
         if handledEggs >= totalEggs {
             if caughtEggs >= totalEggs {
                 gameResult = .win
+                unlockNextLevel()
             } else {
                 gameResult = .lose
             }
@@ -372,16 +368,62 @@ final class GameScreenVM: BaseModel {
         }
     }
     
+    private func unlockNextLevel() {
+        let nextLevel = currentLevel + 1
+        let currentMax = levelsService.maxUnlockedLevel
+        if nextLevel > currentMax {
+            levelsService.saveMaxUnlockedLevel(nextLevel)
+        }
+    }
+    
     private func persistScore() {
-        var profile = userProfileService.load() ?? UserProfile(score: score)
-        profile.score = score
-        userProfileService.save(profile)
+        var updatedProfile = userProfileService.profile
+        updatedProfile.score = score
+        userProfileService.profile = updatedProfile
     }
     
     private func persistBestScore() {
-        var profile = userProfileService.load() ?? UserProfile(score: bestScore)
-        profile.score = bestScore
-        userProfileService.save(profile)
+        var updatedProfile = userProfileService.profile
+        updatedProfile.score = bestScore
+        userProfileService.profile = updatedProfile
     }
+}
+
+// MARK: - Extensions - Models
+extension GameScreenVM {
+    enum GameResult {
+        case win
+        case lose
+    }
+    
+    struct Egg: Identifiable {
+        let id = UUID()
+        let image: ImageResource
+        var x: CGFloat
+        var y: CGFloat
+        var fallSpeed: CGFloat
+    }
+    
+    struct Coin: Identifiable {
+        let id = UUID()
+        let image: ImageResource
+        var x: CGFloat
+        var y: CGFloat
+        var fallSpeed: CGFloat
+        var value: Int
+    }
+    
+    struct Blast: Identifiable {
+        let id = UUID()
+        var x: CGFloat
+        var y: CGFloat
+        var createdAt: Date
+    }
+    
+    struct CoinEffect {
+        let id = UUID()
+        let createdAt: Date
+    }
+    
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 class DefaultsDataSaver<T: Codable> {
     let key: String
@@ -38,8 +39,10 @@ class DefaultsDataSaver<T: Codable> {
             let value = try JSONDecoder().decode(T.self, from: data)
             return value
         } catch {
-            print("@@ERROR: \(error) decode \(T.self) from data: \(data)")
+            logger.log("@@ERROR: \(error) decode \(T.self) from data: \(data)")
             return nil
         }
     }
 }
+
+extension DefaultsDataSaver: Loggerable {}

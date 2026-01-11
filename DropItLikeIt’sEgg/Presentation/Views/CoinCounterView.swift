@@ -9,13 +9,12 @@ import SwiftUI
 import Combine
 
 struct CoinCounterView: View {
-    let amount: Int
-    var isInteractive: Bool = true
-    var onTap: (() -> Void)? = nil
-
     @State private var scale: CGFloat = 1.0
     @State private var shimmerOffset: CGFloat = -180
-
+    
+    let amount: Int
+    var isInteractive: Bool = true
+    var action: (() -> Void)? = nil
     private let animationTimer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -24,12 +23,12 @@ struct CoinCounterView: View {
 
             Text("\(amount)")
                 .customFont(size: 12)
-                .padding(.leading, -56)
+                .padding(.leading, -64)
         }
         .contentShape(Rectangle())
         .onTapGesture {
             guard isInteractive else { return }
-            onTap?()
+            action?()
         }
         .onReceive(animationTimer) { _ in
             guard isInteractive else { return }
@@ -48,7 +47,7 @@ struct CoinCounterView: View {
         Image(.coinCounter)
             .resizable()
             .scaledToFit()
-            .frame(height: 64)
+            .frame(height: 72)
             .scaleEffect(scale)
             .overlay(alignment: .center) {
                 if isInteractive {
@@ -58,7 +57,7 @@ struct CoinCounterView: View {
                                 .resizable()
                                 .scaledToFit()
                         )
-                        .frame(height: 64)
+                        .frame(height: 72)
                 }
             }
     }
@@ -73,7 +72,7 @@ struct CoinCounterView: View {
             startPoint: .top,
             endPoint: .bottom
         )
-        .frame(width: 120)
+        .frame(width: 160)
         .rotationEffect(.degrees(25))
         .offset(x: shimmerOffset)
         .blendMode(.screen)
@@ -99,5 +98,5 @@ struct CoinCounterView: View {
 }
 
 #Preview {
-    CoinCounterView(amount: 1000, isInteractive: true, onTap: { print("Coin tapped") })
+    CoinCounterView(amount: 1000, isInteractive: true, action: { print("Coin tapped") })
 }

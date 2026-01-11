@@ -9,13 +9,11 @@ import SwiftUI
 
 struct GameScreen: View {
     @StateObject var vm: GameScreenVM
-    @State private var isReady = false
+    let routeLevel: Int
     
-    let appVM: ContentVM
-    
-    init(vm: GameScreenVM, appVM: ContentVM) {
+    init(vm: GameScreenVM, level: Int) {
         _vm = StateObject(wrappedValue: vm)
-        self.appVM = appVM
+        self.routeLevel = level
     }
     
     var body: some View {
@@ -24,27 +22,22 @@ struct GameScreen: View {
                 gameLayer(size: proxy.size)
             }
             .onAppear { 
-                if !isReady {
-                    vm.configure(level: appVM.currentLevel)
+                if !vm.isReady {
+                    vm.configure(level: routeLevel)
                     vm.start(with: proxy.size)
-                    isReady = true
+                    vm.isReady = true
+                } else {
+                    vm.syncScore()
                 }
             }
             .onDisappear {
                 vm.pause()
             }
-            .onChange(of: appVM.profile.score) { newScore in
-                if vm.score != newScore && !vm.isLoadingScore {
-                    vm.syncScore()
-                }
-            }
             .onChange(of: vm.score) { newValue in
                 guard !vm.isLoadingScore else { return }
                 
-                appVM.profile.score = newValue
-                appVM.saveProfile()
                 if newValue == 0 {
-                    appVM.openShop()
+                    vm.openShop()
                 }
             }
             .onReceive(vm.timer) { vm.tick(currentTime: $0) }
@@ -64,12 +57,10 @@ struct GameScreen: View {
 private extension GameScreen {
     var topBar: some View {
         ZStack(alignment: .trailing) {
-            CoinCounterView(amount: appVM.profile.score, isInteractive: false)
+            CoinCounterView(amount: vm.score, isInteractive: false)
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            NavBtn(type: .pause) {
-                vm.pause()
-            }
+            NavBtn(type: .pause, action: vm.pause)
         }
         .padding(.horizontal, 32)
         .padding(.top, 8)
@@ -164,9 +155,16 @@ private extension GameScreen {
     @ViewBuilder
     var pauseOverlay: some View {
         if vm.isPaused {
-            PauseView(isPresented: $vm.isPaused, appVM: appVM)
-                .transition(.opacity)
-                .animation(.easeInOut, value: vm.isPaused)
+            PauseView(
+                isPresented: $vm.isPaused,
+                onHome: { vm.popToRoot() },
+                onRestart: {
+                    vm.restart()
+                    vm.isPaused = false
+                }
+            )
+            .transition(.opacity)
+            .animation(.easeInOut, value: vm.isPaused)
         }
     }
     
@@ -174,11 +172,12 @@ private extension GameScreen {
     var resultOverlay: some View {
         switch vm.gameResult {
         case .win:
-            WinView(score: vm.score, best: vm.bestScore, appVM: appVM)
+            WinScreen(score: vm.score, best: vm.bestScore, vm: ResultScreenVM(services: Services.shared, currentLevel: vm.currentLevel, outcome: .win))
         case .lose:
-            LoseView(score: vm.score, best: vm.bestScore, appVM: appVM)
+            LoseScreen(score: vm.score, best: vm.bestScore, vm: ResultScreenVM(services: Services.shared, currentLevel: vm.currentLevel, outcome: .lose))
         case .none:
             EmptyView()
         }
     }
 }
+

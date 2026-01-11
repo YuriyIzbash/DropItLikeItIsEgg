@@ -12,41 +12,29 @@ struct ShopScreen: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var vm: ShopScreenVM
     
-    private var content: some View {
-        VStack(alignment: .leading) {
-            shopCard
-        }
-        .padding(.horizontal, 32)
-    }
-    
     var body: some View {
         ZStackWithBackground {
-            content
+            shopCard
+                .padding(.horizontal, 32)
         }
-        .safeAreaInset(edge: .top) {
-            HStack {
+        .topBar(
+            leading: {
                 NavBtn(type: .back) {
-                    vm.handleBackAction { dismiss() }
+                    vm.handleBackAction(dismiss: dismiss.callAsFunction)
                 }
-                
-                Spacer()
-                
+            },
+            trailing: {
                 CoinCounterView(amount: vm.score, isInteractive: false)
                     .id(vm.score)
             }
-            .padding(.horizontal, 32)
-            .padding(.top, 16)
-        }
+        )
         .onAppear {
-            vm.alertOnAppear()
+            vm.showAlertOnAppear()
         }
         .customAlert(
-            title: vm.activeAlertTitle,
-            message: vm.activeAlertMessage,
-            isPresented: Binding(
-                get: { vm.activeAlert != nil },
-                set: { newValue in if !newValue { vm.activeAlert = nil } }
-            )
+            state: $vm.activeAlert,
+            title: vm.activeAlert?.title ?? "",
+            message: vm.activeAlert?.message ?? ""
         )
     }
 }
@@ -70,20 +58,14 @@ private extension ShopScreen {
                 .padding(.top, 56)
                 .padding(.bottom, 16)
             
-            ShopRow(offerName: "1000 coins", price: 1, onTap: {
-                vm.purchaseCoins()
-            })
+            ShopRow(offerName: "1000 coins", price: 1, action: vm.purchaseCoins)
             
             if !vm.hasUnlockedLevels {
-                ShopRow(offerName: "Unlock levels", price: 1, onTap: {
-                    vm.purchaseUnlockLevels()
-                })
+                ShopRow(offerName: "Unlock levels", price: 1, action: vm.purchaseUnlockLevels)
             }
             
             if !vm.hasNoAds {
-                ShopRow(offerName: "No Ads", price: 3, onTap: {
-                    vm.purchaseNoAds()
-                })
+                ShopRow(offerName: "No Ads", price: 3, action: vm.purchaseNoAds)
             }
         }
         .padding(.horizontal, 12)
@@ -91,5 +73,6 @@ private extension ShopScreen {
 }
 
 #Preview {
-    ShopScreen(vm: ShopScreenVM(appVM: ContentVM(Services.shared), services: Services.shared))
+    ShopScreen(vm: ShopScreenVM(Services.shared))
 }
+
