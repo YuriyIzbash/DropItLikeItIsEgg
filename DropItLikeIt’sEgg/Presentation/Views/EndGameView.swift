@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct EndGameView: View {
-    
     var body: some View {
         ZStackWithBackground(.backgroundWin) {
             MainBtn(title: "HOME", size: .large, enableHaptics: true) {

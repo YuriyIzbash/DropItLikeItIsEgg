@@ -18,6 +18,7 @@ class BaseModel: ObservableObject, Loggerable {
     let levelsService: LevelsService
     let dailyBonusService: DailyBonusService
     let shopService: ShopService
+    let gameProgressionService: GameProgressionService
     let coordinator: Coordinator
     
     init(_ services: Services) {
@@ -28,6 +29,7 @@ class BaseModel: ObservableObject, Loggerable {
         self.levelsService = services.levelsService
         self.dailyBonusService = services.dailyBonusService
         self.shopService = services.shopService
+        self.gameProgressionService = services.gameProgressionService
         
         self.coordinator = services.coordinator
     }

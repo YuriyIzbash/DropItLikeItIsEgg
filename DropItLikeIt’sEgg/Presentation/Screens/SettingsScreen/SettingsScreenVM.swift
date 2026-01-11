@@ -9,27 +9,28 @@ import Combine
 
 @MainActor
 final class SettingsScreenVM: BaseModel {
-    @Published var soundIsOn: Bool = false
-    @Published var notificationIsOn: Bool = false
-    @Published var vibroIsOn: Bool = false
     @Published var showSaveConfirmation: Bool = false
+    
+    var soundIsOn: Bool {
+        get { settingsService.isSoundEnabled }
+        set { settingsService.isSoundEnabled = newValue }
+    }
+    
+    var notificationIsOn: Bool {
+        get { settingsService.isNotificationEnabled }
+        set { settingsService.isNotificationEnabled = newValue }
+    }
+    
+    var vibroIsOn: Bool {
+        get { settingsService.isVibroEnabled }
+        set { settingsService.isVibroEnabled = newValue }
+    }
     
     override init(_ services: Services) {
         super.init(services)
-        
-        load()
-    }
-    
-    func load() {
-        soundIsOn = settingsService.getSoundEnabled()
-        notificationIsOn = settingsService.getNotificationEnabled()
-        vibroIsOn = settingsService.getVibroEnabled()
     }
     
     func save() {
-        settingsService.setSoundEnabled(soundIsOn)
-        settingsService.setNotificationEnabled(notificationIsOn)
-        settingsService.setVibroEnabled(vibroIsOn)
         showSaveConfirmation = true
     }
 }

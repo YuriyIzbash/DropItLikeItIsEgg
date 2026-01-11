@@ -26,6 +26,8 @@ struct GameScreen: View {
                     vm.configure(level: routeLevel)
                     vm.start(with: proxy.size)
                     vm.isReady = true
+                } else {
+                    vm.syncScore()
                 }
             }
             .onDisappear {
@@ -58,9 +60,7 @@ private extension GameScreen {
             CoinCounterView(amount: vm.score, isInteractive: false)
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            NavBtn(type: .pause) {
-                vm.pause()
-            }
+            NavBtn(type: .pause, action: vm.pause)
         }
         .padding(.horizontal, 32)
         .padding(.top, 8)
@@ -172,9 +172,9 @@ private extension GameScreen {
     var resultOverlay: some View {
         switch vm.gameResult {
         case .win:
-            WinScreen(score: vm.score, best: vm.bestScore, vm: WinScreenVM(services: Services.shared, currentLevel: vm.currentLevel))
+            WinScreen(score: vm.score, best: vm.bestScore, vm: ResultScreenVM(services: Services.shared, currentLevel: vm.currentLevel, outcome: .win))
         case .lose:
-            LoseScreen(score: vm.score, best: vm.bestScore, vm: LoseScreenVM(services: Services.shared, currentLevel: vm.currentLevel))
+            LoseScreen(score: vm.score, best: vm.bestScore, vm: ResultScreenVM(services: Services.shared, currentLevel: vm.currentLevel, outcome: .lose))
         case .none:
             EmptyView()
         }

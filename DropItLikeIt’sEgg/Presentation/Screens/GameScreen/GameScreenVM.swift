@@ -54,6 +54,8 @@ final class GameScreenVM: BaseModel {
     
     // MARK: - Game Lifecycle
     func configure(level: Int) {
+        currentLevel = level
+        
         switch level {
         case 1:
             totalEggs = 24
@@ -134,6 +136,7 @@ final class GameScreenVM: BaseModel {
     func resume() { isPaused = false }
     func restart() {
         resetState()
+        loadStoredScore()
     }
     
     // MARK: - Sizing Helpers
@@ -183,10 +186,9 @@ final class GameScreenVM: BaseModel {
     }
     
     private func loadStoredScore() {
-        let stored = userProfileService.load()
         isLoadingScore = true
-        score = stored?.score ?? 0
-        bestScore = stored?.score ?? 0
+        score = userProfileService.profile.score
+        bestScore = userProfileService.profile.score
         isLoadingScore = false
     }
     
@@ -348,6 +350,7 @@ final class GameScreenVM: BaseModel {
         if handledEggs >= totalEggs {
             if caughtEggs >= totalEggs {
                 gameResult = .win
+                unlockNextLevel()
             } else {
                 gameResult = .lose
             }
@@ -365,16 +368,24 @@ final class GameScreenVM: BaseModel {
         }
     }
     
+    private func unlockNextLevel() {
+        let nextLevel = currentLevel + 1
+        let currentMax = levelsService.maxUnlockedLevel
+        if nextLevel > currentMax {
+            levelsService.saveMaxUnlockedLevel(nextLevel)
+        }
+    }
+    
     private func persistScore() {
-        var profile = userProfileService.load() ?? UserProfile(score: score)
-        profile.score = score
-        userProfileService.save(profile)
+        var updatedProfile = userProfileService.profile
+        updatedProfile.score = score
+        userProfileService.profile = updatedProfile
     }
     
     private func persistBestScore() {
-        var profile = userProfileService.load() ?? UserProfile(score: bestScore)
-        profile.score = bestScore
-        userProfileService.save(profile)
+        var updatedProfile = userProfileService.profile
+        updatedProfile.score = bestScore
+        userProfileService.profile = updatedProfile
     }
 }
 

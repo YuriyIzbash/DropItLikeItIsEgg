@@ -10,9 +10,14 @@ import Combine
 
 @MainActor
 final class LevelsScreenVM: BaseModel {
-    @Published private(set) var coinAmount: Int = 1000
+    var coinAmount: Int {
+        userProfileService.profile.score
+    }
+    
     @Published private(set) var levels: [LevelData] = []
     @Published private(set) var maxUnlockedLevel: Int = 6
+    
+    private var cancellables = Set<AnyCancellable>()
     
     override init(_ services: Services) {
         self.levels = (1...9).map { number in
@@ -20,11 +25,18 @@ final class LevelsScreenVM: BaseModel {
         }
         super.init(services)
         
-        load()
+        userProfileService.$profile
+            .map { $0.score }
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.updateLevels()
+            }
+            .store(in: &cancellables)
+        
+        updateLevels()
     }
     
-    func load() {
-        coinAmount = userProfileService.load()?.score ?? 0
+    private func updateLevels() {
         if let stored = levelsService.getMaxUnlockedLevel() {
             maxUnlockedLevel = stored
         }

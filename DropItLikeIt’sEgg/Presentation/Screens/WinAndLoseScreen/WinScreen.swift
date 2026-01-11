@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct WinScreen: View {
-    @StateObject var vm: WinScreenVM
+    @StateObject var vm: ResultScreenVM
     
     let score: Int
     let best: Int
     
-    init(score: Int, best: Int, vm: WinScreenVM) {
+    init(score: Int, best: Int, vm: ResultScreenVM) {
         self.score = score
         self.best = best
         _vm = StateObject(wrappedValue: vm)
@@ -52,9 +52,7 @@ struct WinScreen: View {
                 }
                 .padding(.horizontal, 32)
                 
-                MainBtn(title: "NEXT", action: {
-                    vm.nextAction()
-                })
+                MainBtn(title: "NEXT", action: vm.nextAction)
                 .padding(.horizontal, 48)
                 .padding(.bottom, 48)
             }
@@ -91,6 +89,6 @@ struct ScoreRow: View {
 }
 
 #Preview {
-    WinScreen(score: 1200, best: 1500, vm: WinScreenVM(services: Services.shared, currentLevel: 1))
+    WinScreen(score: 1200, best: 1500, vm: ResultScreenVM(services: Services.shared, currentLevel: 1, outcome: GameOutcome.win))
         .environmentObject(ContentVM(Services.shared))
 }

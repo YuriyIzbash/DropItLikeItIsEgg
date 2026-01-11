@@ -28,7 +28,7 @@ struct ContentView: View {
                     .padding(.horizontal, 48)
                     .padding(.top, 32)
                 
-                MainBtn(title: "PLAY", action: { vm.openLevels() })
+                MainBtn(title: "PLAY", action: vm.openLevels)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .frame(maxHeight: .infinity, alignment: .bottom)
                     .padding(.horizontal, 56)
@@ -36,10 +36,10 @@ struct ContentView: View {
             }
             .topBar(
                 leading: {
-                    NavBtn(type: .info) { vm.openInfo()}
+                    NavBtn(type: .info, action: vm.openInfo)
                 },
                 trailing: {
-                    NavBtn(type: .menu) { vm.openMenu() }
+                    NavBtn(type: .menu, action: vm.openMenu)
                 }
             )
             .overlay {
@@ -80,6 +80,8 @@ struct ContentView: View {
             TermsView()
         case .shop:
             ShopScreen(vm: .init(services))
+        case .endGame:
+            EndGameView()
         }
     }
 }

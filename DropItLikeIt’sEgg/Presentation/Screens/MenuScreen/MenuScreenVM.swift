@@ -9,12 +9,22 @@ import Combine
 
 @MainActor
 final class MenuScreenVM: BaseModel {
-    @Published private(set) var coinAmount: Int = 0
+    var coinAmount: Int {
+        userProfileService.profile.score
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     override init(_ services: Services) {
         super.init(services)
         
-        load()
+        userProfileService.$profile
+            .map { $0.score }
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     func openShop() {
@@ -39,9 +49,5 @@ final class MenuScreenVM: BaseModel {
     
     func openTerms() {
         push(.terms)
-    }
-    
-    func load() {
-        coinAmount = userProfileService.load()?.score ?? 0
     }
 }

@@ -57,9 +57,7 @@ private extension SettingsScreen {
     }
     
     var saveButton: some View {
-        MainBtn(title: "SAVE") {
-            vm.save()
-        }
+        MainBtn(title: "SAVE", action: vm.save)
         .padding(.top, 80)
     }
 }

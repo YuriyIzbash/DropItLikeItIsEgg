@@ -18,9 +18,12 @@ final class Services {
     let levelsService = LevelsService()
     let dailyBonusService = DailyBonusService()
     let shopService = ShopService()
+    let gameProgressionService: GameProgressionService
     
     let coordinator = Coordinator.shared
     
-    init() {}
+    init() {
+        self.gameProgressionService = GameProgressionService(levelsService: levelsService)
+    }
 }
 

@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct LoseScreen: View {
-    @StateObject var vm: LoseScreenVM
+    @StateObject var vm: ResultScreenVM
     
     let score: Int
     let best: Int
     
-    init(score: Int, best: Int, vm: LoseScreenVM) {
+    init(score: Int, best: Int, vm: ResultScreenVM) {
         self.score = score
         self.best = best
         _vm = StateObject(wrappedValue: vm)
@@ -47,9 +47,7 @@ struct LoseScreen: View {
                 }
                 .padding(.horizontal, 32)
                 
-                MainBtn(title: "TRY AGAIN", action: {
-                    vm.restartLevel()
-                })
+                MainBtn(title: "TRY AGAIN", action: vm.restartLevel)
                 .padding(.horizontal, 56)
                 .padding(.bottom, 48)
             }
@@ -59,6 +57,6 @@ struct LoseScreen: View {
 }
 
 #Preview {
-    LoseScreen(score: 500, best: 1200, vm: .init(services: Services.shared, currentLevel: 1))
+    LoseScreen(score: 500, best: 1200, vm: .init(services: Services.shared, currentLevel: 1, outcome: GameOutcome.lose))
         .environmentObject(ContentVM(Services.shared))
 }

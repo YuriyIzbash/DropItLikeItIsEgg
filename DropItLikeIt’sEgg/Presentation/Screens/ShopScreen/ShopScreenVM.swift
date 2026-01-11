@@ -15,14 +15,26 @@ final class ShopScreenVM: BaseModel {
     @Published var activeAlert: ShopAlert? = nil
     @Published private(set) var hasUnlockedLevels: Bool = false
     @Published private(set) var hasNoAds: Bool = false
-    @Published private(set) var score: Int = 0
+    
+    var score: Int {
+        userProfileService.profile.score
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     override init(_ services: Services) {
         super.init(services)
         
         hasUnlockedLevels = shopService.hasUnlockedLevels()
         hasNoAds = shopService.hasNoAds()
-        score = userProfileService.load()?.score ?? 0
+        
+        userProfileService.$profile
+            .map { $0.score }
+            .removeDuplicates()
+            .sink { [weak self] newScore in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     var hasNoCoins: Bool {
@@ -47,10 +59,11 @@ final class ShopScreenVM: BaseModel {
     func purchaseCoins() {
         logger.log("Purchase 1000 coins for $1")
         let added = 1000
-        var profile = userProfileService.load() ?? UserProfile(score: 0)
-        profile.score += added
-        userProfileService.save(profile)
-        score = profile.score
+        
+        var updatedProfile = userProfileService.profile
+        updatedProfile.score += added
+        userProfileService.profile = updatedProfile
+        
         activeAlert = .coinsPurchased
     }
     

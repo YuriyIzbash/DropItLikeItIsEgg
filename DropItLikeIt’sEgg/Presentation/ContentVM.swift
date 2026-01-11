@@ -13,16 +13,26 @@ import os
 final class ContentVM: BaseModel {
     @Published private(set) var currentLevel: Int = 1
     @Published private(set) var maxUnlockedLevel: Int = 6
-    @Published private(set) var profile: UserProfile = .init()
     @Published var isProgressVisible: Bool = true
+    
+    var profile: UserProfile {
+        userProfileService.profile
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     override init(_ services: Services) {
         super.init(services)
         
-        loadProfile()
         loadLevels()
         checkAndApplyDailyBonus()
         levelsService.$maxUnlockedLevel.assign(to: &$maxUnlockedLevel)
+        
+        userProfileService.$profile
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     func openInfo() {
@@ -55,20 +65,6 @@ final class ContentVM: BaseModel {
         }
     }
     
-    // MARK: - Profile persistence
-    func loadProfile() {
-        if let storedProfile = userProfileService.load() {
-            profile = storedProfile
-        } else {
-            profile = UserProfile()
-            saveProfile()
-        }
-    }
-    
-    func saveProfile() {
-        userProfileService.save(profile)
-    }
-    
     // MARK: - Daily Bonus
     // TODO: - Add Notification Later
     func checkAndApplyDailyBonus() {
@@ -94,8 +90,7 @@ final class ContentVM: BaseModel {
     
     // MARK: - Profile mutations
     func incrementCounter(by amount: Int = 1) {
-        profile.score += amount
-        saveProfile()
+        userProfileService.profile.score += amount
     }
     
     func addCoins(_ amount: Int) {

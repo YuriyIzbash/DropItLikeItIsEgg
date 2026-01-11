@@ -31,9 +31,6 @@ struct LevelsScreen: View {
                 CoinCounterView(amount: vm.coinAmount, action: vm.openShop)
             }
         )
-        .onAppear {
-            vm.load()
-        }
     }
 }
 

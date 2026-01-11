@@ -66,7 +66,7 @@ private extension ProfileScreen {
             
             StyledTextField(
                 title: "USERNAME",
-                text: $vm.profile.username,
+                text: $vm.editableProfile.username,
                 field: .username,
                 focusedField: $focusedField,
                 isError: vm.usernameError
@@ -75,7 +75,7 @@ private extension ProfileScreen {
             
             StyledTextField(
                 title: "EMAIL",
-                text: $vm.profile.email,
+                text: $vm.editableProfile.email,
                 field: .email,
                 focusedField: $focusedField,
                 isError: vm.emailError
@@ -87,7 +87,7 @@ private extension ProfileScreen {
     
     var avatarButton: some View {
         ZStack {
-            if let image = vm.profile.image {
+            if let image = vm.editableProfile.image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -115,11 +115,11 @@ private extension ProfileScreen {
                 )
         }
         .sheet(isPresented: $vm.showCameraPicker) {
-            ImagePicker(sourceType: .camera, selectedImage: $vm.profile.image)
+            ImagePicker(sourceType: .camera, selectedImage: $vm.editableProfile.image)
                 .ignoresSafeArea()
         }
         .sheet(isPresented: $vm.showPhotoPicker) {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.profile.image)
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.editableProfile.image)
                 .ignoresSafeArea()
         }
     }
