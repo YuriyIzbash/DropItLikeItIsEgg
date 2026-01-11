@@ -58,6 +58,6 @@ struct MenuScreen: View {
 }
 
 #Preview {
-    MenuScreen(vm: .init(appVM: ContentVM(Services.shared), services: Services.shared))
+    MenuScreen(vm: .init(Services.shared))
 }
 

@@ -7,6 +7,7 @@
 
 import Combine
 
+@MainActor
 final class SettingsScreenVM: BaseModel {
     @Published var soundIsOn: Bool = false
     @Published var notificationIsOn: Bool = false
@@ -15,6 +16,7 @@ final class SettingsScreenVM: BaseModel {
     
     override init(_ services: Services) {
         super.init(services)
+        
         load()
     }
     

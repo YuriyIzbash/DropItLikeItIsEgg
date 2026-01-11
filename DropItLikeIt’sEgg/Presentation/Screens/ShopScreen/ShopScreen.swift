@@ -73,6 +73,6 @@ private extension ShopScreen {
 }
 
 #Preview {
-    ShopScreen(vm: ShopScreenVM(appVM: ContentVM(Services.shared), services: Services.shared))
+    ShopScreen(vm: ShopScreenVM(Services.shared))
 }
 

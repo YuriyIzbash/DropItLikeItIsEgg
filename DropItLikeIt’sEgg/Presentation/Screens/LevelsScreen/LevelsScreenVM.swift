@@ -8,19 +8,16 @@
 import Foundation
 import Combine
 
+@MainActor
 final class LevelsScreenVM: BaseModel {
     @Published private(set) var coinAmount: Int = 1000
     @Published private(set) var levels: [LevelData] = []
     @Published private(set) var maxUnlockedLevel: Int = 6
     
-    private let appVM: ContentVM
-    
-    init(appVM: ContentVM, services: Services) {
-        self.appVM = appVM
+    override init(_ services: Services) {
         self.levels = (1...9).map { number in
             LevelData(number: number, isLocked: true)
         }
-        
         super.init(services)
         
         load()
@@ -28,7 +25,9 @@ final class LevelsScreenVM: BaseModel {
     
     func load() {
         coinAmount = userProfileService.load()?.score ?? 0
-        maxUnlockedLevel = appVM.maxUnlockedLevel
+        if let stored = levelsService.getMaxUnlockedLevel() {
+            maxUnlockedLevel = stored
+        }
         
         let shouldLockAll = coinAmount == 0
         
@@ -38,7 +37,7 @@ final class LevelsScreenVM: BaseModel {
     }
     
     func openGame(for level: Int) {
-        appVM.openGame(level: level)
+        push(.game(level: level))
     }
     
     func openShop() {

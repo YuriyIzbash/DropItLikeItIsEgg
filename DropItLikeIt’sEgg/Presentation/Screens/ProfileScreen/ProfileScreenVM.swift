@@ -8,6 +8,7 @@
 import Combine
 import UIKit
 
+@MainActor
 final class ProfileScreenVM: BaseModel {
     @Published var profile = UserProfile()
     @Published var showSaveConfirmation: Bool = false
@@ -19,6 +20,7 @@ final class ProfileScreenVM: BaseModel {
     
     override init(_ services: Services) {
         super.init(services)
+        
         load()
     }
     

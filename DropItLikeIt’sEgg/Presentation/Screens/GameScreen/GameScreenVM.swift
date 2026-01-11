@@ -10,6 +10,8 @@ import Combine
 
 @MainActor
 final class GameScreenVM: BaseModel {
+    @Published private(set) var currentLevel: Int = 1
+    @Published var isReady: Bool = false
     @Published var isPaused: Bool = false
     @Published private(set) var score: Int = 0
     @Published private(set) var bestScore: Int = 0
@@ -20,10 +22,16 @@ final class GameScreenVM: BaseModel {
     @Published private(set) var coinEffect: CoinEffect?
     @Published private(set) var gameResult: GameResult?
     
+    override init(_ services: Services) {
+        super.init(services)
+    }
+    
+    // MARK: - Timing & Flags
     var isLoadingScore: Bool = false
     
     let timer = Timer.publish(every: 1/60, on: .main, in: .common).autoconnect()
     
+    // MARK: - Game Parameters & Runtime State
     private var totalEggs: Int = 24
     private var speedRange: ClosedRange<CGFloat> = 150...210
     private let eggImages: [ImageResource] = [.egg1, .egg2, .egg3, .egg4, .egg5, .egg6, .egg7, .egg8, .egg9, .egg10, .egg11, .egg12]
@@ -38,10 +46,13 @@ final class GameScreenVM: BaseModel {
     private var coinSpawnCooldown: Double = 0
     private var sceneSize: CGSize = .zero
     
+    // MARK: - Layout Constants
     private let bottomPadding: CGFloat = 28
     
+    // MARK: - Limits
     private let maxCoinsPerLevel: Int = 9
     
+    // MARK: - Game Lifecycle
     func configure(level: Int) {
         switch level {
         case 1:
@@ -113,6 +124,7 @@ final class GameScreenVM: BaseModel {
         trimEffects(currentTime: currentTime)
     }
     
+    // MARK: - Player Controls
     func movePlayer(to normalizedX: CGFloat) {
         playerX = min(max(normalizedX, 0.08), 0.92)
     }
@@ -120,7 +132,11 @@ final class GameScreenVM: BaseModel {
     func togglePause() { isPaused.toggle() }
     func pause() { isPaused = true }
     func resume() { isPaused = false }
+    func restart() {
+        resetState()
+    }
     
+    // MARK: - Sizing Helpers
     func playerSize(for width: CGFloat) -> CGSize {
         let w = max(width * 0.25, 120)
         return CGSize(width: w, height: w * 1.15)
@@ -137,6 +153,7 @@ final class GameScreenVM: BaseModel {
         return CGSize(width: baseSize.width * multiplier, height: baseSize.height * multiplier)
     }
     
+    // MARK: - Layout Helpers
     func groundLine(for size: CGSize) -> CGFloat {
         let playerSize = playerSize(for: size.width)
         let playerCenterY = size.height - playerSize.height/2 - 12
@@ -144,6 +161,12 @@ final class GameScreenVM: BaseModel {
         return playerTopY
     }
     
+    // MARK: - Navigation
+    func openShop() {
+        push(.shop)
+    }
+    
+    // MARK: - State Management
     private func resetState() {
         isPaused = false
         gameResult = nil
@@ -167,6 +190,7 @@ final class GameScreenVM: BaseModel {
         isLoadingScore = false
     }
     
+    // MARK: - Movement
     private func moveEggs(delta: TimeInterval) {
         guard sceneSize.width > 0 else { return }
         let eggSize = eggSize(for: sceneSize.width)
@@ -243,6 +267,7 @@ final class GameScreenVM: BaseModel {
         }
     }
     
+    // MARK: - Spawning
     private func spawnEgg() {
         guard sceneSize.width > 0 else { return }
         let initialY = -eggSize(for: sceneSize.width).height
@@ -277,6 +302,7 @@ final class GameScreenVM: BaseModel {
         coinsSpawned += 1
     }
     
+    // MARK: - Collision Handling
     private func handleCatch(at index: Int) {
         eggs.remove(at: index)
         caughtEggs += 1
@@ -317,6 +343,7 @@ final class GameScreenVM: BaseModel {
         }
     }
     
+    // MARK: - Outcome & Persistence
     private func checkOutcome() {
         if handledEggs >= totalEggs {
             if caughtEggs >= totalEggs {
@@ -351,6 +378,7 @@ final class GameScreenVM: BaseModel {
     }
 }
 
+// MARK: - Extensions - Models
 extension GameScreenVM {
     enum GameResult {
         case win
@@ -387,3 +415,4 @@ extension GameScreenVM {
     }
     
 }
+

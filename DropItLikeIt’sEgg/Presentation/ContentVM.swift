@@ -9,23 +9,36 @@ import SwiftUI
 import Combine
 import os
 
+@MainActor
 final class ContentVM: BaseModel {
-    // MARK: - Navigation
     @Published private(set) var currentLevel: Int = 1
     @Published private(set) var maxUnlockedLevel: Int = 6
-    
-    // MARK: - Shared reactive profile
-    struct AppProfile {
-        var score: Int = 0
-    }
-    
-    @Published var profile: AppProfile = .init()
+    @Published private(set) var profile: UserProfile = .init()
+    @Published var isProgressVisible: Bool = true
     
     override init(_ services: Services) {
         super.init(services)
+        
         loadProfile()
         loadLevels()
         checkAndApplyDailyBonus()
+        levelsService.$maxUnlockedLevel.assign(to: &$maxUnlockedLevel)
+    }
+    
+    func openInfo() {
+        push(.info)
+    }
+    
+    func openMenu() {
+        push(.menu)
+    }
+    
+    func openLevels() {
+        push(.levels)
+    }
+    
+    func hideProgress() {
+        isProgressVisible = false
     }
     
     // MARK: - Levels persistence
@@ -45,20 +58,15 @@ final class ContentVM: BaseModel {
     // MARK: - Profile persistence
     func loadProfile() {
         if let storedProfile = userProfileService.load() {
-            profile.score = storedProfile.score
+            profile = storedProfile
         } else {
-            profile.score = 1000
+            profile = UserProfile()
             saveProfile()
         }
     }
     
     func saveProfile() {
-        if var existingProfile = userProfileService.load() {
-            existingProfile.score = profile.score
-            userProfileService.save(existingProfile)
-        } else {
-            userProfileService.save(UserProfile(score: profile.score))
-        }
+        userProfileService.save(profile)
     }
     
     // MARK: - Daily Bonus
@@ -83,22 +91,6 @@ final class ContentVM: BaseModel {
             logger.log("First launch - daily bonus tracking started")
         }
     }
-    
-    // MARK: - Navigation helpers (Coordinator-based)
-    func openInfo() { push(.info) }
-    func openMenu() { push(.menu) }
-    func openLevels() { push(.levels) }
-    func openGame(level: Int) {
-        currentLevel = level
-        push(.game)
-    }
-    func openProfile() { push(.profile) }
-    func openSettings() { push(.settings) }
-    func openLeaderboard() { push(.leaderboard) }
-    func openPrivacy() { push(.privacy) }
-    func openTerms() { push(.terms) }
-    func openShop() { push(.shop) }
-    func openEndGame() { push(.endGame) }
     
     // MARK: - Profile mutations
     func incrementCounter(by amount: Int = 1) {

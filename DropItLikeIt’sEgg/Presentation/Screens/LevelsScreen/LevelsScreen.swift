@@ -38,5 +38,5 @@ struct LevelsScreen: View {
 }
 
 #Preview {
-    LevelsScreen(vm: .init(appVM: ContentVM(Services.shared), services: Services.shared))
+    LevelsScreen(vm: .init(Services.shared))
 }

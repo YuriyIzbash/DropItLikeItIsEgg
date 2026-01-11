@@ -9,27 +9,28 @@ import SwiftUI
 
 struct PauseView: View {
     @Binding var isPresented: Bool
-    let appVM: ContentVM
-    
+    let onHome: () -> Void
+    let onRestart: () -> Void
+
     var body: some View {
         ZStackWithBackground(color: .black.opacity(0.8)) {
             Text("paused")
                 .customFont(size: 32)
                 .padding(.bottom, 160)
-            
+
             HStack {
                 Button {
-                    appVM.popToRoot()
+                    onHome()
                 } label: {
                     Text("HOME")
                         .customFont(size: 24)
                         .underline(true)
                 }
-                
+
                 Spacer()
-                
+
                 Button {
-                    appVM.openGame(level: appVM.currentLevel)
+                    onRestart()
                 } label: {
                     Text("RESTART")
                         .customFont(size: 24)
@@ -37,7 +38,7 @@ struct PauseView: View {
                 }
             }
             .padding(.horizontal, 48)
-            
+
             MainBtn(title: "PLAY", action: {
                 isPresented = false
             })
@@ -49,5 +50,9 @@ struct PauseView: View {
 }
 
 #Preview {
-    PauseView(isPresented: .constant(true), appVM: ContentVM(Services.shared))
+    PauseView(
+        isPresented: .constant(true),
+        onHome: {},
+        onRestart: {}
+    )
 }

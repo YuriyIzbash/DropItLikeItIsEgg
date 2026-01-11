@@ -7,15 +7,14 @@
 
 import Combine
 
+@MainActor
 final class MenuScreenVM: BaseModel {
     @Published private(set) var coinAmount: Int = 0
     
-    private let appVM: ContentVM
-    
-    init(appVM: ContentVM, services: Services) {
-        self.appVM = appVM
+    override init(_ services: Services) {
         super.init(services)
-        load() 
+        
+        load()
     }
     
     func openShop() {

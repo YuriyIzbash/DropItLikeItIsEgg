@@ -12,14 +12,13 @@ enum AppRoute: Hashable {
     case info
     case menu
     case levels
-    case game
+    case game(level: Int)
     case shop
     case profile
     case settings
     case leaderboard
     case privacy
     case terms
-    case endGame
 }
 
 @MainActor
@@ -38,3 +37,4 @@ final class Coordinator: ObservableObject {
         path.removeAll()
     }
 }
+

@@ -9,12 +9,14 @@ import Foundation
 import Combine
 import UIKit
 
+@MainActor
 final class LeaderBoardScreenVM: BaseModel {
     @Published private(set) var profile = UserProfile()
     @Published private(set) var leaderboardMockData: [LeaderboardMockData] = []
     
     override init(_ services: Services) {
         super.init(services)
+        
         load()
     }
     

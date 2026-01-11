@@ -9,27 +9,24 @@ import Foundation
 import Combine
 import os
 
+@MainActor
 final class ShopScreenVM: BaseModel {
     @Published private(set) var showNoCoinsAlert: Bool = false
     @Published var activeAlert: ShopAlert? = nil
     @Published private(set) var hasUnlockedLevels: Bool = false
     @Published private(set) var hasNoAds: Bool = false
+    @Published private(set) var score: Int = 0
     
-    private let appVM: ContentVM
-    
-    init(appVM: ContentVM, services: Services) {
-        self.appVM = appVM
+    override init(_ services: Services) {
         super.init(services)
+        
         hasUnlockedLevels = shopService.hasUnlockedLevels()
         hasNoAds = shopService.hasNoAds()
-    }
-    
-    var score: Int {
-        appVM.profile.score
+        score = userProfileService.load()?.score ?? 0
     }
     
     var hasNoCoins: Bool {
-        appVM.profile.score <= 0
+        score <= 0
     }
     
     func showAlertOnAppear() {
@@ -40,7 +37,7 @@ final class ShopScreenVM: BaseModel {
     
     func handleBackAction(dismiss: () -> Void) {
         if hasNoCoins {
-            appVM.popToRoot()
+            popToRoot()
         } else {
             dismiss()
         }
@@ -48,20 +45,22 @@ final class ShopScreenVM: BaseModel {
     
     // MARK: - Shop Actions
     func purchaseCoins() {
-        // TODO: Implement actual purchase logic
         logger.log("Purchase 1000 coins for $1")
-        appVM.addCoins(1000)
+        let added = 1000
+        var profile = userProfileService.load() ?? UserProfile(score: 0)
+        profile.score += added
+        userProfileService.save(profile)
+        score = profile.score
         activeAlert = .coinsPurchased
     }
     
     func purchaseUnlockLevels() {
-        // TODO: Implement actual purchase logic
         logger.log("Unlock levels for $1")
-        appVM.unlockLevels(upTo: 9)
+        levelsService.saveMaxUnlockedLevel(9)
         hasUnlockedLevels = true
         shopService.setUnlockedLevels(true)
         activeAlert = .levelsUnlocked
-        appVM.openGame(level: appVM.currentLevel + 1)
+        push(.game(level: 7))
     }
     
     func purchaseNoAds() {
