@@ -2,7 +2,7 @@
 //  ResultScreenVM.swift
 //  DropItLikeIt'sEgg
 //
-//  Created by Assistant on 11. 1. 26.
+//  Created by yuriy on 11. 1. 26.
 //
 
 import Combine
