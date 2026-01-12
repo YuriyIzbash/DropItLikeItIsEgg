@@ -9,12 +9,7 @@ import Combine
 
 @MainActor
 final class SettingsService: ObservableObject {
-    @PublishedStored(wrappedValue: false, key: "settings.isSoundEnabled")
-    var isSoundEnabled: Bool
-    
-    @PublishedStored(wrappedValue: false, key: "settings.isNotificationEnabled")
-    var isNotificationEnabled: Bool
-    
-    @PublishedStored(wrappedValue: false, key: "settings.isViibrationEnabled")
-    var isVibroEnabled: Bool
+    @PublishedStored(wrappedValue: false, key: "settings.isSoundEnabled") var isSoundEnabled: Bool
+    @PublishedStored(wrappedValue: false, key: "settings.isNotificationEnabled") var isNotificationEnabled: Bool
+    @PublishedStored(wrappedValue: false, key: "settings.isViibrationEnabled") var isVibroEnabled: Bool
 }

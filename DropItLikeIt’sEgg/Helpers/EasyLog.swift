@@ -27,3 +27,5 @@ extension Loggerable {
         EasyLog.log(String(describing: type(of: self)))
     }
 }
+
+

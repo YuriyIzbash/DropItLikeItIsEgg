@@ -25,6 +25,7 @@ final class LeaderBoardScreenVM: BaseModel {
                 self?.loadMockLeaderboard()
             }
             .store(in: &cancellables)
+        
         loadMockLeaderboard()
     }
     

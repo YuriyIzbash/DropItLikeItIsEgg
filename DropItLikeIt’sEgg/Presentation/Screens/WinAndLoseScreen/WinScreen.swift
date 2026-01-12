@@ -1,3 +1,10 @@
+//
+//  WinScreen.swift
+//  DropItLikeIt'sEgg
+//
+//  Created by yuriy on 11. 1. 26.
+//
+
 import SwiftUI
 
 struct WinScreen: View {

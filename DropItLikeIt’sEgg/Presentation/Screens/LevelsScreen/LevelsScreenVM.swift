@@ -10,13 +10,10 @@ import Combine
 
 @MainActor
 final class LevelsScreenVM: BaseModel {
-    var coinAmount: Int {
-        userProfileService.profile.score
-    }
-    
     @Published private(set) var levels: [LevelData] = []
     @Published private(set) var maxUnlockedLevel: Int = 6
     
+    var coinAmount: Int { score }
     private var cancellables = Set<AnyCancellable>()
     
     override init(_ services: Services) {
@@ -25,12 +22,9 @@ final class LevelsScreenVM: BaseModel {
         }
         super.init(services)
         
-        userProfileService.$profile
-            .map { $0.score }
+        self.$score
             .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.updateLevels()
-            }
+            .sink { [weak self] _ in self?.updateLevels() }
             .store(in: &cancellables)
         
         updateLevels()

@@ -13,7 +13,6 @@ final class GameScreenVM: BaseModel {
     @Published private(set) var currentLevel: Int = 1
     @Published var isReady: Bool = false
     @Published var isPaused: Bool = false
-    @Published private(set) var score: Int = 0
     @Published private(set) var bestScore: Int = 0
     @Published private(set) var playerX: CGFloat = 0.5
     @Published private(set) var eggs: [Egg] = []
@@ -187,8 +186,9 @@ final class GameScreenVM: BaseModel {
     
     private func loadStoredScore() {
         isLoadingScore = true
-        score = userProfileService.profile.score
-        bestScore = userProfileService.profile.score
+        let stored = userProfileService.profile.score
+        self.score = stored
+        self.bestScore = stored
         isLoadingScore = false
     }
     

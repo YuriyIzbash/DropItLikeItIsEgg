@@ -19,20 +19,13 @@ final class ContentVM: BaseModel {
         userProfileService.profile
     }
     
-    private var cancellables = Set<AnyCancellable>()
-    
     override init(_ services: Services) {
         super.init(services)
         
         loadLevels()
         checkAndApplyDailyBonus()
-        levelsService.$maxUnlockedLevel.assign(to: &$maxUnlockedLevel)
-        
-        userProfileService.$profile
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
+        levelsService.$maxUnlockedLevel
+            .assign(to: &$maxUnlockedLevel)
     }
     
     func openInfo() {
