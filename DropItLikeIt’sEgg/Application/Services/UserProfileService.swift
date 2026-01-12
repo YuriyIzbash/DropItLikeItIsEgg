@@ -9,6 +9,5 @@ import Combine
 
 @MainActor
 final class UserProfileService: ObservableObject {
-    @PublishedStored(key: "user.profile") 
-    var profile = UserProfile()
+    @PublishedStored(key: "user.profile") var profile = UserProfile()
 }

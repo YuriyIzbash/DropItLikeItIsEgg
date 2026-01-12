@@ -16,25 +16,13 @@ final class ShopScreenVM: BaseModel {
     @Published private(set) var hasUnlockedLevels: Bool = false
     @Published private(set) var hasNoAds: Bool = false
     
-    var score: Int {
-        userProfileService.profile.score
-    }
-    
-    private var cancellables = Set<AnyCancellable>()
-    
     override init(_ services: Services) {
         super.init(services)
         
-        hasUnlockedLevels = shopService.hasUnlockedLevels()
-        hasNoAds = shopService.hasNoAds()
-        
-        userProfileService.$profile
-            .map { $0.score }
-            .removeDuplicates()
-            .sink { [weak self] newScore in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
+        shopService.$hasUnlockedLevels
+            .assign(to: &self.$hasUnlockedLevels)
+        shopService.$hasNoAds
+            .assign(to: &self.$hasNoAds)
     }
     
     var hasNoCoins: Bool {
@@ -55,7 +43,6 @@ final class ShopScreenVM: BaseModel {
         }
     }
     
-    // MARK: - Shop Actions
     func purchaseCoins() {
         logger.log("Purchase 1000 coins for $1")
         let added = 1000
@@ -70,7 +57,6 @@ final class ShopScreenVM: BaseModel {
     func purchaseUnlockLevels() {
         logger.log("Unlock levels for $1")
         levelsService.saveMaxUnlockedLevel(9)
-        hasUnlockedLevels = true
         shopService.setUnlockedLevels(true)
         activeAlert = .levelsUnlocked
         push(.game(level: 7))
@@ -79,7 +65,6 @@ final class ShopScreenVM: BaseModel {
     func purchaseNoAds() {
         // TODO: Implement actual purchase logic
         logger.log("Purchase No Ads for $3")
-        hasNoAds = true
         shopService.setNoAds(true)
         activeAlert = .noAds
     }
@@ -111,3 +96,4 @@ extension ShopScreenVM {
         }
     }
 }
+

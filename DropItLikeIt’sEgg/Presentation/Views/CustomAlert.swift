@@ -35,6 +35,7 @@ struct CustomAlert: View {
                 .padding(.top, 8)
             }
             .padding(24)
+            .foregroundStyle(Color(.label))
             .background(.white.opacity(0.95))
             .cornerRadius(16)
             .shadow(radius: 20)
@@ -43,5 +44,9 @@ struct CustomAlert: View {
         }
         .transition(.opacity.combined(with: .scale))
     }
+}
+
+#Preview {
+    CustomAlert(title: "1", message: "2", confirmTitle: "ok", onConfirm: {})
 }
 

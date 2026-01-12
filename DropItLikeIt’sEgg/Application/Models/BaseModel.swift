@@ -11,6 +11,8 @@ import os
 
 @MainActor
 class BaseModel: ObservableObject, Loggerable {
+    @Published var score: Int = 0
+    
     let settingsService: SettingsService
     let fileService: FileService
     let userProfileService: UserProfileService
@@ -32,6 +34,11 @@ class BaseModel: ObservableObject, Loggerable {
         self.gameProgressionService = services.gameProgressionService
         
         self.coordinator = services.coordinator
+        
+        userProfileService.$profile
+            .map(\.score)
+            .removeDuplicates()
+            .assign(to: &self.$score)
     }
     
     func push(_ route: AppRoute) {
@@ -42,3 +49,4 @@ class BaseModel: ObservableObject, Loggerable {
         coordinator.popToRoot()
     }
 }
+
